@@ -24,6 +24,7 @@ from dateutil import parser as dateutil_parser
 from pydantic import ValidationError
 
 from config.schema import CostType, Event
+from enrichment.annotate import generate_short_note
 from enrichment.enrich import enrich_event
 
 logger = logging.getLogger(__name__)
@@ -305,10 +306,17 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
         "tags": [],
         "family_friendly_score": 0.0,
         "rainy_day_friendly": False,
+        # Provenance — passed through from scraper / resolver
+        "extracted_from": raw.get("extracted_from", "direct_scraper"),
+        "extraction_confidence": float(raw.get("extraction_confidence", 1.0)),
+        "short_note": None,  # filled in after enrichment
     }
 
     # Apply enrichment (tags, score, rainy_day)
     event_data = enrich_event(event_data)
+
+    # Generate short_note from enriched facts (never from DullesMoms content)
+    event_data["short_note"] = generate_short_note(event_data)
 
     try:
         return Event(**event_data)

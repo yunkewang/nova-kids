@@ -160,6 +160,88 @@ def _check_age_range(event: Event) -> list[ValidationIssue]:
     return issues
 
 
+def _check_no_dullesmoms_source_url(event: Event) -> list[ValidationIssue]:
+    """
+    Error when source_url points to dullesmoms.com.
+
+    DullesMoms is a discovery layer only.  Published events must have original
+    host URLs.  If a DullesMoms URL appears here it means the resolver failed
+    to find an original source and the event was not properly routed to review.
+    """
+    issues: list[ValidationIssue] = []
+    if event.source_url and "dullesmoms.com" in event.source_url.lower():
+        issues.append(ValidationIssue(
+            event.id, event.title, "DULLESMOMS_SOURCE_URL",
+            (
+                "source_url points to dullesmoms.com. Published events must use "
+                "the original event host URL. Route to manual review instead."
+            ),
+            "error",
+        ))
+    return issues
+
+
+def _check_no_dullesmoms_registration_url(event: Event) -> list[ValidationIssue]:
+    """Warn when registration_url points to dullesmoms.com."""
+    issues: list[ValidationIssue] = []
+    reg_url = event.registration_url or ""
+    if "dullesmoms.com" in reg_url.lower():
+        issues.append(ValidationIssue(
+            event.id, event.title, "DULLESMOMS_REGISTRATION_URL",
+            "registration_url points to dullesmoms.com. Prefer original registration link.",
+            "warning",
+        ))
+    return issues
+
+
+def _check_actionable_url(event: Event) -> list[ValidationIssue]:
+    """
+    Every published event must have at minimum: title + start + one valid URL.
+
+    The URL can be source_url or registration_url.
+    """
+    issues: list[ValidationIssue] = []
+    has_url = _is_valid_url(event.source_url) or _is_valid_url(event.registration_url)
+    if not has_url:
+        issues.append(ValidationIssue(
+            event.id, event.title, "NO_ACTIONABLE_URL",
+            "Event has no valid source_url or registration_url. App cannot link to it.",
+            "error",
+        ))
+    return issues
+
+
+def _check_short_note(event: Event) -> list[ValidationIssue]:
+    """Validate short_note length and single-sentence constraint."""
+    issues: list[ValidationIssue] = []
+    if event.short_note is None:
+        return issues
+    from enrichment.annotate import validate_short_note
+    is_valid, reason = validate_short_note(event.short_note)
+    if not is_valid:
+        issues.append(ValidationIssue(
+            event.id, event.title, "INVALID_SHORT_NOTE",
+            reason,
+            "warning",
+        ))
+    return issues
+
+
+def _check_seed_resolved_confidence(event: Event) -> list[ValidationIssue]:
+    """Warn when a seed-resolved event has low extraction confidence."""
+    issues: list[ValidationIssue] = []
+    if event.extracted_from == "seed_resolved" and event.extraction_confidence < 0.6:
+        issues.append(ValidationIssue(
+            event.id, event.title, "LOW_EXTRACTION_CONFIDENCE",
+            (
+                f"seed_resolved event has extraction_confidence="
+                f"{event.extraction_confidence:.2f} (< 0.6). Review for accuracy."
+            ),
+            "warning",
+        ))
+    return issues
+
+
 def _check_duplicate_ids(events: list[Event]) -> list[ValidationIssue]:
     """Cross-event rule: detect duplicate IDs in the batch."""
     seen: dict[str, str] = {}
@@ -187,6 +269,12 @@ _PER_EVENT_RULES = [
     _check_score_range,
     _check_summary_length,
     _check_age_range,
+    # Source provenance rules
+    _check_no_dullesmoms_source_url,
+    _check_no_dullesmoms_registration_url,
+    _check_actionable_url,
+    _check_short_note,
+    _check_seed_resolved_confidence,
 ]
 
 

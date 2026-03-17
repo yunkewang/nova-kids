@@ -23,20 +23,50 @@ before the pipeline will use them.
 
 ---
 
-## Prohibited Sources
+## DullesMoms — Discovery Layer Only
 
-The following are **explicitly prohibited** as formal data sources:
+DullesMoms (`dullesmoms.com`) occupies a **special, limited role** in the pipeline.
 
-- **DullesMoms** (dullesMoms.com) — This site is a community aggregator, not
-  an original event publisher. Events on DullesMoms are typically sourced from
-  the same venues already in our approved list. Using it as a scraping target
-  would duplicate effort, risk copyright concerns, and produce data of lower
-  provenance. Do not add it to `sources.yaml`.
+### What DullesMoms IS allowed for
 
+- **Seed discovery**: The `seed_discovery/dullesmoms_seed_finder.py` module
+  may visit the DullesMoms calendar list page to identify candidate events and,
+  where present, outbound links to original event host pages.
+
+### What DullesMoms is NOT allowed for
+
+- **Published content source**: DullesMoms descriptions, summaries, images,
+  and calendar text must NEVER be stored as source-of-record content or
+  published to the app.
+- **source_name / source_url in published events**: A published event must
+  never have `dullesmoms.com` in its `source_url` unless a manual override
+  path is explicitly approved by the product owner. The validation layer will
+  flag this as an error.
+- **Formal data source in `sources.yaml`**: DullesMoms must not appear in the
+  approved sources list.
+
+### Workflow
+
+```
+DullesMoms calendar page
+        ↓  (title, date text, location text, outbound URL only)
+  CandidateEvent (NOT published)
+        ↓  resolver.py fetches original host page
+  Raw dict from original page
+        ↓  normalize_record()
+  Event (published with original source_url)
+```
+
+Candidates that cannot be resolved to an original URL are written to
+`data/manual_review/pending_candidates.json` for human inspection.
+
+### Prohibited Sources (community aggregators)
+
+- **DullesMoms as a content source** — see the section above for the limited
+  discovery-only role.
 - **Other community aggregators** — sites like NoVAParents, local Facebook
   groups, Nextdoor, or similar community-curated lists. These are secondary
   sources, not original publishers.
-
 - **Paid/gated databases** — any source that requires a subscription or
   account to access event data.
 
@@ -66,6 +96,21 @@ Before adding a new source, confirm:
 
 ## Content Rules
 
+### Manual Review Queue
+
+When seed discovery cannot resolve a candidate to an original host page, it
+is written to `data/manual_review/pending_candidates.json` with:
+- `requires_manual_review: true`
+- A `notes` field explaining why it was flagged
+- A `_review_instructions` field (informal) suggesting next steps
+
+To approve a candidate manually:
+1. Find the original event host URL yourself.
+2. Set `candidate_original_url` to the confirmed URL.
+3. Set `status` to `"manual_review_approved"`.
+4. Run `scripts/run_pipeline.py` — manually approved candidates are treated
+   as resolved with `extracted_from: "manual_review_approved"`.
+
 ### Summaries
 
 Summaries in the `summary` field must be:
@@ -83,10 +128,24 @@ Summaries in the `summary` field must be:
 - Tags must come from `ALLOWED_TAGS` in `config/schema.py`.
 - Scores are algorithmic estimates, not editorial judgements.
 
+### short_note
+
+The `short_note` field is a single derived sentence based strictly on
+structured facts extracted from the original source page.  Rules:
+- Maximum 200 characters.
+- Must be a single sentence.
+- May only reference: venue name, cost type, activity type, age range,
+  indoor/outdoor setting — and only when those facts were explicitly present
+  in the original source.
+- Must NOT reference DullesMoms content.
+- Must NOT invent pricing, age ranges, or amenities.
+- If facts are insufficient, leave `short_note: null`.
+
 ### Links
 
 - `source_url` must always point to the **original source event page**, not
   to an aggregator or cached copy.
+- `source_url` must never be a `dullesmoms.com` URL in published events.
 - `registration_url` should point to the official registration form when
   available. Do not link to third-party resellers unless they are the
   authorized ticketing platform for that event.
