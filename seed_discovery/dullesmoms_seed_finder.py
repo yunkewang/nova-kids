@@ -39,11 +39,12 @@ from __future__ import annotations
 import hashlib
 import logging
 import re
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from typing import Any
 from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
+from dateutil import parser as dateutil_parser
 
 from models.candidate import CandidateEvent, CandidateStatus
 from seed_discovery.base import BaseSeedFinder
@@ -79,6 +80,21 @@ class DullesMomsSeedFinder(BaseSeedFinder):
 
     seed_source_name = "DullesMoms"
 
+    def __init__(self, target_week_start: date | None = None) -> None:
+        super().__init__()
+        self.target_week_start = target_week_start
+
+    def _candidate_in_target_week(self, date_text: str | None) -> bool:
+        """Return True if date_text falls within [target_week_start, +6 days]."""
+        if self.target_week_start is None or not date_text:
+            return True
+        try:
+            dt = dateutil_parser.parse(date_text, fuzzy=True)
+            week_end = self.target_week_start + timedelta(days=6)
+            return self.target_week_start <= dt.date() <= week_end
+        except Exception:
+            return True  # unparseable date → include rather than drop
+
     def fetch_candidates(self) -> list[CandidateEvent]:
         candidates: list[CandidateEvent] = []
         url: str | None = SEED_URL
@@ -107,7 +123,14 @@ class DullesMomsSeedFinder(BaseSeedFinder):
             for article in event_articles:
                 candidate = self._parse_article(article)
                 if candidate:
-                    candidates.append(candidate)
+                    if self._candidate_in_target_week(candidate.discovered_date_text):
+                        candidates.append(candidate)
+                    else:
+                        logger.debug(
+                            "Skipping '%s' (%s) — outside target week.",
+                            candidate.discovered_title,
+                            candidate.discovered_date_text,
+                        )
 
             # Pagination: follow "next" link
             next_el = soup.select_one("a.tribe-events-c-nav__next, a[rel='next']")

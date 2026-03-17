@@ -243,6 +243,101 @@ def _merge_facts(*fact_dicts: dict[str, Any]) -> dict[str, Any]:
     return merged
 
 
+def _find_original_url_from_detail_page(
+    seed_url: str,
+    session: requests.Session,
+) -> str | None:
+    """
+    Visit a DullesMoms event detail page and extract the best outbound URL.
+
+    DullesMoms list-page articles rarely carry outbound links, but the
+    per-event detail page usually has a "Website", "Register", or "Tickets"
+    button pointing to the original host.  This function must NOT extract or
+    store any descriptive content from the DullesMoms page.
+    """
+    _SEED_DOMAIN = "dullesmoms.com"
+
+    # Domains that are NOT usable original event sources
+    _UTILITY_DOMAINS = frozenset([
+        "google.com", "calendar.google.com",
+        "apple.com", "outlook.live.com", "outlook.office.com",
+        "facebook.com", "instagram.com", "twitter.com", "x.com",
+        "linkedin.com", "youtube.com",
+        "maps.google.com", "goo.gl",
+    ])
+
+    def _is_dm_url(url: str) -> bool:
+        try:
+            return _SEED_DOMAIN in urlparse(url).netloc.lower()
+        except Exception:
+            return True
+
+    def _is_utility_url(url: str) -> bool:
+        """Return True if the URL is a utility/social link, not an original event host."""
+        try:
+            netloc = urlparse(url).netloc.lower().lstrip("www.")
+            return any(netloc == d or netloc.endswith("." + d) for d in _UTILITY_DOMAINS)
+        except Exception:
+            return False
+
+    try:
+        time.sleep(REQUEST_DELAY)
+        resp = session.get(seed_url, timeout=REQUEST_TIMEOUT)
+        resp.raise_for_status()
+    except Exception as exc:
+        logger.debug("Could not fetch DullesMoms detail page %s: %s", seed_url, exc)
+        return None
+
+    soup = BeautifulSoup(resp.text, "lxml")
+
+    priority_re = re.compile(
+        r"original|register|ticket|sign.?up|event details|learn more|website|source|buy",
+        re.IGNORECASE,
+    )
+
+    # Priority 1: links whose text or href suggest they are the original source,
+    #             that are neither DullesMoms nor utility/social/calendar links
+    for anchor in soup.find_all("a", href=True):
+        href = str(anchor.get("href", "")).strip()
+        if not href.startswith("http"):
+            continue
+        if _is_dm_url(href) or _is_utility_url(href):
+            continue
+        link_text = anchor.get_text(strip=True)
+        if priority_re.search(link_text) or priority_re.search(href):
+            return href
+
+    # Priority 2: first outbound https link that is not a utility/social URL
+    for anchor in soup.find_all("a", href=True):
+        href = str(anchor.get("href", "")).strip()
+        if (
+            href.startswith("https://")
+            and not _is_dm_url(href)
+            and not _is_utility_url(href)
+        ):
+            return href
+
+    return None
+
+
+_GENERIC_TITLE_RE = re.compile(
+    r"^(home\s*page?|welcome|untitled|index|coming\s*soon|error|404|403|not\s*found"
+    r"|page\s*not\s*found|access\s*denied|forbidden)$",
+    re.IGNORECASE,
+)
+
+
+def _is_generic_title(title: str | None) -> bool:
+    """Return True if the title looks like a generic page title, not an event title."""
+    if not title:
+        return True
+    t = title.strip()
+    # Very short non-descriptive titles
+    if len(t) <= 6:
+        return True
+    return bool(_GENERIC_TITLE_RE.match(t))
+
+
 def _source_name_from_url(url: str) -> str:
     """Derive a readable source name from a URL domain."""
     try:
@@ -254,25 +349,47 @@ def _source_name_from_url(url: str) -> str:
         return "Unknown Source"
 
 
-def _compute_extraction_confidence(facts: dict[str, Any]) -> float:
+def _compute_extraction_confidence(
+    facts: dict[str, Any],
+    discovered: dict[str, Any] | None = None,
+) -> float:
     """
     Score how complete the extracted facts are (0–1).
 
+    When `discovered` is provided, fields missing from `facts` can be
+    supplemented with discovered_ candidate data at a reduced credit weight.
+    This lets events with a valid original URL but sparse structured data
+    still be published when we have reliable seed discovery metadata.
+
     Used to decide auto-publish vs. manual review.
     """
+    disc = discovered or {}
     score = 0.0
+
     if facts.get("title"):
         score += 0.30
+    elif disc.get("title"):
+        score += 0.15  # partial credit for discovered fallback
+
     if facts.get("start_text"):
         score += 0.30
+    elif disc.get("start_text"):
+        score += 0.20  # date from DullesMoms is fairly reliable
+
     if facts.get("location_name") or facts.get("location_address"):
         score += 0.20
+    elif disc.get("location_name"):
+        score += 0.10  # partial credit for discovered location
+
     if facts.get("cost_text") is not None:
         score += 0.10
+
     if facts.get("description_snippet"):
         score += 0.05
+
     if facts.get("registration_url"):
         score += 0.05
+
     return round(score, 4)
 
 
@@ -301,13 +418,46 @@ def resolve_candidate(
       - source_url = original host URL
     """
     original_url = candidate.candidate_original_url
+    _session = session or _build_session()
+
+    # If no original URL was found on the list page, visit the DullesMoms
+    # event detail page to look for an outbound link there.
+    if not original_url and candidate.seed_url and "dullesmoms.com" in candidate.seed_url:
+        logger.debug(
+            "No original URL for '%s' — visiting DullesMoms detail page: %s",
+            candidate.discovered_title,
+            candidate.seed_url,
+        )
+        original_url = _find_original_url_from_detail_page(candidate.seed_url, _session)
+        if original_url:
+            candidate.candidate_original_url = original_url
+            # Recalculate confidence now that we have an original URL
+            candidate.confidence = min(candidate.confidence + 0.50, 1.0)
+            candidate.requires_manual_review = False
+            logger.info(
+                "Detail-page resolution: found original URL for '%s': %s",
+                candidate.discovered_title,
+                original_url,
+            )
+        else:
+            candidate.requires_manual_review = True
+            candidate.status = CandidateStatus.MANUAL_REVIEW
+            candidate.review_reason = "no_original_url_found"
+            candidate.last_resolution_error = (
+                "No outbound original URL found on DullesMoms list page or detail page."
+            )
+            candidate.suggested_next_action = (
+                "Search for this event manually and set candidate_original_url."
+            )
+            candidate.notes = candidate.last_resolution_error
+            return None
+
     if not original_url:
         candidate.requires_manual_review = True
         candidate.status = CandidateStatus.MANUAL_REVIEW
+        candidate.review_reason = "no_original_url_found"
         candidate.notes = (candidate.notes or "") + " No original URL to resolve."
         return None
-
-    _session = session or _build_session()
 
     # Fetch the original page
     try:
@@ -318,6 +468,11 @@ def resolve_candidate(
         logger.warning("Could not fetch original URL %s: %s", original_url, exc)
         candidate.requires_manual_review = True
         candidate.status = CandidateStatus.MANUAL_REVIEW
+        candidate.review_reason = "original_url_dead"
+        candidate.last_resolution_error = f"Fetch failed: {exc}"
+        candidate.suggested_next_action = (
+            "Verify the URL is still live and update candidate_original_url if needed."
+        )
         candidate.notes = (
             (candidate.notes or "") + f" Fetch failed: {exc}"
         ).strip()
@@ -325,18 +480,48 @@ def resolve_candidate(
 
     soup = BeautifulSoup(response.text, "lxml")
 
-    # Extract facts in priority order
+    # Extract facts in priority order from the original page
     jsonld_facts = _extract_jsonld(soup)
     og_facts = _extract_opengraph(soup)
     html_facts = _extract_html_patterns(soup)
     facts = _merge_facts(jsonld_facts, og_facts, html_facts)
 
-    extraction_confidence = _compute_extraction_confidence(facts)
+    # Discovered fields available as fallbacks (from DullesMoms, marked non-authoritative)
+    discovered_fallbacks: dict[str, Any] = {}
+    if candidate.discovered_title:
+        discovered_fallbacks["title"] = candidate.discovered_title
+    if candidate.discovered_date_text:
+        discovered_fallbacks["start_text"] = candidate.discovered_date_text
+    if candidate.discovered_location_text:
+        discovered_fallbacks["location_name"] = candidate.discovered_location_text
 
-    # Update candidate with extracted data
-    candidate.extracted_title = facts.get("title") or candidate.discovered_title
+    # Compute confidence with discovered fallbacks providing partial credit
+    extraction_confidence = _compute_extraction_confidence(facts, discovered=discovered_fallbacks)
+
+    # Populate candidate extracted fields (original page first, fallback to discovered)
+    # Prefer the discovered title (which DullesMoms specifically wrote for this event)
+    # over a generic/venue-homepage title extracted from the original page.
+    raw_extracted_title = facts.get("title")
+    if _is_generic_title(raw_extracted_title):
+        raw_extracted_title = None
+    # Prefer discovered title when:
+    # (a) extracted is a substring of discovered (venue name embedded in event name)
+    # (b) extracted looks like a website page title ("Venue | Location", "Venue - Site")
+    if raw_extracted_title and candidate.discovered_title:
+        is_venue_substring = (
+            raw_extracted_title.lower() in candidate.discovered_title.lower()
+            and len(candidate.discovered_title) > len(raw_extracted_title) + 5
+        )
+        is_page_title = " | " in raw_extracted_title or (
+            " - " in raw_extracted_title
+            and not any(kw in raw_extracted_title.lower() for kw in
+                        ["storytime", "workshop", "class", "camp", "tour", "event"])
+        )
+        if is_venue_substring or is_page_title:
+            raw_extracted_title = None
+    candidate.extracted_title = raw_extracted_title or candidate.discovered_title
     candidate.extracted_date_text = facts.get("start_text") or candidate.discovered_date_text
-    candidate.extracted_venue = facts.get("location_name")
+    candidate.extracted_venue = facts.get("location_name") or candidate.discovered_location_text
     candidate.extracted_address = facts.get("location_address")
     candidate.extracted_cost_text = facts.get("cost_text")
     candidate.extracted_description_snippet = facts.get("description_snippet")
@@ -347,7 +532,7 @@ def resolve_candidate(
     )
     candidate.resolved_at = datetime.now(tz=timezone.utc)
 
-    # Update overall candidate confidence
+    # Overall confidence: weighted average of discovery and extraction signals
     combined_confidence = round(
         (candidate.confidence * 0.3) + (extraction_confidence * 0.7),
         4,
@@ -357,6 +542,15 @@ def resolve_candidate(
     if combined_confidence < _MIN_PUBLISH_CONFIDENCE:
         candidate.requires_manual_review = True
         candidate.status = CandidateStatus.MANUAL_REVIEW
+        candidate.review_reason = "low_confidence"
+        candidate.last_resolution_error = (
+            f"Extraction confidence {combined_confidence:.2f} below threshold "
+            f"{_MIN_PUBLISH_CONFIDENCE}."
+        )
+        candidate.suggested_next_action = (
+            "Check the original URL for structured data (JSON-LD) or review "
+            "manually to confirm title, date, and location."
+        )
         candidate.notes = (
             (candidate.notes or "")
             + f" Extraction confidence {combined_confidence:.2f} below threshold."
@@ -371,13 +565,16 @@ def resolve_candidate(
     candidate.status = CandidateStatus.RESOLVED
 
     # Build the raw dict for normalize_record()
+    # Use extracted facts first; fall back to discovered_ fields for title/date/location
+    location_text = " ".join(
+        filter(None, [candidate.extracted_venue, candidate.extracted_address])
+    ) or candidate.discovered_location_text
+
     raw: dict[str, Any] = {
-        "title": candidate.extracted_title or candidate.discovered_title,
+        "title": candidate.extracted_title,
         "start_text": candidate.extracted_date_text,
         "end_text": None,
-        "location_text": " ".join(
-            filter(None, [candidate.extracted_venue, candidate.extracted_address])
-        ) or candidate.discovered_location_text,
+        "location_text": location_text,
         "price_text": candidate.extracted_cost_text,
         "summary_text": candidate.extracted_description_snippet,
         "source_name": candidate.original_source_name,
@@ -402,23 +599,27 @@ def resolve_candidates(
     candidates: list[CandidateEvent],
 ) -> tuple[list[dict[str, Any]], list[CandidateEvent]]:
     """
-    Resolve a batch of candidates.
+    Resolve a batch of candidates, including those previously flagged for review.
+
+    For candidates without a candidate_original_url, this will attempt to visit
+    the DullesMoms event detail page to find one before giving up.
 
     Returns:
       (resolved_raws, manual_review_candidates)
 
     resolved_raws: list of raw dicts ready for normalize_record()
-    manual_review_candidates: list of CandidateEvents that need human review
+    manual_review_candidates: list of CandidateEvents that still need human review
     """
     session = _build_session()
     resolved_raws: list[dict[str, Any]] = []
     manual_review: list[CandidateEvent] = []
 
     for candidate in candidates:
-        if candidate.requires_manual_review:
-            manual_review.append(candidate)
+        # Skip explicitly rejected or already published candidates
+        if candidate.status.value in ("rejected", "published"):
             continue
 
+        candidate.resolution_attempts += 1
         raw = resolve_candidate(candidate, session=session)
         if raw is not None:
             resolved_raws.append(raw)
