@@ -227,6 +227,61 @@ def _check_short_note(event: Event) -> list[ValidationIssue]:
     return issues
 
 
+def _check_shortener_url(event: Event) -> list[ValidationIssue]:
+    """Warn when source_url is still a URL-shortener link (redirect not resolved)."""
+    issues: list[ValidationIssue] = []
+    if not event.source_url:
+        return issues
+    try:
+        from urllib.parse import urlparse
+        host = urlparse(event.source_url).netloc.lower().lstrip("www.")
+        _SHORTENER_DOMAINS = frozenset([
+            "bit.ly", "tinyurl.com", "t.co", "ow.ly", "buff.ly",
+            "goo.gl", "short.io", "rb.gy", "cutt.ly", "is.gd",
+            "lnkd.in", "dlvr.it", "rebrand.ly", "rebrandly.com",
+        ])
+        if host in _SHORTENER_DOMAINS:
+            issues.append(ValidationIssue(
+                event.id, event.title, "SHORTENER_SOURCE_URL",
+                f"source_url uses a shortener domain ({host}). Redirect should have been resolved.",
+                "warning",
+            ))
+    except Exception:
+        pass
+    return issues
+
+
+def _check_price_text_quality(event: Event) -> list[ValidationIssue]:
+    """Warn when price_text is suspiciously long (likely a scraped paragraph)."""
+    issues: list[ValidationIssue] = []
+    if event.price_text and len(event.price_text) > 80:
+        issues.append(ValidationIssue(
+            event.id, event.title, "PRICE_TEXT_TOO_LONG",
+            f"price_text is {len(event.price_text)} chars (max 80). May be a noisy extraction.",
+            "warning",
+        ))
+    return issues
+
+
+def _check_enrichment_consistency(event: Event) -> list[ValidationIssue]:
+    """Warn on contradictory tag/flag combinations."""
+    issues: list[ValidationIssue] = []
+    tag_set = set(event.tags)
+    if "indoor" in tag_set and not event.rainy_day_friendly:
+        issues.append(ValidationIssue(
+            event.id, event.title, "INDOOR_NOT_RAINY_DAY",
+            "Event is tagged 'indoor' but rainy_day_friendly=False. Check venue override.",
+            "warning",
+        ))
+    if "outdoor" in tag_set and "indoor" not in tag_set and event.rainy_day_friendly:
+        issues.append(ValidationIssue(
+            event.id, event.title, "OUTDOOR_RAINY_DAY_FRIENDLY",
+            "Event is tagged 'outdoor' (no 'indoor') but rainy_day_friendly=True.",
+            "warning",
+        ))
+    return issues
+
+
 def _check_seed_resolved_confidence(event: Event) -> list[ValidationIssue]:
     """Warn when a seed-resolved event has low extraction confidence."""
     issues: list[ValidationIssue] = []
@@ -275,6 +330,9 @@ _PER_EVENT_RULES = [
     _check_actionable_url,
     _check_short_note,
     _check_seed_resolved_confidence,
+    _check_shortener_url,
+    _check_price_text_quality,
+    _check_enrichment_consistency,
 ]
 
 

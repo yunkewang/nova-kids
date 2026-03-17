@@ -128,15 +128,41 @@ def _activity_phrase(tags: list[str]) -> str | None:
 _MAX_NOTE_LEN = 200
 
 
+_HTML_TAG_RE = re.compile(r"<[^>]+>")
+_MULTI_SENTENCE_RE = re.compile(r"(?<=[.!?])\s+[A-Z]")
+
+
+def _clean_summary(text: str) -> str:
+    """Strip HTML tags and collapse whitespace."""
+    text = _HTML_TAG_RE.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
 def generate_short_note(event_data: dict[str, Any]) -> str | None:
     """
     Compose a single-sentence note from structured event facts only.
 
-    Template: "[Cost] [setting] [activity] [venue_phrase] [age_phrase]."
+    Fast-path: if the event has a clean summary that is ≤120 chars and a
+    single sentence, use it directly (stripped of HTML).
+
+    Fallback template: "[Cost] [setting] [activity] [venue_phrase] [age_phrase]."
 
     Returns None when there are insufficient facts for a meaningful sentence.
     Does not invent or guess any details.
     """
+    # Fast-path: clean summary ≤120 chars, single sentence, no raw HTML
+    summary_raw = event_data.get("summary") or ""
+    if summary_raw:
+        summary_clean = _clean_summary(summary_raw)
+        if (
+            summary_clean
+            and len(summary_clean) <= 120
+            and not _MULTI_SENTENCE_RE.search(summary_clean)
+        ):
+            if not summary_clean.endswith("."):
+                summary_clean += "."
+            return summary_clean
+
     tags = event_data.get("tags", [])
 
     cost = _cost_phrase(event_data)
@@ -152,6 +178,7 @@ def generate_short_note(event_data: dict[str, Any]) -> str | None:
     # Build parts
     parts: list[str] = []
 
+    # Lead with cost as a differentiator (e.g. "Free indoor storytime…")
     if cost:
         parts.append(cost)
 
@@ -160,6 +187,9 @@ def generate_short_note(event_data: dict[str, Any]) -> str | None:
 
     if activity:
         parts.append(activity)
+    elif venue:
+        # If no activity tag, prefix with "family-friendly event" for context
+        parts.append("family-friendly event")
 
     if venue:
         parts.append(venue)
@@ -171,7 +201,6 @@ def generate_short_note(event_data: dict[str, Any]) -> str | None:
         return None
 
     # Assemble sentence
-    # Capitalise first word, end with period
     sentence = " ".join(parts)
     sentence = sentence[0].upper() + sentence[1:]
     if not sentence.endswith("."):

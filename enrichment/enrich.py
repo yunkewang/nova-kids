@@ -13,6 +13,7 @@ import re
 from datetime import datetime
 from typing import Any
 
+from config.known_venues import lookup_venue_multi
 from config.schema import ALLOWED_TAGS, CostType
 
 # ---------------------------------------------------------------------------
@@ -209,6 +210,28 @@ def enrich_event(event_data: dict[str, Any]) -> dict[str, Any]:
     """
     tags = derive_tags(event_data)
     rainy_day = derive_rainy_day_friendly(tags)
+
+    # Apply known-venue overrides (merge tags; override rainy_day / city / county)
+    venue_hint = lookup_venue_multi(
+        event_data.get("location_name"),
+        event_data.get("title"),
+        event_data.get("source_url"),
+    )
+    if venue_hint:
+        # Merge hint tags into derived tags
+        extra_tags = [t for t in venue_hint.get("tags", []) if t in ALLOWED_TAGS]
+        tags = sorted(set(tags) | set(extra_tags))
+        # Override rainy_day only when the hint explicitly sets it
+        if "rainy_day_friendly" in venue_hint:
+            rainy_day = venue_hint["rainy_day_friendly"]
+        else:
+            rainy_day = derive_rainy_day_friendly(tags)
+        # Fill city / county only when missing
+        if not event_data.get("city") and venue_hint.get("city"):
+            event_data["city"] = venue_hint["city"]
+        if not event_data.get("county") and venue_hint.get("county"):
+            event_data["county"] = venue_hint["county"]
+
     score = compute_family_friendly_score(event_data, tags)
 
     event_data["tags"] = tags
