@@ -33,6 +33,9 @@ All events in the NoVA Kids pipeline are represented as instances of the
 | `registration_url` | `str \| null` | No | Registration or ticketing link |
 | `image_url` | `str \| null` | No | Event banner/thumbnail URL |
 | `last_verified_at` | `datetime` | Yes | UTC timestamp of last pipeline confirmation |
+| `extracted_from` | `str` | No | Provenance: `direct_scraper` \| `seed_resolved` \| `manual_review_approved` |
+| `extraction_confidence` | `float` | No | 0–1 confidence in extracted data completeness. 1.0 for direct scrapers. |
+| `short_note` | `str \| null` | No | Single derived sentence ≤200 chars. Fact-only. Never from DullesMoms. |
 
 ---
 
@@ -57,6 +60,7 @@ this fixed set for the MVP:
 - `storytime`, `stem`, `arts`, `crafts`, `music`, `theater`, `sports`
 - `swim`, `hiking`, `nature`, `cooking`, `fitness`
 - `workshop`, `camp`, `festival`, `holiday`
+- `animals`, `train`, `museum`
 
 ### Weather
 - `rainy_day`

@@ -6,19 +6,26 @@ Usage:
     python scripts/run_pipeline.py [OPTIONS]
 
 Options:
-    --source ID     Run only this source (can be repeated).
-    --dry-run       Normalize and validate but do not write published files.
-    --verbose       Enable DEBUG logging.
+    --source ID              Run only this source (can be repeated).
+    --with-seed-discovery    Also include events resolved from seed discovery
+                             (reads data/normalized/seed_events.json).
+    --dry-run                Normalize and validate but do not write published files.
+    --verbose                Enable DEBUG logging.
 
 The pipeline steps are:
   1. Load enabled sources from config/sources.yaml
   2. Run each scraper → raw dicts saved to data/raw/
-  3. Normalize each raw dict → Event objects saved to data/normalized/
-  4. Enrich events (tags, scores) — done inside normalize_record()
-  5. Deduplicate
-  6. Validate — abort if any errors are found (warnings are noted)
-  7. Publish weekly JSON to data/published/events/
-  8. Print summary report
+  3. (Optional) Load seed-resolved raws from data/normalized/seed_events.json
+  4. Normalize all raw dicts → Event objects saved to data/normalized/
+  5. Enrich events (tags, scores) — done inside normalize_record()
+  6. Deduplicate
+  7. Validate — abort if any errors are found (warnings are noted)
+  8. Publish weekly JSON to data/published/events/
+  9. Print summary report
+
+To run seed discovery first:
+    python scripts/run_seed_discovery.py
+    python scripts/run_pipeline.py --with-seed-discovery
 """
 
 from __future__ import annotations
@@ -37,8 +44,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config.schema import Event
 from config.settings import NORMALIZED_DIR, SOURCES_FILE
-from enrichment.dedupe import deduplicate
 from enrichment.normalize import normalize_record
+from enrichment.dedupe import deduplicate
 from enrichment.publish import publish_events
 from enrichment.validate import validate_events
 from scrapers.base import ScraperError
@@ -131,6 +138,15 @@ def main(argv: list[str] | None = None) -> int:
         help="Run only this source (repeat to include multiple).",
     )
     parser.add_argument(
+        "--with-seed-discovery",
+        action="store_true",
+        dest="with_seed",
+        help=(
+            "Include events from data/normalized/seed_events.json "
+            "(produced by run_seed_discovery.py)."
+        ),
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Skip writing published files.",
@@ -157,6 +173,20 @@ def main(argv: list[str] | None = None) -> int:
     print("\n[1/5] Scraping...")
     raw_records = run_scrapers(sources)
     print(f"      Raw records fetched: {len(raw_records)}")
+
+    # 2b. Optionally load seed-resolved records
+    if args.with_seed:
+        seed_path = NORMALIZED_DIR / "seed_events.json"
+        if seed_path.exists():
+            seed_raws = json.loads(seed_path.read_text(encoding="utf-8"))
+            raw_records.extend(seed_raws)
+            print(f"      Seed records added:  {len(seed_raws)}")
+        else:
+            logging.warning(
+                "--with-seed-discovery: %s not found. "
+                "Run scripts/run_seed_discovery.py first.",
+                seed_path,
+            )
 
     # 3. Normalize + enrich
     print("\n[2/5] Normalizing and enriching...")
