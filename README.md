@@ -12,7 +12,9 @@ activities iOS app.
 2. [Repository Layout](#repository-layout)
 3. [Quick Start](#quick-start)
 4. [Running the Pipeline Locally](#running-the-pipeline-locally)
-5. [CLI Scripts](#cli-scripts)
+5. [Seed Discovery (DullesMoms)](#seed-discovery-dullesmoms)
+6. [Running Seed Discovery Locally](#running-seed-discovery-locally)
+7. [CLI Scripts](#cli-scripts)
 6. [Adding a New Source](#adding-a-new-source)
 7. [Weekly Publish Format](#weekly-publish-format)
 8. [Git Workflow](#git-workflow)
@@ -36,10 +38,45 @@ Scrapers → raw JSON → Normalize → Enrich → Dedupe → Validate → Publi
 
 ---
 
+## Overview
+
+The pipeline has two modes:
+
+**Direct scraping** (always on):
+```
+Approved scrapers → raw JSON → Normalize → Enrich → Dedupe → Validate → Publish
+```
+
+**Seed discovery** (opt-in):
+```
+DullesMoms calendar (discovery only)
+        ↓ titles, dates, outbound links — NO descriptions stored
+  CandidateEvent objects (internal, never published)
+        ↓ resolver fetches original host page
+  Raw dict from original page
+        ↓ normalize / enrich / publish (source_url = original host)
+  Published event — OR — data/manual_review/pending_candidates.json
+```
+
+- DullesMoms is **discovery-only** — never a content source.
+- All published events have `source_url` pointing to the original host.
+- Unresolved candidates go to a manual review queue for human inspection.
+- `short_note` is a single derived sentence from verified facts — never invented.
+
+See [docs/source_rules.md](docs/source_rules.md) for the full source policy.
+
 ## Repository Layout
 
 ```
 nova-kids/
+├── models/
+│   ├── __init__.py
+│   └── candidate.py       # CandidateEvent model (internal, not published)
+├── seed_discovery/
+│   ├── __init__.py
+│   ├── base.py            # BaseSeedFinder ABC
+│   ├── dullesmoms_seed_finder.py  # discovery-only: titles + outbound URLs
+│   └── resolver.py        # fetches original pages, extracts structured facts
 ├── config/
 │   ├── __init__.py
 │   ├── schema.py          # Pydantic Event model + ALLOWED_TAGS
@@ -57,16 +94,19 @@ nova-kids/
 │   ├── __init__.py
 │   ├── normalize.py       # raw dict → Event
 │   ├── enrich.py          # tag/score derivation
+│   ├── annotate.py        # short_note generation (fact-only, template-driven)
 │   ├── dedupe.py          # deduplication logic
 │   ├── validate.py        # validation rules + report
 │   └── publish.py         # weekly JSON writer
 ├── scripts/
-│   ├── run_pipeline.py    # main pipeline runner
-│   ├── validate_events.py # standalone validator
-│   └── dedupe_events.py   # standalone dedup tool
+│   ├── run_pipeline.py         # main pipeline runner
+│   ├── run_seed_discovery.py   # seed discovery + original page resolution
+│   ├── validate_events.py      # standalone validator
+│   └── dedupe_events.py        # standalone dedup tool
 ├── data/
 │   ├── raw/               # raw scraper output (gitignored except .gitkeep)
 │   ├── normalized/        # normalized events (gitignored except .gitkeep)
+│   ├── manual_review/     # pending_candidates.json for human inspection
 │   └── published/
 │       └── events/        # published weekly JSON + index.json
 ├── docs/
@@ -139,12 +179,25 @@ python scripts/validate_events.py data/published/events/week-2025-06-02.json
 ### `scripts/run_pipeline.py`
 
 ```
-usage: run_pipeline.py [-h] [--source SOURCE_ID] [--dry-run] [--verbose]
+usage: run_pipeline.py [-h] [--source SOURCE_ID] [--with-seed-discovery]
+                       [--dry-run] [--verbose]
 
 Options:
-  --source SOURCE_ID  Run only this source (repeat for multiple)
-  --dry-run           Skip writing published files
-  --verbose, -v       Enable DEBUG logging
+  --source SOURCE_ID       Run only this source (repeat for multiple)
+  --with-seed-discovery    Include seed-resolved events from seed_events.json
+  --dry-run                Skip writing published files
+  --verbose, -v            Enable DEBUG logging
+```
+
+### `scripts/run_seed_discovery.py`
+
+```
+usage: run_seed_discovery.py [-h] [--dry-run] [--no-resolve] [--verbose]
+
+Options:
+  --dry-run       Discover and resolve but do not write output files
+  --no-resolve    Only run seed finder; skip fetching original pages
+  --verbose, -v   Enable DEBUG logging
 ```
 
 ### `scripts/validate_events.py`
@@ -163,6 +216,80 @@ usage: dedupe_events.py [-h] [--output OUTPUT] [--verbose] [input]
 
 Deduplicates events in a JSON file and writes the result.
 ```
+
+---
+
+## Seed Discovery (DullesMoms)
+
+DullesMoms is a community aggregator for NoVA family events.  The pipeline
+uses it **only as a discovery layer** to surface candidate events and outbound
+links to original host pages.
+
+**What the seed finder does:**
+- Visits `https://dullesmoms.com/dmcalendar/list/`
+- Extracts: event title, date text, location text, any outbound (non-DullesMoms) URL
+- Does NOT store: descriptions, summaries, body text, or images
+
+**What the resolver does:**
+- Fetches each `candidate_original_url` (the actual venue/org/Eventbrite page)
+- Extracts facts via schema.org JSON-LD → Open Graph → HTML patterns
+- Returns a raw dict ready for `normalize_record()`
+- Routes low-confidence events to `data/manual_review/pending_candidates.json`
+
+**What is published:**
+- `source_url` = the original host URL (never dullesmoms.com)
+- `source_name` = the original host name
+- `extracted_from` = `"seed_resolved"` or `"manual_review_approved"`
+- No DullesMoms text appears anywhere in published JSON
+
+---
+
+## Running Seed Discovery Locally
+
+```bash
+# Step 1: Discover candidates + resolve original pages
+python scripts/run_seed_discovery.py
+
+# Verbose mode (see each fetch)
+python scripts/run_seed_discovery.py --verbose
+
+# Discovery only (no HTTP fetches to original pages)
+python scripts/run_seed_discovery.py --no-resolve
+
+# Step 2: Review the manual review queue
+cat data/manual_review/pending_candidates.json
+# For each pending candidate, find the original URL and update the record:
+#   "candidate_original_url": "https://...",
+#   "status": "manual_review_approved"
+
+# Step 3: Run the full pipeline including seed-resolved events
+python scripts/run_pipeline.py --with-seed-discovery --dry-run
+# If output looks good:
+python scripts/run_pipeline.py --with-seed-discovery
+
+# Step 4: Commit and open a PR
+git add data/published/ data/manual_review/
+git commit -m "data: publish week-YYYY-MM-DD with seed-resolved events"
+git push -u origin data/week-YYYY-MM-DD
+gh pr create --title "Publish week-YYYY-MM-DD" --body "Weekly update including seed-resolved events."
+```
+
+### Understanding the manual review file
+
+`data/manual_review/pending_candidates.json` contains events the pipeline
+could not automatically resolve.  Each record has:
+
+| Field | Meaning |
+|---|---|
+| `discovered_title` | Title as it appeared on DullesMoms |
+| `candidate_original_url` | Best outbound URL found (may be null) |
+| `confidence` | 0–1 score; below 0.5 means manual review needed |
+| `notes` | Why it was flagged |
+| `_review_instructions` | Informal suggestion for the reviewer |
+| `status` | Set to `"manual_review_approved"` when confirmed |
+
+The pipeline re-runs are safe: the review queue is merged, not overwritten,
+so manual annotations are preserved across runs.
 
 ---
 
@@ -279,10 +406,30 @@ Claude Code will:
 2. Fetch the source URL and compare the HTML against the scraper selectors.
 3. Update the selectors, test with `--dry-run`, and open a PR.
 
+### Running seed discovery and review
+
+Ask Claude Code:
+> "Run seed discovery against DullesMoms, review the manual review queue,
+> and open a PR for any events that resolved cleanly."
+
+Claude Code will:
+1. Run `python scripts/run_seed_discovery.py --dry-run` first.
+2. Report the discovery summary (how many candidates, how many need review).
+3. If you approve, run without `--dry-run`.
+4. Summarize what is in `pending_candidates.json` for you to review.
+5. Run `python scripts/run_pipeline.py --with-seed-discovery --dry-run`.
+6. Open a PR with both `data/published/` and `data/manual_review/` changes.
+
+Claude Code will **not** approve manual review candidates on your behalf —
+that decision stays with you.
+
 ### Safety rules Claude Code follows
 
 - Never pushes directly to `main`.
 - Always opens a PR with a clear description.
 - Never adds unapproved sources (see `docs/source_rules.md`).
-- Never fabricates event data; only uses content fetched from sources.
-- Commits only files under `data/published/` for data-only updates.
+- Never fabricates event data; only uses content fetched from original sources.
+- Never stores or publishes DullesMoms descriptions, summaries, or images.
+- Never sets `source_url` to a dullesmoms.com URL in published events.
+- Commits only files under `data/published/` and `data/manual_review/` for data updates.
+- Always runs `--dry-run` first and reports before writing files.

@@ -1,0 +1,206 @@
+"""
+Annotation layer — generates derived short_note for publishable events.
+
+RULES (non-negotiable):
+  - short_note must be a single sentence, max 200 characters.
+  - It may only describe facts that were explicitly extracted from the original
+    source page and are present as structured fields on the event dict.
+  - It must NOT paraphrase, summarize, or reference DullesMoms content.
+  - It must NOT invent pricing, age ranges, amenities, or any other details.
+  - If the available facts are insufficient for a meaningful sentence, return None.
+
+This module is purely template-driven — it does not call any external AI API.
+Tags, cost, venue, and age fields are the only inputs.
+
+Public entry point: generate_short_note(event_data: dict) -> str | None
+"""
+
+from __future__ import annotations
+
+import re
+from datetime import datetime
+from typing import Any
+
+
+# ---------------------------------------------------------------------------
+# Individual fact extractors
+# ---------------------------------------------------------------------------
+
+def _cost_phrase(event_data: dict[str, Any]) -> str | None:
+    """Return a brief cost phrase, or None if cost is unknown."""
+    cost = event_data.get("cost_type", "unknown")
+    # Handle both enum value and string
+    cost_str = cost.value if hasattr(cost, "value") else str(cost)
+    if cost_str == "free":
+        return "Free"
+    if cost_str == "paid":
+        price_text = event_data.get("price_text")
+        if price_text:
+            # Keep it short
+            return price_text[:40].strip() if len(price_text) > 40 else price_text
+        return "Paid"
+    if cost_str == "suggested_donation":
+        return "Suggested donation"
+    return None  # unknown — don't guess
+
+
+def _setting_phrase(tags: list[str]) -> str | None:
+    """Return 'indoor' or 'outdoor' if clearly tagged."""
+    if "indoor" in tags and "outdoor" not in tags:
+        return "indoor"
+    if "outdoor" in tags and "indoor" not in tags:
+        return "outdoor"
+    if "virtual" in tags:
+        return "online/virtual"
+    return None
+
+
+def _age_phrase(event_data: dict[str, Any]) -> str | None:
+    """Return an age phrase only when explicit age fields are present."""
+    age_min = event_data.get("age_min")
+    age_max = event_data.get("age_max")
+    tags = event_data.get("tags", [])
+
+    if age_min is not None and age_max is not None:
+        if age_min == 0 and age_max <= 3:
+            return "for infants and toddlers"
+        if age_min == 0:
+            return f"for ages {age_min}–{age_max}"
+        return f"for ages {age_min}–{age_max}"
+    if age_min is not None:
+        return f"for ages {age_min}+"
+    if age_max is not None:
+        return f"for ages up to {age_max}"
+
+    # Fall back to broad age tags only
+    if "toddler" in tags and "preschool" not in tags and "elementary" not in tags:
+        return "for toddlers"
+    if "all_ages" in tags:
+        return "for all ages"
+    return None
+
+
+def _venue_phrase(event_data: dict[str, Any]) -> str | None:
+    """Return 'at <venue>' phrase if location is known."""
+    location = event_data.get("location_name")
+    if location and len(location) < 60:
+        return f"at {location}"
+    city = event_data.get("city")
+    county = event_data.get("county")
+    if city:
+        return f"in {city}"
+    if county:
+        return f"in {county} County"
+    return None
+
+
+def _activity_phrase(tags: list[str]) -> str | None:
+    """Return a brief activity description from tags."""
+    # Priority-ordered activity descriptors
+    activity_map = [
+        ("storytime", "storytime"),
+        ("stem", "STEM activity"),
+        ("arts", "arts program"),
+        ("crafts", "craft activity"),
+        ("music", "music program"),
+        ("theater", "theater performance"),
+        ("nature", "nature program"),
+        ("sports", "sports activity"),
+        ("swim", "swim program"),
+        ("hiking", "hike"),
+        ("cooking", "cooking class"),
+        ("fitness", "fitness class"),
+        ("workshop", "workshop"),
+        ("camp", "camp program"),
+        ("festival", "festival"),
+        ("holiday", "holiday event"),
+    ]
+    for tag, phrase in activity_map:
+        if tag in tags:
+            return phrase
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Note assembly
+# ---------------------------------------------------------------------------
+
+_MAX_NOTE_LEN = 200
+
+
+def generate_short_note(event_data: dict[str, Any]) -> str | None:
+    """
+    Compose a single-sentence note from structured event facts only.
+
+    Template: "[Cost] [setting] [activity] [venue_phrase] [age_phrase]."
+
+    Returns None when there are insufficient facts for a meaningful sentence.
+    Does not invent or guess any details.
+    """
+    tags = event_data.get("tags", [])
+
+    cost = _cost_phrase(event_data)
+    setting = _setting_phrase(tags)
+    activity = _activity_phrase(tags)
+    venue = _venue_phrase(event_data)
+    age = _age_phrase(event_data)
+
+    # We need at least one of (activity, venue) for the note to say anything
+    if not activity and not venue:
+        return None
+
+    # Build parts
+    parts: list[str] = []
+
+    if cost:
+        parts.append(cost)
+
+    if setting:
+        parts.append(setting)
+
+    if activity:
+        parts.append(activity)
+
+    if venue:
+        parts.append(venue)
+
+    if age:
+        parts.append(age)
+
+    if not parts:
+        return None
+
+    # Assemble sentence
+    # Capitalise first word, end with period
+    sentence = " ".join(parts)
+    sentence = sentence[0].upper() + sentence[1:]
+    if not sentence.endswith("."):
+        sentence += "."
+
+    # Truncate safely if somehow over limit (shouldn't happen normally)
+    if len(sentence) > _MAX_NOTE_LEN:
+        sentence = sentence[: _MAX_NOTE_LEN - 1].rstrip() + "."
+
+    return sentence
+
+
+# ---------------------------------------------------------------------------
+# Multi-sentence guard
+# ---------------------------------------------------------------------------
+
+_SENTENCE_BOUNDARY = re.compile(r"(?<=[.!?])\s+(?=[A-Z])")
+
+
+def validate_short_note(note: str | None) -> tuple[bool, str]:
+    """
+    Check a short_note for policy compliance.
+
+    Returns (is_valid, reason_if_invalid).
+    """
+    if note is None:
+        return True, ""
+    if len(note) > _MAX_NOTE_LEN:
+        return False, f"short_note exceeds {_MAX_NOTE_LEN} chars ({len(note)})"
+    if len(_SENTENCE_BOUNDARY.findall(note)) > 0:
+        return False, "short_note appears to contain multiple sentences"
+    return True, ""

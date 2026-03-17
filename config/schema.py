@@ -65,6 +65,9 @@ ALLOWED_TAGS: frozenset[str] = frozenset(
         "camp",
         "swim",
         "hiking",
+        "animals",
+        "train",
+        "museum",
         # Weather
         "rainy_day",
     }
@@ -142,6 +145,29 @@ class Event(BaseModel):
     last_verified_at: datetime = Field(
         description="UTC timestamp of when the pipeline last confirmed this event exists."
     )
+    extracted_from: str = Field(
+        default="direct_scraper",
+        description=(
+            "Provenance token describing how this event's data was obtained. "
+            "Values: 'direct_scraper' | 'seed_resolved' | 'manual_review_approved'"
+        ),
+    )
+    extraction_confidence: float = Field(
+        default=1.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "0–1 confidence in the completeness of extracted data. "
+            "1.0 for direct scrapers. Lower for seed-resolved events."
+        ),
+    )
+    short_note: Optional[str] = Field(
+        default=None,
+        description=(
+            "Single-sentence derived note (max 200 chars) based strictly on "
+            "extracted facts. Never fabricated. Never sourced from DullesMoms."
+        ),
+    )
 
     # ---- Validators --------------------------------------------------------
 
@@ -172,6 +198,25 @@ class Event(BaseModel):
         if self.end is not None and self.end < self.start:
             raise ValueError("end must be >= start")
         return self
+
+    @field_validator("short_note")
+    @classmethod
+    def short_note_single_sentence(cls, v: Optional[str]) -> Optional[str]:
+        """Enforce max length and single-sentence constraint."""
+        if v is None:
+            return v
+        v = v.strip()
+        if len(v) > 200:
+            raise ValueError("short_note must be 200 characters or fewer")
+        return v
+
+    @field_validator("extracted_from")
+    @classmethod
+    def extracted_from_known_value(cls, v: str) -> str:
+        allowed = {"direct_scraper", "seed_resolved", "manual_review_approved"}
+        if v not in allowed:
+            raise ValueError(f"extracted_from must be one of {allowed}, got {v!r}")
+        return v
 
     class Config:
         json_encoders = {datetime: lambda v: v.isoformat()}
