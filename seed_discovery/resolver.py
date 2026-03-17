@@ -43,6 +43,55 @@ _MIN_PUBLISH_CONFIDENCE = SEED_CONFIDENCE_THRESHOLD
 
 
 # ---------------------------------------------------------------------------
+# Known URL shortener domains
+# ---------------------------------------------------------------------------
+
+_SHORTENER_DOMAINS: frozenset[str] = frozenset([
+    "bit.ly", "tinyurl.com", "t.co", "ow.ly", "buff.ly",
+    "goo.gl", "short.io", "rb.gy", "cutt.ly", "is.gd",
+    "lnkd.in", "dlvr.it", "rebrand.ly", "rebrandly.com",
+])
+
+
+def _is_shortener_url(url: str) -> bool:
+    """Return True if url's domain is a known URL shortener."""
+    try:
+        netloc = urlparse(url).netloc.lower().lstrip("www.")
+        return netloc in _SHORTENER_DOMAINS
+    except Exception:
+        return False
+
+
+# ---------------------------------------------------------------------------
+# Price text cleanup
+# ---------------------------------------------------------------------------
+
+_PRICE_PATTERN = re.compile(
+    r"(?:free(?:\s+with\s+\w+)?|\$\s*\d[\d,.]*(?:\s*(?:per\s+\w+|each|/\w+))?)",
+    re.IGNORECASE,
+)
+
+
+def _clean_price_text(text: str | None) -> str | None:
+    """
+    Return a cleaned price string ≤ 80 chars.
+
+    1. ≤ 80 chars → return stripped.
+    2. > 80 chars → search for a $price or 'free' pattern; return first match.
+    3. No match found → return None (noise discarded).
+    """
+    if not text:
+        return None
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) <= 80:
+        return text
+    match = _PRICE_PATTERN.search(text)
+    if match:
+        return match.group(0).strip()
+    return None
+
+
+# ---------------------------------------------------------------------------
 # HTTP helper (single shared session per resolver call)
 # ---------------------------------------------------------------------------
 
@@ -68,14 +117,15 @@ def _build_session() -> requests.Session:
 # Extraction strategies
 # ---------------------------------------------------------------------------
 
-def _extract_jsonld(soup: BeautifulSoup) -> dict[str, Any]:
+def _extract_jsonld(soup: BeautifulSoup) -> tuple[dict[str, Any], bool]:
     """
     Extract event facts from schema.org/Event JSON-LD blocks.
 
-    Returns a dict with any of: title, start, end, location_name,
-    location_address, cost_text, description_snippet, registration_url.
+    Returns (facts_dict, found_event_schema) where found_event_schema is True
+    when at least one schema.org/Event block was found on the page.
     """
     facts: dict[str, Any] = {}
+    found_event_schema = False
 
     for script in soup.find_all("script", type="application/ld+json"):
         try:
@@ -96,6 +146,8 @@ def _extract_jsonld(soup: BeautifulSoup) -> dict[str, Any]:
             schema_type = item.get("@type", "")
             if "Event" not in str(schema_type):
                 continue
+
+            found_event_schema = True
 
             if "name" in item and not facts.get("title"):
                 facts["title"] = str(item["name"]).strip()
@@ -153,7 +205,7 @@ def _extract_jsonld(soup: BeautifulSoup) -> dict[str, Any]:
             if isinstance(organizer, dict) and not facts.get("source_name_hint"):
                 facts["source_name_hint"] = organizer.get("name", "")
 
-    return facts
+    return facts, found_event_schema
 
 
 def _extract_opengraph(soup: BeautifulSoup) -> dict[str, Any]:
@@ -478,13 +530,20 @@ def resolve_candidate(
         ).strip()
         return None
 
+    # Track whether we followed a redirect (shortener → final URL)
+    final_url: str = response.url
+    redirect_resolved = final_url.rstrip("/") != original_url.rstrip("/")
+
     soup = BeautifulSoup(response.text, "lxml")
 
     # Extract facts in priority order from the original page
-    jsonld_facts = _extract_jsonld(soup)
+    jsonld_facts, found_jsonld_event = _extract_jsonld(soup)
     og_facts = _extract_opengraph(soup)
     html_facts = _extract_html_patterns(soup)
     facts = _merge_facts(jsonld_facts, og_facts, html_facts)
+
+    # Clean up extracted cost text
+    facts["cost_text"] = _clean_price_text(facts.get("cost_text"))
 
     # Discovered fields available as fallbacks (from DullesMoms, marked non-authoritative)
     discovered_fallbacks: dict[str, Any] = {}
@@ -497,17 +556,23 @@ def resolve_candidate(
 
     # Compute confidence with discovered fallbacks providing partial credit
     extraction_confidence = _compute_extraction_confidence(facts, discovered=discovered_fallbacks)
+    # Bonuses: +0.10 if we resolved a URL shortener redirect; +0.05 if page had JSON-LD Event
+    if redirect_resolved:
+        extraction_confidence = min(1.0, extraction_confidence + 0.10)
+    if found_jsonld_event:
+        extraction_confidence = min(1.0, extraction_confidence + 0.05)
 
     # Populate candidate extracted fields (original page first, fallback to discovered)
-    # Prefer the discovered title (which DullesMoms specifically wrote for this event)
-    # over a generic/venue-homepage title extracted from the original page.
-    raw_extracted_title = facts.get("title")
+    # Title priority: JSON-LD Event name > DullesMoms discovered title > OG/HTML page title.
+    # We preserve the DullesMoms title over generic venue-homepage titles.
+    jsonld_title = jsonld_facts.get("title") if found_jsonld_event else None
+    raw_extracted_title = jsonld_title or facts.get("title")
     if _is_generic_title(raw_extracted_title):
         raw_extracted_title = None
     # Prefer discovered title when:
     # (a) extracted is a substring of discovered (venue name embedded in event name)
     # (b) extracted looks like a website page title ("Venue | Location", "Venue - Site")
-    if raw_extracted_title and candidate.discovered_title:
+    if raw_extracted_title and candidate.discovered_title and not jsonld_title:
         is_venue_substring = (
             raw_extracted_title.lower() in candidate.discovered_title.lower()
             and len(candidate.discovered_title) > len(raw_extracted_title) + 5
@@ -528,7 +593,7 @@ def resolve_candidate(
     candidate.extracted_registration_url = facts.get("registration_url")
     candidate.original_source_name = (
         facts.get("source_name_hint")
-        or _source_name_from_url(original_url)
+        or _source_name_from_url(final_url)
     )
     candidate.resolved_at = datetime.now(tz=timezone.utc)
 
@@ -578,7 +643,8 @@ def resolve_candidate(
         "price_text": candidate.extracted_cost_text,
         "summary_text": candidate.extracted_description_snippet,
         "source_name": candidate.original_source_name,
-        "source_url": original_url,
+        "source_url": final_url,
+        "referral_url": original_url if redirect_resolved else None,
         "registration_url": candidate.extracted_registration_url,
         "image_url": None,  # never copy images from seed sources
         # Provenance fields consumed by normalize_record()

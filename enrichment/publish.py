@@ -21,6 +21,8 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+from urllib.parse import urlparse
+
 from config.schema import Event
 from config.settings import PUBLISHED_DIR
 
@@ -128,16 +130,33 @@ def publish_events(
     else:
         week_start = _week_monday(now_utc.date())
 
-    # Collect unique source names
-    source_names = sorted({e.source_name for e in events})
+    # Sort events by start time before publishing
+    def _sort_key(e: Event):
+        start = e.start
+        if start.tzinfo is not None:
+            start = start.astimezone(timezone.utc).replace(tzinfo=None)
+        return (start, e.title)
+
+    events_sorted = sorted(events, key=_sort_key)
+
+    # Count unique source domains (not just source_name strings)
+    source_domains: set[str] = set()
+    for e in events_sorted:
+        try:
+            domain = urlparse(e.source_url).netloc.lower().lstrip("www.")
+            if domain:
+                source_domains.add(domain)
+        except Exception:
+            pass
+    source_count = len(source_domains) or len({e.source_name for e in events_sorted})
 
     # Build the weekly payload
     weekly = WeeklyFile(
         week_start=week_start.isoformat(),
         generated_at=now_utc.isoformat(),
-        source_count=len(source_names),
-        event_count=len(events),
-        events=[_event_to_dict(e) for e in events],
+        source_count=source_count,
+        event_count=len(events_sorted),
+        events=[_event_to_dict(e) for e in events_sorted],
     )
 
     # Write the weekly file
@@ -147,7 +166,7 @@ def publish_events(
         json.dumps(asdict(weekly), indent=2, default=str),
         encoding="utf-8",
     )
-    logger.info("Published %d events to %s", len(events), out_path)
+    logger.info("Published %d events to %s", len(events_sorted), out_path)
 
     # Update index.json
     existing_index = _load_existing_index()
@@ -185,6 +204,6 @@ def publish_events(
         week_start=week_start,
         output_path=out_path,
         index_path=index_path,
-        event_count=len(events),
-        source_count=len(source_names),
+        event_count=len(events_sorted),
+        source_count=source_count,
     )

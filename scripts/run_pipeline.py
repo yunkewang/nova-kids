@@ -193,6 +193,84 @@ def save_normalized(events: list[Event]) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Repair mode
+# ---------------------------------------------------------------------------
+
+def _repair_published_week(week_start: date, dry_run: bool) -> int:
+    """
+    Re-enrich and re-publish a previously published week JSON.
+
+    Reads the existing week-YYYY-MM-DD.json, re-runs normalize → dedupe →
+    validate → publish so that enrichment improvements (venue hints, new tags,
+    better short_notes) are applied without re-scraping.
+    """
+    from config.settings import PUBLISHED_DIR
+
+    filename = f"week-{week_start.isoformat()}.json"
+    week_path = PUBLISHED_DIR / filename
+    if not week_path.exists():
+        logging.error("Repair: %s not found.", week_path)
+        return 1
+
+    raw_payload = json.loads(week_path.read_text(encoding="utf-8"))
+    existing_events: list[dict] = raw_payload.get("events", [])
+    if not existing_events:
+        logging.warning("Repair: no events found in %s.", filename)
+        return 0
+
+    print(f"[repair] Loaded {len(existing_events)} events from {filename}")
+
+    # Re-normalize each event (re-runs enrichment pipeline on the stored raw data)
+    repaired: list[Event] = []
+    failed = 0
+    for ev in existing_events:
+        # Convert stored event dict back to a raw scraper-style dict
+        raw: dict = {
+            "title": ev.get("title", ""),
+            "start_text": ev.get("start", ""),
+            "end_text": ev.get("end"),
+            "location_text": " ".join(filter(None, [
+                ev.get("location_name"), ev.get("location_address"),
+            ])),
+            "price_text": ev.get("price_text"),
+            "summary_text": ev.get("summary"),
+            "source_name": ev.get("source_name", ""),
+            "source_url": ev.get("source_url", ""),
+            "registration_url": ev.get("registration_url"),
+            "image_url": ev.get("image_url"),
+            "extracted_from": ev.get("extracted_from", "repaired"),
+            "extraction_confidence": ev.get("extraction_confidence", 1.0),
+            "all_day": ev.get("all_day", False),
+        }
+        event = normalize_record(raw)
+        if event:
+            repaired.append(event)
+        else:
+            failed += 1
+
+    print(f"[repair] Re-normalized: {len(repaired)} ok, {failed} failed")
+
+    repaired = deduplicate(repaired)
+    print(f"[repair] After dedupe: {len(repaired)}")
+
+    report = validate_events(repaired)
+    print(f"[repair] {report.summary()}")
+    if not report.is_clean():
+        for issue in report.errors:
+            print(f"  ERROR [{issue.rule}] {issue.event_title}: {issue.message}")
+        print("[repair] Halted due to validation errors.")
+        return 1
+
+    if dry_run:
+        print("[repair] Dry run — skipping publish.")
+    else:
+        result = publish_events(repaired, week_start=week_start)
+        print(f"[repair] Republished {result.event_count} events → {result.output_path.name}")
+
+    return 0
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -248,6 +326,17 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--repair-published-week",
+        metavar="DATE",
+        default=None,
+        dest="repair_week",
+        help=(
+            "Re-enrich and re-publish an already-published week file "
+            "(YYYY-MM-DD). Loads the existing week JSON, re-runs normalize + "
+            "dedupe + validate + publish in place. Use --dry-run to preview."
+        ),
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Skip writing published files.",
@@ -259,6 +348,16 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     _configure_logging(args.verbose)
+
+    # Repair mode — short-circuit the normal pipeline
+    if args.repair_week:
+        try:
+            repair_date = date.fromisoformat(args.repair_week)
+        except ValueError:
+            logging.error("Invalid --repair-published-week: %r (expected YYYY-MM-DD)", args.repair_week)
+            return 1
+        print(f"\n=== NoVA Kids Repair Mode: {args.repair_week} ===\n")
+        return _repair_published_week(repair_date, dry_run=args.dry_run)
 
     # Parse --week-start
     target_week: date | None = None

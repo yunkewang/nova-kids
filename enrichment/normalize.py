@@ -119,14 +119,42 @@ def parse_datetime(
 # Location normalization
 # ---------------------------------------------------------------------------
 
+# Regex to detect the start of a street address within a location string.
+# Matches patterns like "123 Main St", "One Park Ave", etc.
+_STREET_ADDRESS_RE = re.compile(
+    r"(?:,\s*|\s{2,}|\b)(\d{1,5}\s+[A-Z][a-zA-Z]|\bOne\b|\bTwo\b)",
+)
+
+
+def _split_venue_address(text: str) -> tuple[str, str | None]:
+    """
+    Split "Venue Name, 123 Main St, City, VA 12345" into
+    (venue_name, street_address_remainder).
+
+    Returns (text, None) when no street address is detected.
+    """
+    m = _STREET_ADDRESS_RE.search(text)
+    if not m:
+        return text, None
+    # Split at the first comma before the street number, or at the street number
+    split_pos = text.rfind(",", 0, m.start())
+    if split_pos == -1:
+        split_pos = m.start()
+    venue = text[:split_pos].strip().rstrip(",").strip()
+    address = text[split_pos:].strip().lstrip(",").strip()
+    if not venue:
+        return text, None
+    return venue, address
+
+
 def normalize_location(
     location_text: str | None,
 ) -> dict[str, str | None]:
     """
     Return a dict with keys: location_name, location_address, city, county.
 
-    For now this does basic cleanup and keyword-based county inference.
-    A future iteration can call a geocoding API.
+    Attempts to split "Venue Name, 123 Main St …" into a venue name and
+    street address. Falls back to keyword-based county inference.
     """
     if not location_text:
         return {
@@ -137,6 +165,8 @@ def normalize_location(
         }
 
     clean = re.sub(r"\s+", " ", location_text).strip()
+    venue_name, street_address = _split_venue_address(clean)
+
     city: str | None = None
     county: str | None = None
 
@@ -152,8 +182,8 @@ def normalize_location(
             break
 
     return {
-        "location_name": clean,
-        "location_address": None,  # address parsing requires geocoding
+        "location_name": venue_name,
+        "location_address": street_address,
         "city": city,
         "county": county,
     }
