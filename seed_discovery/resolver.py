@@ -373,8 +373,24 @@ def _find_original_url_from_detail_page(
 
 
 _GENERIC_TITLE_RE = re.compile(
-    r"^(home\s*page?|welcome|untitled|index|coming\s*soon|error|404|403|not\s*found"
-    r"|page\s*not\s*found|access\s*denied|forbidden)$",
+    r"^("
+    r"home\s*page?|welcome|untitled|index|coming\s*soon|error|404|403"
+    r"|not\s*found|page\s*not\s*found|access\s*denied|forbidden"
+    r"|facebook|twitter|instagram|linkedin"
+    r"|parks\s*&?\s*recreation|parks\s+and\s+recreation"
+    r"|communications\s+and\s+community\s+engagement"
+    r")$",
+    re.IGNORECASE,
+)
+
+# Titles that are clearly venue/site taglines rather than specific event titles.
+# These patterns are checked in addition to the exact-match list above.
+_SITE_TAGLINE_RE = re.compile(
+    r"(?:"
+    r"arcade,?\s+sports\s+bar"           # "Arcade, Sports Bar, and Restaurant…"
+    r"|(?:art\s+classes|cooking\s+classes).{0,40}birthday\s+parties"
+    r"|pick\s+you\s+own,.{0,20}u-?pick"  # Great Country Farms SEO title
+    r")",
     re.IGNORECASE,
 )
 
@@ -387,7 +403,11 @@ def _is_generic_title(title: str | None) -> bool:
     # Very short non-descriptive titles
     if len(t) <= 6:
         return True
-    return bool(_GENERIC_TITLE_RE.match(t))
+    if _GENERIC_TITLE_RE.match(t):
+        return True
+    if _SITE_TAGLINE_RE.search(t):
+        return True
+    return False
 
 
 def _source_name_from_url(url: str) -> str:

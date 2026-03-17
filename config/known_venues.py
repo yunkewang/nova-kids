@@ -29,7 +29,12 @@ KNOWN_VENUES: list[tuple[str, VenueHint]] = [
     ("smithsonian",                {"tags": ["indoor", "museum"],         "rainy_day_friendly": True, "city": "Washington"}),
     ("natural history",            {"tags": ["indoor", "museum", "nature"],"rainy_day_friendly": True}),
     ("air and space",              {"tags": ["indoor", "museum", "stem"], "rainy_day_friendly": True}),
+    ("udvar",                      {"tags": ["indoor", "museum", "stem"], "rainy_day_friendly": True}),
+    ("airandspace",                {"tags": ["indoor", "museum", "stem"], "rainy_day_friendly": True}),
     ("tudor place",                {"tags": ["indoor", "museum"],         "rainy_day_friendly": True, "city": "Washington"}),
+    # ── Malls / Indoor Destinations ──────────────────────────────────────────
+    ("tysons corner",              {"tags": ["indoor"],                   "rainy_day_friendly": True, "city": "McLean", "county": "Fairfax"}),
+    ("fair oaks mall",             {"tags": ["indoor"],                   "rainy_day_friendly": True, "county": "Fairfax"}),
     # ── Libraries ───────────────────────────────────────────────────────────
     ("public library",      {"tags": ["indoor"],  "rainy_day_friendly": True}),
     ("county library",      {"tags": ["indoor"],  "rainy_day_friendly": True}),
