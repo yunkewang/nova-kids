@@ -1,0 +1,54 @@
+# NoVA Kids — approved event sources
+# -----------------------------------------------------------------------
+# Rules:
+#  - Only list original/public sources with explicit public event feeds.
+#  - DullesMoms is NOT a data source; never add it here.
+#  - When enabled is false the scraper is skipped during pipeline runs.
+#  - source_type values: rss | html | api | ical
+# -----------------------------------------------------------------------
+
+sources:
+  - id: fairfax_park_authority
+    name: Fairfax County Park Authority
+    source_type: html
+    base_url: https://www.fairfaxcounty.gov/parks/park-events
+    enabled: true
+    notes: >
+      Park events listing. Scrape the public event calendar.
+      Respect robots.txt and add polite delays between requests.
+
+  - id: arlington_parks_rec
+    name: Arlington County Parks & Recreation
+    source_type: html
+    base_url: https://parks.arlingtonva.us/events/
+    enabled: true
+    notes: >
+      Public parks events page. HTML scraping with pagination.
+
+  - id: fairfax_county_library
+    name: Fairfax County Public Library
+    source_type: html
+    base_url: https://www.fairfaxcounty.gov/library/programs-events
+    enabled: true
+    notes: >
+      FCPL events page. Filter for family/children programs.
+      May have RSS feeds per branch — prefer those when available.
+
+  - id: arlington_public_library
+    name: Arlington Public Library
+    source_type: html
+    base_url: https://library.arlingtonva.us/events/
+    enabled: true
+    notes: >
+      APL events page. Filter for kids and family events.
+
+  - id: eventbrite_nova_family
+    name: Eventbrite — Northern Virginia Family Events
+    source_type: api
+    base_url: https://www.eventbrite.com/d/va--northern-virginia/family-events/
+    enabled: false
+    notes: >
+      Eventbrite public search results for NoVA family events.
+      Disabled by default; enable when an Eventbrite API key is configured
+      via EVENTBRITE_API_KEY environment variable.
+      Only ingest events where is_free or relevant family categories apply.
