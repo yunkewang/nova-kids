@@ -104,16 +104,23 @@ def _load_existing_index() -> IndexFile | None:
 # Public entry point
 # ---------------------------------------------------------------------------
 
-def publish_events(events: list[Event]) -> PublishResult:
+def publish_events(
+    events: list[Event],
+    week_start: date | None = None,
+) -> PublishResult:
     """
     Write (or overwrite) the weekly JSON file and update index.json.
 
-    If `events` is empty, writes an empty week file for the current week.
+    If `week_start` is provided it is used as-is (snapped to Monday).
+    Otherwise the week is inferred from the earliest event start time,
+    or falls back to the current week when there are no events.
     """
     now_utc = datetime.now(tz=timezone.utc)
 
     # Determine which week we're publishing
-    if events:
+    if week_start is not None:
+        week_start = _week_monday(week_start)
+    elif events:
         earliest_start = min(e.start for e in events)
         week_start = _week_monday(
             earliest_start.date() if isinstance(earliest_start, datetime) else earliest_start

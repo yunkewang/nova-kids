@@ -152,4 +152,13 @@ def deduplicate(events: list[Event]) -> list[Event]:
         len(events) - len(deduplicated),
     )
 
-    return sorted(deduplicated, key=lambda e: (e.start, e.title))
+    def _sort_key(e: "Event") -> tuple:
+        # Normalize to naive UTC for sorting — avoids TypeError when mixing
+        # offset-aware and offset-naive datetimes across scrapers / seed resolvers.
+        from datetime import timezone as _tz
+        start = e.start
+        if start.tzinfo is not None:
+            start = start.astimezone(_tz.utc).replace(tzinfo=None)
+        return (start, e.title)
+
+    return sorted(deduplicated, key=_sort_key)

@@ -104,6 +104,11 @@ def parse_datetime(
         # If no year was in the string, default_year shifts the date forward
         if default_year and dt.year < default_year:
             dt = dt.replace(year=default_year)
+        # Normalise to naive local time so all events sort consistently.
+        # Timezone info is not reliable from scraped text anyway.
+        if dt.tzinfo is not None:
+            from datetime import timezone as _tz
+            dt = dt.astimezone(_tz.utc).replace(tzinfo=None)
         return dt
     except (ValueError, OverflowError) as exc:
         logger.debug("Could not parse datetime %r: %s", text, exc)

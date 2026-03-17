@@ -38,7 +38,7 @@ import argparse
 import json
 import logging
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -154,44 +154,60 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Only run seed discovery; skip fetching original pages.",
     )
+    parser.add_argument(
+        "--week-start",
+        metavar="DATE",
+        default=None,
+        help=(
+            "Only collect candidates for the week starting on DATE (YYYY-MM-DD). "
+            "If omitted, all upcoming events are collected."
+        ),
+    )
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args(argv)
     _configure_logging(args.verbose)
 
+    # Parse target week
+    target_week: date | None = None
+    if args.week_start:
+        try:
+            target_week = date.fromisoformat(args.week_start)
+        except ValueError:
+            logging.error("Invalid --week-start date: %r (expected YYYY-MM-DD)", args.week_start)
+            return 1
+
     print("\n=== NoVA Kids — Seed Discovery ===")
     print("NOTE: DullesMoms is used for discovery only.")
     print("      Published content comes from original event host pages.\n")
+    if target_week:
+        print(f"      Target week: {target_week} → {target_week.strftime('%Y-%m-%d')} (Mon)")
 
     started_at = datetime.now(tz=timezone.utc)
 
     # ---- Step 1: Seed discovery ----------------------------------------
     print("[1/3] Running DullesMoms seed finder...")
-    finder = DullesMomsSeedFinder()
+    finder = DullesMomsSeedFinder(target_week_start=target_week)
     try:
         candidates = finder.run()
     except Exception as exc:
         logging.error("Seed finder failed: %s", exc)
         return 1
 
-    needs_review = [c for c in candidates if c.requires_manual_review]
-    auto_resolvable = [c for c in candidates if not c.requires_manual_review]
     print(f"      Candidates discovered: {len(candidates)}")
-    print(f"      Auto-resolvable:       {len(auto_resolvable)}")
-    print(f"      Needs manual review:   {len(needs_review)}")
 
     # ---- Step 2: Resolve to original pages -----------------------------
     resolved_raws: list[dict] = []
-    newly_flagged: list[CandidateEvent] = list(needs_review)  # copy
+    newly_flagged: list[CandidateEvent] = []
 
     if args.no_resolve:
         print("\n[2/3] Skipping resolution (--no-resolve).")
         newly_flagged = list(candidates)
     else:
-        print(f"\n[2/3] Resolving {len(auto_resolvable)} candidates to original pages...")
-        resolved_raws, resolution_failures = resolve_candidates(auto_resolvable)
-        newly_flagged.extend(resolution_failures)
+        print(f"\n[2/3] Resolving {len(candidates)} candidates "
+              "(visiting DullesMoms detail pages as needed)...")
+        resolved_raws, newly_flagged = resolve_candidates(candidates)
         print(f"      Resolved successfully: {len(resolved_raws)}")
-        print(f"      Sent to manual review: {len(resolution_failures)}")
+        print(f"      Sent to manual review: {len(newly_flagged)}")
 
     # ---- Step 3: Write outputs -----------------------------------------
     print("\n[3/3] Saving outputs...")

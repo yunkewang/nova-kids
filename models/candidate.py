@@ -129,6 +129,28 @@ class CandidateEvent(BaseModel):
         description="Name of the original host (venue, org, or domain name).",
     )
 
+    # ---- Manual review metadata --------------------------------------------
+    review_reason: Optional[str] = Field(
+        default=None,
+        description=(
+            "Machine-readable reason this candidate is in manual review. "
+            "One of: no_original_url_found, original_url_dead, "
+            "extraction_incomplete, ambiguous_duplicate, low_confidence."
+        ),
+    )
+    resolution_attempts: int = Field(
+        default=0,
+        description="Number of times the resolver has attempted this candidate.",
+    )
+    last_resolution_error: Optional[str] = Field(
+        default=None,
+        description="Error message from the most recent failed resolution attempt.",
+    )
+    suggested_next_action: Optional[str] = Field(
+        default=None,
+        description="Human-readable hint for what to do next in manual review.",
+    )
+
     # ---- Timestamps --------------------------------------------------------
     discovered_at: datetime = Field(
         default_factory=lambda: datetime.now(tz=timezone.utc),
