@@ -227,6 +227,71 @@ def _check_short_note(event: Event) -> list[ValidationIssue]:
     return issues
 
 
+_LOCATION_ADDR_FRAGMENT_RE = re.compile(
+    r"\b\d{3,5}\s+[A-Z][a-z]"          # "501 Main" or "20427 Exchange"
+    r"|Address[A-Z\d]"                   # "Address20427" (B&N concat)
+    r"|Get\s+Directions"
+    r"|Store\s+Hours?"
+    r"|Phone\s+Number",
+    re.IGNORECASE,
+)
+
+_SUMMARY_SHORTCODE_RE = re.compile(r"\[vc_|\[/vc_", re.IGNORECASE)
+
+_MACHINE_NAME_RE = re.compile(r"^[A-Z][a-z]+(?:\.[A-Z][a-z]+)?$")  # "Ashburnice", "Airandspace.Si"
+
+
+def _check_location_junk(event: Event) -> list[ValidationIssue]:
+    """Warn when location_name still contains address fragments or boilerplate."""
+    issues: list[ValidationIssue] = []
+    if event.location_name and _LOCATION_ADDR_FRAGMENT_RE.search(event.location_name):
+        issues.append(ValidationIssue(
+            event.id, event.title, "LOCATION_NAME_HAS_ADDRESS",
+            f"location_name appears to contain an address fragment: {event.location_name!r}",
+            "warning",
+        ))
+    return issues
+
+
+def _check_summary_shortcodes(event: Event) -> list[ValidationIssue]:
+    """Error when summary contains unstripped WordPress shortcodes."""
+    issues: list[ValidationIssue] = []
+    if event.summary and _SUMMARY_SHORTCODE_RE.search(event.summary):
+        issues.append(ValidationIssue(
+            event.id, event.title, "SUMMARY_HAS_SHORTCODES",
+            "summary contains WordPress shortcode fragments — strip before publishing.",
+            "error",
+        ))
+    return issues
+
+
+def _check_machine_source_name(event: Event) -> list[ValidationIssue]:
+    """Warn when source_name looks like a machine-generated domain fragment."""
+    issues: list[ValidationIssue] = []
+    if event.source_name and _MACHINE_NAME_RE.match(event.source_name) and len(event.source_name) > 6:
+        issues.append(ValidationIssue(
+            event.id, event.title, "MACHINE_SOURCE_NAME",
+            f"source_name looks auto-generated: {event.source_name!r}. Add to config/source_names.py.",
+            "warning",
+        ))
+    return issues
+
+
+def _check_generic_title(event: Event) -> list[ValidationIssue]:
+    """Warn when title looks like a venue name rather than an event name."""
+    issues: list[ValidationIssue] = []
+    if not event.title or not event.location_name:
+        return issues
+    # Title that exactly matches location_name (after case normalization) is likely a venue page
+    if event.title.lower().strip() == event.location_name.lower().strip():
+        issues.append(ValidationIssue(
+            event.id, event.title, "TITLE_MATCHES_VENUE",
+            f"title exactly matches location_name ({event.location_name!r}) — likely a venue page, not an event.",
+            "warning",
+        ))
+    return issues
+
+
 def _check_shortener_url(event: Event) -> list[ValidationIssue]:
     """Warn when source_url is still a URL-shortener link (redirect not resolved)."""
     issues: list[ValidationIssue] = []
@@ -333,6 +398,10 @@ _PER_EVENT_RULES = [
     _check_shortener_url,
     _check_price_text_quality,
     _check_enrichment_consistency,
+    _check_location_junk,
+    _check_summary_shortcodes,
+    _check_machine_source_name,
+    _check_generic_title,
 ]
 
 

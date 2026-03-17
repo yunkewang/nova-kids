@@ -144,16 +144,18 @@ def compute_family_friendly_score(event_data: dict[str, Any], tags: list[str]) -
 
     Heuristic weights:
       +0.30  tagged all_ages, kids, elementary, toddler, or preschool
+      +0.20  kid-centric venue type (museum, animals/aquarium)
       +0.15  free event
       +0.10  indoor
-      +0.10  storytime, arts, crafts, stem, nature, music
+      +0.10  storytime, arts, crafts, stem, nature, music, animals, museum
       +0.10  weekend
+      +0.10  child-centric title keyword (children's, kids, family, toddler, baby)
       +0.05  rainy_day_friendly
       +0.05  has summary
       +0.05  has image_url
       +0.05  has registration_url
       -0.10  teen-only (without all_ages or elementary)
-    Total possible: ~1.05 → capped at 1.0
+    Total possible: ~1.30 → capped at 1.0
     """
     score = 0.0
     tag_set = set(tags)
@@ -165,6 +167,11 @@ def compute_family_friendly_score(event_data: dict[str, Any], tags: list[str]) -
     elif "teen" in tag_set:
         score -= 0.10  # teen-only is less broadly family-friendly
 
+    # Kid-centric venue type bonus (aquariums, children's museums, animal parks)
+    kid_venue_tags = {"museum", "animals"}
+    if tag_set & kid_venue_tags:
+        score += 0.20
+
     # Cost
     if "free" in tag_set:
         score += 0.15
@@ -173,14 +180,20 @@ def compute_family_friendly_score(event_data: dict[str, Any], tags: list[str]) -
     if "indoor" in tag_set:
         score += 0.10
 
-    # Activity richness
+    # Activity richness (expanded to include animals and museum)
     enriching_tags = {"storytime", "arts", "crafts", "stem", "nature", "music",
-                      "theater", "cooking", "workshop"}
+                      "theater", "cooking", "workshop", "animals", "museum"}
     if tag_set & enriching_tags:
         score += 0.10
 
     # Timing
     if "weekend" in tag_set:
+        score += 0.10
+
+    # Child-centric title keywords
+    title_lower = (event_data.get("title") or "").lower()
+    if any(kw in title_lower for kw in
+           ["children", "kids", "family", "toddler", "baby", "preschool", "storytime"]):
         score += 0.10
 
     # Weather
@@ -202,6 +215,84 @@ def compute_family_friendly_score(event_data: dict[str, Any], tags: list[str]) -
 # Top-level entry point
 # ---------------------------------------------------------------------------
 
+# Keywords that strongly indicate an indoor activity (for conflict resolution)
+_STRONG_INDOOR_RE = re.compile(
+    r"\b(?:indoor|inside|workshop|class|room|center|museum|theater|library|rink|arena)\b",
+    re.IGNORECASE,
+)
+# Keywords that strongly indicate an outdoor activity
+_STRONG_OUTDOOR_RE = re.compile(
+    r"\b(?:outdoor|outside|trail|hike|farm|field|hunt|garden|park\b|nature\s+walk)\b",
+    re.IGNORECASE,
+)
+# Venue name keywords that imply indoor
+_INDOOR_VENUE_WORDS = frozenset([
+    "museum", "library", "center", "school", "rink", "arena",
+    "theater", "theatre", "studio", "aquarium", "mall",
+])
+# Venue name keywords that imply outdoor
+_OUTDOOR_VENUE_WORDS = frozenset([
+    "park", "farm", "trail", "garden", "field", "nature", "reserve",
+])
+
+
+def _resolve_indoor_outdoor_conflict(
+    tags: list[str],
+    event_data: dict[str, Any],
+    venue_hint_rainy: bool | None,
+) -> list[str]:
+    """
+    Remove the weaker of indoor/outdoor when both are tagged on the same event.
+
+    Resolution priority:
+      1. Known-venue hint rainy_day_friendly value (authoritative)
+      2. Venue name keywords (location_name)
+      3. Title + summary keywords
+      4. If still ambiguous, keep both (mixed venue is plausible)
+    """
+    tag_set = set(tags)
+    if "indoor" not in tag_set or "outdoor" not in tag_set:
+        return tags  # no conflict
+
+    # 1. Venue hint is authoritative
+    if venue_hint_rainy is True:
+        tag_set.discard("outdoor")
+        return sorted(tag_set)
+    if venue_hint_rainy is False:
+        tag_set.discard("indoor")
+        return sorted(tag_set)
+
+    # 2. Venue name keywords
+    loc_lower = (event_data.get("location_name") or "").lower()
+    loc_is_indoor = any(w in loc_lower for w in _INDOOR_VENUE_WORDS)
+    loc_is_outdoor = any(w in loc_lower for w in _OUTDOOR_VENUE_WORDS)
+
+    if loc_is_indoor and not loc_is_outdoor:
+        tag_set.discard("outdoor")
+        return sorted(tag_set)
+    if loc_is_outdoor and not loc_is_indoor:
+        tag_set.discard("indoor")
+        return sorted(tag_set)
+
+    # 3. Title + summary keywords
+    combined = " ".join(filter(None, [
+        event_data.get("title", ""),
+        event_data.get("summary", ""),
+    ]))
+    has_indoor = bool(_STRONG_INDOOR_RE.search(combined))
+    has_outdoor = bool(_STRONG_OUTDOOR_RE.search(combined))
+
+    if has_indoor and not has_outdoor:
+        tag_set.discard("outdoor")
+        return sorted(tag_set)
+    if has_outdoor and not has_indoor:
+        tag_set.discard("indoor")
+        return sorted(tag_set)
+
+    # 4. Ambiguous — keep both (legitimate mixed venue e.g. Community Center & Park)
+    return tags
+
+
 def enrich_event(event_data: dict[str, Any]) -> dict[str, Any]:
     """
     Mutate and return event_data with derived tags, score, and flags.
@@ -217,6 +308,7 @@ def enrich_event(event_data: dict[str, Any]) -> dict[str, Any]:
         event_data.get("title"),
         event_data.get("source_url"),
     )
+    venue_hint_rainy: bool | None = None
     if venue_hint:
         # Merge hint tags into derived tags
         extra_tags = [t for t in venue_hint.get("tags", []) if t in ALLOWED_TAGS]
@@ -224,6 +316,7 @@ def enrich_event(event_data: dict[str, Any]) -> dict[str, Any]:
         # Override rainy_day only when the hint explicitly sets it
         if "rainy_day_friendly" in venue_hint:
             rainy_day = venue_hint["rainy_day_friendly"]
+            venue_hint_rainy = rainy_day
         else:
             rainy_day = derive_rainy_day_friendly(tags)
         # Fill city / county only when missing
@@ -231,6 +324,13 @@ def enrich_event(event_data: dict[str, Any]) -> dict[str, Any]:
             event_data["city"] = venue_hint["city"]
         if not event_data.get("county") and venue_hint.get("county"):
             event_data["county"] = venue_hint["county"]
+
+    # Resolve indoor/outdoor tag conflict
+    tags = _resolve_indoor_outdoor_conflict(tags, event_data, venue_hint_rainy)
+
+    # Recompute rainy_day from resolved tags (venue hint overrides still apply)
+    if venue_hint_rainy is None:
+        rainy_day = derive_rainy_day_friendly(tags)
 
     score = compute_family_friendly_score(event_data, tags)
 

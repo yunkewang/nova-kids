@@ -15,6 +15,7 @@ The public entry point is `normalize_record(raw: dict) -> Event | None`.
 from __future__ import annotations
 
 import hashlib
+import html as _html_module
 import logging
 import re
 from datetime import datetime, timezone
@@ -24,6 +25,7 @@ from dateutil import parser as dateutil_parser
 from pydantic import ValidationError
 
 from config.schema import CostType, Event
+from config.source_names import normalize_source_name
 from enrichment.annotate import generate_short_note
 from enrichment.enrich import enrich_event
 
@@ -46,11 +48,79 @@ _COUNTY_KEYWORDS: dict[str, list[str]] = {
 # Title normalization
 # ---------------------------------------------------------------------------
 
-# Words that should stay lowercase in title case (unless at start)
 _LOWERCASE_WORDS = frozenset(
     {"a", "an", "the", "and", "but", "or", "for", "nor", "on", "at",
      "to", "by", "in", "of", "up", "as", "is", "it"}
 )
+
+# Titles that are clearly generic destination/venue/homepage titles,
+# not event titles.  When detected, the title is kept but flagged.
+_GENERIC_TITLE_PATTERNS = re.compile(
+    r"^("
+    r"facebook|twitter|instagram|linkedin"
+    r"|parks\s*&?\s*recreation"
+    r"|parks\s+and\s+recreation"
+    r"|communications\s+and\s+community\s+engagement"
+    r"|home\s*page?"
+    r"|welcome\b"
+    r"|untitled"
+    r"|index"
+    r"|coming\s*soon"
+    r"|error|404|403|not\s*found|page\s*not\s*found"
+    r")$",
+    re.IGNORECASE,
+)
+
+# SEO keyword stuffing pattern: long title with em-dash followed by 3+ comma-
+# separated terms ("Great Country Farms – Pick You Own, Strawberries, U-pick…")
+_SEO_STUFFED_TITLE_RE = re.compile(r"\s*[–—]\s*.{0,60},.{0,60},")
+
+# Site taglines that are clearly not specific event titles
+_SITE_TAGLINE_RE = re.compile(
+    r"(?:"
+    r"arcade,?\s+sports\s+bar"
+    r"|(?:art\s+classes|cooking\s+classes).{0,40}birthday\s+parties"
+    r"|pick\s+you\s+own,.{0,20}u-?pick"
+    r")",
+    re.IGNORECASE,
+)
+
+
+def clean_event_title(title: str | None) -> str | None:
+    """
+    Remove common SEO / page-builder artifacts from extracted event titles.
+
+    - Strips em-dash SEO suffix: "Venue – keyword1, keyword2, …" → "Venue"
+    - Strips pipe site-name suffix: "Event | Site Name" → "Event"
+    - Strips trailing punctuation
+    - Returns None for known generic page titles
+    """
+    if not title or not title.strip():
+        return None
+    title = re.sub(r"\s+", " ", title).strip()
+
+    # Detect purely generic page titles
+    if _GENERIC_TITLE_PATTERNS.match(title):
+        return None
+
+    # Detect site taglines (not specific event descriptions)
+    if _SITE_TAGLINE_RE.search(title):
+        return None
+
+    # Strip em-dash SEO keyword stuffing
+    if _SEO_STUFFED_TITLE_RE.search(title):
+        dash_pos = re.search(r"\s*[–—]", title)
+        if dash_pos:
+            title = title[: dash_pos.start()].strip()
+
+    # Strip pipe site-name suffix ("Event | Brand")
+    if " | " in title:
+        title = title[: title.index(" | ")].strip()
+
+    # Strip trailing period/comma (but keep "St.", "Jr.", etc.)
+    title = re.sub(r"[.,]+$", "", title).strip()
+
+    return title or None
 
 
 def normalize_title(title: str) -> str:
@@ -75,6 +145,62 @@ def normalize_title(title: str) -> str:
             result.append(lower)
 
     return " ".join(result)
+
+
+# ---------------------------------------------------------------------------
+# Summary cleaning
+# ---------------------------------------------------------------------------
+
+# WordPress/Visual Composer shortcodes — matches both complete [tag ...] and
+# unclosed fragments that were truncated before the closing bracket.
+_SHORTCODE_RE = re.compile(
+    r"\[/?[a-z_][a-z0-9_]*(?:[^\]]*\]|[^\]]*$)",
+    re.IGNORECASE | re.DOTALL,
+)
+
+# Very generic boilerplate summaries that carry no event-specific information
+_GENERIC_SUMMARY_TEXTS = frozenset([
+    "fairfax county, virginia",
+    "fairfax county",
+    "loudoun county",
+    "arlington county",
+    "city of alexandria",
+    "arlington, virginia",
+])
+
+
+def clean_summary(text: str | None) -> str | None:
+    """
+    Strip junk from scraped summary text.
+
+    - Removes WordPress/Visual Composer shortcodes
+    - Decodes HTML entities (&amp; → &, &lt; → <, etc.)
+    - Strips HTML tags
+    - Collapses whitespace
+    - Returns None when the result is too short or is known boilerplate
+    """
+    if not text:
+        return None
+
+    # Strip shortcodes
+    text = _SHORTCODE_RE.sub(" ", text)
+
+    # Decode HTML entities
+    text = _html_module.unescape(text)
+
+    # Strip HTML tags
+    text = re.sub(r"<[^>]+>", " ", text)
+
+    # Collapse whitespace
+    text = re.sub(r"\s+", " ", text).strip()
+
+    if len(text) < 20:
+        return None
+
+    if text.lower().rstrip(".") in _GENERIC_SUMMARY_TEXTS:
+        return None
+
+    return text
 
 
 # ---------------------------------------------------------------------------
@@ -105,7 +231,6 @@ def parse_datetime(
         if default_year and dt.year < default_year:
             dt = dt.replace(year=default_year)
         # Normalise to naive local time so all events sort consistently.
-        # Timezone info is not reliable from scraped text anyway.
         if dt.tzinfo is not None:
             from datetime import timezone as _tz
             dt = dt.astimezone(_tz.utc).replace(tzinfo=None)
@@ -119,11 +244,151 @@ def parse_datetime(
 # Location normalization
 # ---------------------------------------------------------------------------
 
-# Regex to detect the start of a street address within a location string.
-# Matches patterns like "123 Main St", "One Park Ave", etc.
-_STREET_ADDRESS_RE = re.compile(
-    r"(?:,\s*|\s{2,}|\b)(\d{1,5}\s+[A-Z][a-zA-Z]|\bOne\b|\bTwo\b)",
+# ── Boilerplate cutoff patterns ─────────────────────────────────────────────
+# When any of these appear, truncate the string at that point.
+_LOC_BOILERPLATE_RE = re.compile(
+    r"(?:"
+    r"Get\s+Directions?"
+    r"|Store\s+Hours?"
+    r"|Phone\s+Number"
+    r"|Connect\s+With\s+Us"
+    r"|Hours\s+are\b"
+    r"|Store\s+Features?"
+    r"|FeaturesConnect"
+    r"|(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+\d{1,2}"   # "Sun 11-7"
+    r")",
+    re.IGNORECASE,
 )
+
+# Phone numbers anywhere in location text
+_PHONE_RE = re.compile(r"\s*\(?\d{3}\)?[\s\-\.]\d{3}[\s\-\.]\d{4}")
+
+# "Address" immediately followed by a capital letter or digit (B&N pattern).
+# This means the scraper concatenated "Address" directly with the address text.
+_ADDRESS_CONCAT_RE = re.compile(r"\bAddress([A-Z\d])")
+
+# "• City, ST" or "• City, ST ZIPCODE" at end of string (DullesMoms venue fmt)
+_BULLET_CITY_SUFFIX_RE = re.compile(
+    r"\s*•\s*[A-Za-z][A-Za-z\s]+,\s*[A-Z]{2}(?:\s+\d{5})?\s*$"
+)
+
+
+def _clean_location_raw(text: str) -> tuple[str, str | None]:
+    """
+    First-pass cleanup of raw location text.
+
+    Returns (cleaned_venue_text, extracted_address_or_None).
+
+    Handles:
+    - "Get Directions / Store Hours / Phone Number …" boilerplate
+    - "Address[Capital]" concat artifact (Barnes & Noble)
+    - Phone numbers embedded in location
+    - "• City, ST" DullesMoms suffix
+    - "• ParentOrg" bullet separators (keep only pre-bullet name)
+    """
+    # 1. Cut at boilerplate markers
+    m = _LOC_BOILERPLATE_RE.search(text)
+    if m:
+        text = text[: m.start()].strip()
+
+    # 2. Remove phone numbers
+    text = _PHONE_RE.sub("", text).strip()
+
+    # 3. Handle "Address[Capital]" concat (B&N: "…VA Address20427 Exchange St…")
+    extracted_addr: str | None = None
+    m = _ADDRESS_CONCAT_RE.search(text)
+    if m:
+        addr_raw = text[m.start() + len("Address"):].strip()
+        text = text[: m.start()].strip()
+        extracted_addr = _normalize_address_spacing(addr_raw)
+
+    # 4. Strip trailing punctuation (bullet split is deferred to normalize_location
+    #    so that addresses embedded after "•" can still be found)
+    text = text.rstrip(",:;").strip()
+
+    return text, extracted_addr
+
+
+def _strip_bullet_prefix(venue: str) -> str:
+    """
+    Remove '• ParentOrg' or '• City, ST' suffix from a venue name.
+
+    Called AFTER any address has been extracted from the full text, so we
+    don't accidentally discard address information still attached after "•".
+    """
+    # "• City, ST" at end
+    venue = _BULLET_CITY_SUFFIX_RE.sub("", venue).strip()
+    # Any remaining "• anything" — keep only the first segment
+    if " • " in venue:
+        venue = venue.split(" • ")[0].strip()
+    return venue.rstrip(",:;").strip()
+
+
+def _normalize_address_spacing(text: str) -> str:
+    """
+    Fix address formatting issues from scraped/concatenated text.
+
+    - "20427 Exchange StAshburn"   → "20427 Exchange St, Ashburn"
+    - "501 E. Pratt St.Baltimore"  → "501 E. Pratt St., Baltimore"
+    - "SWWashington"               → "SW, Washington"
+    - "22033Fairfax"               → "22033, Fairfax"
+    """
+    # Street abbreviation directly before capital city name ("StAshburn" → "St, Ashburn")
+    # Note: no trailing \b because "StAshburn" has no word boundary between t and A
+    text = re.sub(
+        r"\b(St|Ave?|Rd|Dr|Blvd?|Ln|Ct|Pl|Way|Pkwy)([A-Z][a-z])",
+        r"\1, \2", text,
+    )
+    # Abbreviation with period before capital ("St.Baltimore")
+    text = re.sub(
+        r"(\bSt|\bAve|\bRd|\bDr|\bBlvd|\bLn|\bCt|\bPl|SW|NW|SE|NE)\.([A-Z])",
+        r"\1., \2", text,
+    )
+    # Compass direction run-together with city ("SWWashington")
+    text = re.sub(r"\b(SW|NW|SE|NE)([A-Z][a-z])", r"\1, \2", text)
+    # State abbreviation directly before ZIP (no space): "VA20147" → "VA 20147"
+    text = re.sub(r"\b([A-Z]{2})(\d{5})\b", r"\1 \2", text)
+    # 5-digit ZIP directly before a capital letter
+    text = re.sub(r"(\d{5})([A-Z])", r"\1, \2", text)
+    # Normalize whitespace
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def _find_street_address_pos(text: str) -> int | None:
+    """
+    Return the character position where a street address begins in text,
+    or None if no address is detected.
+
+    Checks (in priority order):
+      1. Comma + digits:          "…Venue, 501 Main St…"
+      2. Two+ spaces + digits:    "…Venue  501 Main St…"
+      3. Digit directly after text char (no separator):
+                                  "…Museum650 Jefferson…"
+      4. Single space + 3-5 digit number + capital word
+                                  "…Venue 501 E. Pratt…"
+    """
+    # Pattern 1: comma before street number
+    m = re.search(r",\s*\d{1,5}\s+[A-Z]", text)
+    if m:
+        return m.start()
+
+    # Pattern 2: two or more spaces before street number
+    m = re.search(r"\s{2,}\d{1,5}\s+[A-Z]", text)
+    if m:
+        return m.start()
+
+    # Pattern 3: digit directly after lowercase (no separator — concatenation)
+    m = re.search(r"(?<=[a-z])(\d{1,5})\s+[A-Z][a-zA-Z.]", text)
+    if m:
+        return m.start()
+
+    # Pattern 4: single space + 3–5 digit street number + capital letter
+    m = re.search(r"\s(\d{3,5})\s+[A-Z][a-zA-Z.]", text)
+    if m:
+        return m.start()
+
+    return None
 
 
 def _split_venue_address(text: str) -> tuple[str, str | None]:
@@ -133,28 +398,34 @@ def _split_venue_address(text: str) -> tuple[str, str | None]:
 
     Returns (text, None) when no street address is detected.
     """
-    m = _STREET_ADDRESS_RE.search(text)
-    if not m:
+    pos = _find_street_address_pos(text)
+    if pos is None:
         return text, None
-    # Split at the first comma before the street number, or at the street number
-    split_pos = text.rfind(",", 0, m.start())
+
+    # Prefer splitting at the last comma before the street number
+    split_pos = text.rfind(",", 0, pos)
     if split_pos == -1:
-        split_pos = m.start()
+        split_pos = pos
+
     venue = text[:split_pos].strip().rstrip(",").strip()
     address = text[split_pos:].strip().lstrip(",").strip()
+
     if not venue:
         return text, None
+
     return venue, address
 
 
-def normalize_location(
-    location_text: str | None,
-) -> dict[str, str | None]:
+def normalize_location(location_text: str | None) -> dict[str, str | None]:
     """
     Return a dict with keys: location_name, location_address, city, county.
 
-    Attempts to split "Venue Name, 123 Main St …" into a venue name and
-    street address. Falls back to keyword-based county inference.
+    Multi-step pipeline:
+      1. Collapse whitespace
+      2. Strip boilerplate (Get Directions, Store Hours, phone#, Address concat)
+      3. Strip "• City, ST" DullesMoms suffix
+      4. Split venue name from street address
+      5. Infer city/county from keyword matching against full original text
     """
     if not location_text:
         return {
@@ -165,16 +436,29 @@ def normalize_location(
         }
 
     clean = re.sub(r"\s+", " ", location_text).strip()
+
+    # Pre-clean: strip boilerplate and extract any embedded address (Address concat)
+    clean, extracted_address = _clean_location_raw(clean)
+
+    # Split venue name from inline street address BEFORE stripping bullet prefixes,
+    # so addresses embedded after "•" (e.g. Udvar-Hazy / Smithsonian) are captured.
     venue_name, street_address = _split_venue_address(clean)
 
+    # Now strip "• ParentOrg" / "• City, ST" from venue name
+    venue_name = _strip_bullet_prefix(venue_name)
+
+    # Prefer street_address from split; fall back to extracted_address from boilerplate
+    final_address = street_address or extracted_address
+    if final_address:
+        final_address = _normalize_address_spacing(final_address)
+
+    # Infer city/county from the full original text (before stripping)
     city: str | None = None
     county: str | None = None
-
-    lower = clean.lower()
+    lower = location_text.lower()
     for cty, keywords in _COUNTY_KEYWORDS.items():
         if any(kw in lower for kw in keywords):
             county = cty
-            # Use the first matching keyword as a city hint
             for kw in keywords:
                 if kw in lower:
                     city = kw.title()
@@ -182,8 +466,8 @@ def normalize_location(
             break
 
     return {
-        "location_name": venue_name,
-        "location_address": street_address,
+        "location_name": venue_name or None,
+        "location_address": final_address,
         "city": city,
         "county": county,
     }
@@ -293,9 +577,16 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
         logger.warning("Skipping record with empty title: %r", raw)
         return None
 
-    title = normalize_title(title_raw)
+    # Clean and normalize title
+    cleaned_title = clean_event_title(title_raw)
+    if cleaned_title is None:
+        logger.warning("Skipping record with generic/unusable title: %r", title_raw)
+        return None
+    title = normalize_title(cleaned_title)
+
     source_url = normalize_url(raw.get("source_url")) or raw.get("source_url", "")
-    source_name = raw.get("source_name", raw.get("source_id", "unknown"))
+    raw_source_name = raw.get("source_name", raw.get("source_id", "unknown"))
+    source_name = normalize_source_name(source_url, raw_source_name) or raw_source_name
 
     # Parse datetimes
     current_year = datetime.now().year
@@ -312,8 +603,10 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
     # Location
     loc = normalize_location(raw.get("location_text"))
 
+    # Summary — clean junk before cost/note generation
+    summary_text = clean_summary(raw.get("summary_text"))
+
     # Cost
-    summary_text = raw.get("summary_text")
     cost_type, price_text = normalize_cost(raw.get("price_text"), summary_text)
 
     # Generate ID
@@ -347,10 +640,10 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
         "short_note": None,  # filled in after enrichment
     }
 
-    # Apply enrichment (tags, score, rainy_day)
+    # Apply enrichment (tags, score, rainy_day, venue overrides)
     event_data = enrich_event(event_data)
 
-    # Generate short_note from enriched facts (never from DullesMoms content)
+    # Generate short_note from enriched facts
     event_data["short_note"] = generate_short_note(event_data)
 
     try:

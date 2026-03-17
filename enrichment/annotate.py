@@ -131,6 +131,27 @@ _MAX_NOTE_LEN = 200
 _HTML_TAG_RE = re.compile(r"<[^>]+>")
 _MULTI_SENTENCE_RE = re.compile(r"(?<=[.!?])\s+[A-Z]")
 
+# Venue homepage boilerplate openers — these are marketing copy, not event notes.
+# If a summary starts with one of these, skip the fast-path and use the template.
+_BOILERPLATE_OPENER_RE = re.compile(
+    r"^(?:"
+    r"visit\s+(?:our|the)\s"
+    r"|explore\s+(?:our|the)\s"
+    r"|explore\s+award"
+    r"|savor\s+"
+    r"|indulge\s+"
+    r"|just\s+minutes\s+from"
+    r"|eat,?\s+drink"
+    r"|dulles\s+sportsplex\s+is"
+    r"|the\s+(?:alden|charles|cascades|rust|brambleton|ashburn)\s+\w+\s+is"
+    r"|the\s+sterling\s+community\s+center\s+offers"
+    r"|the\s+claude\s+moore\s+\w+\s+is"
+    r"|port\s+discovery,?\s+located"
+    r"|a\s+toy\s+library"
+    r")",
+    re.IGNORECASE,
+)
+
 
 def _clean_summary(text: str) -> str:
     """Strip HTML tags and collapse whitespace."""
@@ -138,19 +159,24 @@ def _clean_summary(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def _is_boilerplate_summary(text: str) -> bool:
+    """Return True if text looks like venue marketing copy rather than event description."""
+    return bool(_BOILERPLATE_OPENER_RE.match(text.strip()))
+
+
 def generate_short_note(event_data: dict[str, Any]) -> str | None:
     """
     Compose a single-sentence note from structured event facts only.
 
-    Fast-path: if the event has a clean summary that is ≤120 chars and a
-    single sentence, use it directly (stripped of HTML).
+    Fast-path: if the event has a clean summary that is ≤120 chars, a single
+    sentence, and does not look like venue homepage boilerplate, use it directly.
 
     Fallback template: "[Cost] [setting] [activity] [venue_phrase] [age_phrase]."
 
     Returns None when there are insufficient facts for a meaningful sentence.
     Does not invent or guess any details.
     """
-    # Fast-path: clean summary ≤120 chars, single sentence, no raw HTML
+    # Fast-path: clean summary ≤120 chars, single sentence, not venue boilerplate
     summary_raw = event_data.get("summary") or ""
     if summary_raw:
         summary_clean = _clean_summary(summary_raw)
@@ -158,6 +184,7 @@ def generate_short_note(event_data: dict[str, Any]) -> str | None:
             summary_clean
             and len(summary_clean) <= 120
             and not _MULTI_SENTENCE_RE.search(summary_clean)
+            and not _is_boilerplate_summary(summary_clean)
         ):
             if not summary_clean.endswith("."):
                 summary_clean += "."
