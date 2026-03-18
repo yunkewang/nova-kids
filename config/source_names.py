@@ -16,10 +16,11 @@ from urllib.parse import urlparse
 # ---------------------------------------------------------------------------
 
 _DOMAIN_MAP: dict[str, str] = {
-    # Aquariums / Animals
+    # Aquariums / Animals / Welfare
     "aqua.org":                      "National Aquarium",
     "leesburganimalpark.com":        "Leesburg Animal Park",
     "portdiscovery.org":             "Port Discovery Children's Museum",
+    "awla.org":                      "Animal Welfare League of Arlington",
     # Museums / Science
     "nationalchildrensmuseum.org":   "National Children's Museum",
     "airandspace.si.edu":            "National Air and Space Museum",

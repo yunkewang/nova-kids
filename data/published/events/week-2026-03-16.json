@@ -1,6 +1,6 @@
 {
   "week_start": "2026-03-16",
-  "generated_at": "2026-03-18T01:00:06.381582+00:00",
+  "generated_at": "2026-03-18T01:13:00.536520+00:00",
   "source_count": 36,
   "event_count": 86,
   "events": [
@@ -34,7 +34,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.321743+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.484719+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.935,
       "short_note": "Indoor animals program at National Aquarium."
@@ -68,7 +68,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.326491+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.489818+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Mount Vernon Inn Restaurant."
@@ -97,11 +97,11 @@
         "indoor",
         "weekday"
       ],
-      "family_friendly_score": 0.15,
+      "family_friendly_score": 0.25,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.327310+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.490720+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Sterling Community Center."
@@ -136,7 +136,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.327825+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.491257+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum."
@@ -166,11 +166,11 @@
         "toddler",
         "weekday"
       ],
-      "family_friendly_score": 0.45,
+      "family_friendly_score": 0.55,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.328537+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.491958+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers."
@@ -204,7 +204,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.328992+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.492461+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor family-friendly event at Scotto's Rigatoni Grill."
@@ -234,11 +234,11 @@
         "sports",
         "weekday"
       ],
-      "family_friendly_score": 0.25,
+      "family_friendly_score": 0.35,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.329511+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.492885+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor skating session at Ashburn Ice House."
@@ -272,7 +272,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.329924+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.493344+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle."
@@ -306,7 +306,7 @@
       "rainy_day_friendly": true,
       "registration_url": "https://www.musepaintbar.com/events/classic-painting-310160",
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.330342+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.493752+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.97,
       "short_note": "Join our artist instructors as they take you step-by-step through this masterpiece, no art experience required!"
@@ -316,7 +316,7 @@
       "source_name": "Little Oaks Montessori Academy",
       "source_url": "https://www.lomamontessori.com/",
       "title": "Open House @ Little Oaks Montessori Academy",
-      "summary": "Our Montessori school nurtures independence, curiosity, and a love for learning through hands-on exploration in a child-led environment.",
+      "summary": null,
       "start": "2026-03-18T16:00:00",
       "end": null,
       "all_day": false,
@@ -335,11 +335,11 @@
         "indoor",
         "weekday"
       ],
-      "family_friendly_score": 0.2,
+      "family_friendly_score": 0.15,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.331222+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.494411+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Little Oaks Montessori Academy."
@@ -374,7 +374,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.332013+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.494836+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "$25 online/virtual workshop."
@@ -384,7 +384,7 @@
       "source_name": "Loudoun County",
       "source_url": "https://www.loudoun.gov/1259/Claude-Moore-Recreation-Community-Center",
       "title": "School\u2019s Out Camp: Elementary @ Claude Moore Rec Center",
-      "summary": "The Claude Moore Recreation and Community Center is dedicated to providing a broad range of year-round recreational, health and wellness, social, fitness and educational programs and activities.",
+      "summary": null,
       "start": "2026-03-19T07:30:00",
       "end": null,
       "all_day": false,
@@ -401,19 +401,17 @@
       "tags": [
         "camp",
         "elementary",
-        "fitness",
-        "indoor",
         "morning",
         "weekday"
       ],
-      "family_friendly_score": 0.6,
-      "rainy_day_friendly": true,
+      "family_friendly_score": 0.5,
+      "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.332548+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.495274+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor fitness class at Claude Moore Rec Center."
+      "short_note": "Camp program at Claude Moore Rec Center."
     },
     {
       "id": "a542fdfea700a3ed",
@@ -443,16 +441,16 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.333405+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.495730+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor family-friendly event at Park View High School."
     },
     {
-      "id": "53514d10b6f3e596",
+      "id": "48e23a1c081f37ac",
       "source_name": "Tea with Mrs. B",
       "source_url": "https://www.teawithmrsb.com/",
-      "title": "Tea With Mrs.b",
+      "title": "Tea With Mrs. B",
       "summary": null,
       "start": "2026-03-19T08:00:00",
       "end": null,
@@ -476,7 +474,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.333797+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.496125+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor family-friendly event at Tea with Mrs. B."
@@ -511,7 +509,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.334154+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.496512+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm."
@@ -546,7 +544,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.334781+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.497495+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum."
@@ -576,11 +574,11 @@
         "toddler",
         "weekday"
       ],
-      "family_friendly_score": 0.45,
+      "family_friendly_score": 0.55,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.335496+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.498199+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers."
@@ -614,7 +612,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.335891+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.498626+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor animals program at Leesburg Animal Park."
@@ -648,7 +646,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.336328+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.499015+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle."
@@ -658,7 +656,7 @@
       "source_name": "Barnes & Noble",
       "source_url": "https://stores.barnesandnoble.com/store/3303",
       "title": "Children\u2019s Storytime @ Barnes & Noble \u2022 Ashburn, Va",
-      "summary": "Visit our Barnes & Noble One Loudoun bookstore for books, toys, games, music and more. Browse upcoming events & find directions to your local store.",
+      "summary": null,
       "start": "2026-03-19T11:00:00",
       "end": null,
       "all_day": false,
@@ -676,15 +674,14 @@
         "elementary",
         "indoor",
         "morning",
-        "music",
         "storytime",
         "weekday"
       ],
-      "family_friendly_score": 0.7,
+      "family_friendly_score": 0.65,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.336787+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.499424+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor storytime at Barnes & Noble."
@@ -717,7 +714,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.337574+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.499889+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Dulles SportsPlex."
@@ -752,7 +749,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.338075+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.500454+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor STEM activity at Udvar-Hazy Center."
@@ -781,11 +778,11 @@
         "indoor",
         "weekday"
       ],
-      "family_friendly_score": 0.15,
+      "family_friendly_score": 0.25,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.338766+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.501196+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at The Toy Nest."
@@ -818,7 +815,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.339243+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.501686+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Tysons Corner Center."
@@ -848,11 +845,11 @@
         "toddler",
         "weekday"
       ],
-      "family_friendly_score": 0.55,
+      "family_friendly_score": 0.65,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.340367+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.502802+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at The Toy Nest for toddlers."
@@ -881,11 +878,11 @@
         "indoor",
         "weekday"
       ],
-      "family_friendly_score": 0.15,
+      "family_friendly_score": 0.25,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.340734+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.503179+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Cascades Library."
@@ -914,11 +911,11 @@
         "indoor",
         "weekday"
       ],
-      "family_friendly_score": 0.15,
+      "family_friendly_score": 0.25,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.341140+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.503593+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Rust Library."
@@ -947,11 +944,11 @@
         "indoor",
         "weekday"
       ],
-      "family_friendly_score": 0.15,
+      "family_friendly_score": 0.25,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.341506+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.503935+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Brambleton Library."
@@ -980,18 +977,18 @@
         "indoor",
         "weekday"
       ],
-      "family_friendly_score": 0.2,
+      "family_friendly_score": 0.3,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.341872+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.504351+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Douglass Community Center."
     },
     {
       "id": "9ed33367522fc685",
-      "source_name": "Awla",
+      "source_name": "Animal Welfare League of Arlington",
       "source_url": "https://www.awla.org/",
       "title": "Kids Care Club: Birds in Your Backyard @ Animal Welfare League of Arlington",
       "summary": null,
@@ -1019,7 +1016,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.342609+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.505042+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor animals program at Animal Welfare League of Arlington, VA."
@@ -1029,7 +1026,7 @@
       "source_name": "Loudoun County",
       "source_url": "https://www.loudoun.gov/1259/Claude-Moore-Recreation-Community-Center",
       "title": "School\u2019s Out Camp: Elementary @ Claude Moore Rec Center",
-      "summary": "The Claude Moore Recreation and Community Center is dedicated to providing a broad range of year-round recreational, health and wellness, social, fitness and educational programs and activities.",
+      "summary": null,
       "start": "2026-03-20T07:30:00",
       "end": null,
       "all_day": false,
@@ -1046,25 +1043,23 @@
       "tags": [
         "camp",
         "elementary",
-        "fitness",
-        "indoor",
         "morning",
         "weekday"
       ],
-      "family_friendly_score": 0.6,
-      "rainy_day_friendly": true,
+      "family_friendly_score": 0.5,
+      "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.343184+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.505602+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor fitness class at Claude Moore Rec Center."
+      "short_note": "Camp program at Claude Moore Rec Center."
     },
     {
-      "id": "0d95da75b76c049b",
+      "id": "c56e8f2fdc4bd1d9",
       "source_name": "Tea with Mrs. B",
       "source_url": "https://www.teawithmrsb.com/",
-      "title": "Tea With Mrs.b",
+      "title": "Tea With Mrs. B",
       "summary": null,
       "start": "2026-03-20T08:00:00",
       "end": null,
@@ -1088,7 +1083,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.344051+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.506058+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor family-friendly event at Tea with Mrs. B."
@@ -1122,7 +1117,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.344377+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.506410+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor cooking class at Cookology."
@@ -1157,7 +1152,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.344737+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.506777+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm."
@@ -1186,11 +1181,11 @@
         "morning",
         "weekday"
       ],
-      "family_friendly_score": 0.15,
+      "family_friendly_score": 0.35,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.345413+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.507342+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at The Toy Nest."
@@ -1220,11 +1215,11 @@
         "sports",
         "weekday"
       ],
-      "family_friendly_score": 0.25,
+      "family_friendly_score": 0.35,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.345818+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.507764+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor skating session at Ashburn Ice House."
@@ -1259,7 +1254,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.346265+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.508227+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum."
@@ -1289,11 +1284,11 @@
         "toddler",
         "weekday"
       ],
-      "family_friendly_score": 0.45,
+      "family_friendly_score": 0.55,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.346954+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.508960+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers."
@@ -1325,11 +1320,11 @@
         "stem",
         "weekday"
       ],
-      "family_friendly_score": 0.85,
+      "family_friendly_score": 0.95,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.347350+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.509360+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor STEM activity at Children's Science Center Lab."
@@ -1363,7 +1358,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.347756+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.509750+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor animals program at Leesburg Animal Park."
@@ -1397,7 +1392,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.348165+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.510155+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle."
@@ -1407,7 +1402,7 @@
       "source_name": "Loudoun County",
       "source_url": "https://www.loudoun.gov/1285/Claude-Moore-Park",
       "title": "Feeding Time @ Claude Moore Park",
-      "summary": "Claude Moore Park offers a variety of activities for people of all ages. Because of Claude Moore Park\u2019s open spaces, miles of hiking trails, pavilions, and ponds, the park hosts classes and activities that take advantage of these natural resources.",
+      "summary": null,
       "start": "2026-03-20T11:00:00",
       "end": null,
       "all_day": false,
@@ -1422,20 +1417,18 @@
       "cost_type": "unknown",
       "price_text": null,
       "tags": [
-        "all_ages",
-        "hiking",
         "morning",
         "outdoor",
         "weekday"
       ],
-      "family_friendly_score": 0.35,
+      "family_friendly_score": 0.0,
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.348578+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.510548+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Outdoor hike at Claude Moore Park for all ages."
+      "short_note": "Outdoor family-friendly event at Claude Moore Park."
     },
     {
       "id": "227722eb24186df8",
@@ -1465,7 +1458,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.349551+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.510950+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Dulles SportsPlex."
@@ -1475,7 +1468,7 @@
       "source_name": "Loudoun County",
       "source_url": "https://www.loudoun.gov/1285/Claude-Moore-Park",
       "title": "Park Puzzle & Escape Challenge @ Claude Moore Park",
-      "summary": "Claude Moore Park offers a variety of activities for people of all ages. Because of Claude Moore Park\u2019s open spaces, miles of hiking trails, pavilions, and ponds, the park hosts classes and activities that take advantage of these natural resources.",
+      "summary": null,
       "start": "2026-03-20T13:00:00",
       "end": null,
       "all_day": false,
@@ -1491,19 +1484,17 @@
       "price_text": null,
       "tags": [
         "afternoon",
-        "all_ages",
-        "hiking",
         "outdoor",
         "weekday"
       ],
-      "family_friendly_score": 0.35,
+      "family_friendly_score": 0.0,
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.350063+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.511422+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Outdoor hike at Claude Moore Park for all ages."
+      "short_note": "Outdoor family-friendly event at Claude Moore Park."
     },
     {
       "id": "a4104856a568e4c8",
@@ -1534,7 +1525,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.351021+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.511837+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at HOPE Preschool."
@@ -1544,7 +1535,7 @@
       "source_name": "Astar Explorer",
       "source_url": "https://astarexplorer.com/",
       "title": "Parents\u2019 Night Out @ Astar Explorer \u2022 Fair Oaks Mall",
-      "summary": "CHILDREN REGISTER At Astar Explorer, we believe in the stimulation of young minds through interaction and hands-on learning of STEM. Science, Technology, Engineering, and Mathematics is the language of today\u2019s...Read More",
+      "summary": null,
       "start": "2026-03-20T17:00:00",
       "end": null,
       "all_day": false,
@@ -1556,24 +1547,22 @@
       "county": "Fairfax",
       "age_min": null,
       "age_max": null,
-      "cost_type": "paid",
+      "cost_type": "unknown",
       "price_text": null,
       "tags": [
-        "elementary",
         "evening",
         "festival",
         "indoor",
-        "stem",
         "weekday"
       ],
-      "family_friendly_score": 0.6,
+      "family_friendly_score": 0.15,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.351816+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.512232+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Paid indoor STEM activity at Astar Explorer."
+      "short_note": "Indoor festival at Astar Explorer."
     },
     {
       "id": "ae7dc7f2c9ee4c77",
@@ -1600,11 +1589,11 @@
         "teen",
         "weekday"
       ],
-      "family_friendly_score": 0.05,
+      "family_friendly_score": 0.15,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.352846+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.512706+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Cascades Library."
@@ -1638,7 +1627,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.353418+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.513189+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Outdoor nature program at Frying Pan Farm and Equestrian."
@@ -1673,7 +1662,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.353983+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.513654+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.69,
       "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre."
@@ -1707,7 +1696,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.354492+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.514123+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor skating session at Ashburn Ice House."
@@ -1742,7 +1731,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.354985+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.514577+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm."
@@ -1775,7 +1764,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.355671+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.515152+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Dulles SportsPlex."
@@ -1785,7 +1774,7 @@
       "source_name": "Loudoun County",
       "source_url": "https://www.loudoun.gov/DullesSouthRecCenter",
       "title": "Underwater Egg Hunt @ Dulles South Rec Center",
-      "summary": "Dulles South Rec and Community Center has a wide variety of licensed preschool classes, full day child care, before and after school programs and many different classes and camps.",
+      "summary": null,
       "start": "2026-03-21T09:00:00",
       "end": null,
       "all_day": false,
@@ -1800,19 +1789,17 @@
       "cost_type": "unknown",
       "price_text": null,
       "tags": [
-        "indoor",
         "morning",
-        "preschool",
         "weekend"
       ],
-      "family_friendly_score": 0.6,
-      "rainy_day_friendly": true,
+      "family_friendly_score": 0.2,
+      "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.356246+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.515592+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Dulles South Rec Center."
+      "short_note": "Family-friendly event at Dulles South Rec Center."
     },
     {
       "id": "1ecc935fa12ce1c2",
@@ -1844,7 +1831,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.357203+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.516085+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor nature program at Hidden Oaks Nature Center."
@@ -1873,11 +1860,11 @@
         "morning",
         "weekend"
       ],
-      "family_friendly_score": 0.25,
+      "family_friendly_score": 0.35,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.357664+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.516566+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Cascades Library."
@@ -1912,7 +1899,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.358107+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.517016+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum."
@@ -1946,7 +1933,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.358813+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.517717+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor animals program at Leesburg Animal Park."
@@ -1976,11 +1963,11 @@
         "teen",
         "weekend"
       ],
-      "family_friendly_score": 0.15,
+      "family_friendly_score": 0.25,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.359325+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.518229+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor family-friendly event at Minnie H. Peyton Community Center at Bailey's."
@@ -2014,7 +2001,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.359851+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.518778+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor storytime at Scrawl Books."
@@ -2024,7 +2011,7 @@
       "source_name": "Arlington County",
       "source_url": "https://www.arlingtonva.us/Government/Departments/Parks-Recreation/Locations/Indoor-Facilities/Madison-Community-Center-Park",
       "title": "Madison Community Center and Park",
-      "summary": "Madison features a multipurpose room, a game room and a fitness room. The surrounding Fort Ethan Allen park is stocked as well, with plenty of options such as a basketball court, a combination field, playground and a dog park.",
+      "summary": null,
       "start": "2026-03-21T10:45:00",
       "end": null,
       "all_day": false,
@@ -2039,20 +2026,18 @@
       "cost_type": "unknown",
       "price_text": null,
       "tags": [
-        "fitness",
         "indoor",
         "morning",
-        "sports",
         "weekend"
       ],
-      "family_friendly_score": 0.4,
+      "family_friendly_score": 0.35,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.360357+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.519171+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor sports activity at Madison Community Center & Park."
+      "short_note": "Indoor family-friendly event at Madison Community Center & Park."
     },
     {
       "id": "9ccefd271d034484",
@@ -2083,7 +2068,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.361373+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.519565+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle."
@@ -2093,7 +2078,7 @@
       "source_name": "Barnes & Noble",
       "source_url": "https://stores.barnesandnoble.com/store/2937",
       "title": "Saturday Storytime @ Barnes & Noble \u2022 Fairfax, Va",
-      "summary": "Visit our Barnes & Noble Fairfax bookstore for books, toys, games, music and more. Browse upcoming events & find directions to your local store.",
+      "summary": null,
       "start": "2026-03-21T11:00:00",
       "end": null,
       "all_day": false,
@@ -2111,15 +2096,14 @@
         "festival",
         "indoor",
         "morning",
-        "music",
         "storytime",
         "weekend"
       ],
-      "family_friendly_score": 0.5,
+      "family_friendly_score": 0.45,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.361900+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.519987+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor storytime at Barnes & Noble Fair Lakes Promenade."
@@ -2129,7 +2113,7 @@
       "source_name": "Barnes & Noble",
       "source_url": "https://stores.barnesandnoble.com/store/3432",
       "title": "Storytime @ Barnes & Noble \u2022 Reston, Va",
-      "summary": "Visit our Barnes & Noble Reston bookstore for books, toys, games, music and more. Browse upcoming events & find directions to your local store.",
+      "summary": null,
       "start": "2026-03-21T11:00:00",
       "end": null,
       "all_day": false,
@@ -2146,15 +2130,14 @@
       "tags": [
         "indoor",
         "morning",
-        "music",
         "storytime",
         "weekend"
       ],
-      "family_friendly_score": 0.5,
+      "family_friendly_score": 0.45,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.362793+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.520571+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor storytime at Barnes & Noble The Spectrum at Reston Town Center."
@@ -2164,7 +2147,7 @@
       "source_name": "Loudoun County",
       "source_url": "https://www.loudoun.gov/1397/Franklin-Park",
       "title": "The Enchanted Egg Quest @ Franklin Park",
-      "summary": "Franklin Park is a regional park in the western portion of Loudoun County. Its 203 acres of rolling hills harbor majestic views of the Blue Ridge Mountains.",
+      "summary": null,
       "start": "2026-03-21T11:00:00",
       "end": null,
       "all_day": false,
@@ -2184,11 +2167,11 @@
         "outdoor",
         "weekend"
       ],
-      "family_friendly_score": 0.25,
+      "family_friendly_score": 0.2,
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.363653+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.521049+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor nature program at Franklin Park."
@@ -2198,7 +2181,7 @@
       "source_name": "Muse Paintbar",
       "source_url": "https://www.musepaintbar.com/events/fairfax-paint-bar",
       "title": "Family Day: Dandelion Sunset @ Muse Paintbar \u2022 Fairfax, Va",
-      "summary": "Explore our paint & sip events in Fairfax, VA. Our classes in the Mosaic District combine the fun of a painting party with guidance from a talented artist.",
+      "summary": null,
       "start": "2026-03-21T12:00:00",
       "end": null,
       "all_day": false,
@@ -2218,11 +2201,11 @@
         "indoor",
         "weekend"
       ],
-      "family_friendly_score": 0.5,
+      "family_friendly_score": 0.45,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.364418+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.521444+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "($37) indoor arts program at Muse Paintbar."
@@ -2255,7 +2238,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.365286+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.521950+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Outdoor family-friendly event at Lake Fairfax Park."
@@ -2284,11 +2267,11 @@
         "indoor",
         "weekend"
       ],
-      "family_friendly_score": 0.25,
+      "family_friendly_score": 0.35,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.365662+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.522333+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Rust Library."
@@ -2322,7 +2305,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.366102+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.522803+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "$24.75 indoor cooking class at The Conche."
@@ -2355,7 +2338,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.367117+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.523824+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Tackett's Mill."
@@ -2390,7 +2373,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.367537+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.524308+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.69,
       "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre."
@@ -2400,7 +2383,7 @@
       "source_name": "McLean Community Center",
       "source_url": "https://mcleancenter.org/about/visit/the-alden-theatre/",
       "title": "The Wizard of Oz @ the Alden Theatre",
-      "summary": "The Alden Theatre is a beautiful, 383-seat performing arts venue in McLean, Va. It is a community resource that presents award-winning entertainment, lectures a",
+      "summary": null,
       "start": "2026-03-21T14:00:00",
       "end": null,
       "all_day": false,
@@ -2420,11 +2403,11 @@
         "theater",
         "weekend"
       ],
-      "family_friendly_score": 0.4,
+      "family_friendly_score": 0.35,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.368097+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.524798+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor theater performance at The Alden."
@@ -2453,11 +2436,11 @@
         "indoor",
         "weekend"
       ],
-      "family_friendly_score": 0.25,
+      "family_friendly_score": 0.35,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.368848+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.525188+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Charles Houston Rec Center."
@@ -2488,11 +2471,11 @@
         "music",
         "weekend"
       ],
-      "family_friendly_score": 0.45,
+      "family_friendly_score": 0.55,
       "rainy_day_friendly": true,
       "registration_url": "https://mcleancenter.org/events/fiesta-del-sol/?occurrence=2026-03-21",
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.369359+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.525687+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.97,
       "short_note": "Indoor music program at McLean Community Center."
@@ -2502,7 +2485,7 @@
       "source_name": "Astar Explorer",
       "source_url": "https://astarexplorer.com/",
       "title": "Parents\u2019 Night Out @ Astar Explorer \u2022 Fair Oaks Mall",
-      "summary": "CHILDREN REGISTER At Astar Explorer, we believe in the stimulation of young minds through interaction and hands-on learning of STEM. Science, Technology, Engineering, and Mathematics is the language of today\u2019s...Read More",
+      "summary": null,
       "start": "2026-03-21T17:00:00",
       "end": null,
       "all_day": false,
@@ -2514,24 +2497,22 @@
       "county": "Fairfax",
       "age_min": null,
       "age_max": null,
-      "cost_type": "paid",
+      "cost_type": "unknown",
       "price_text": null,
       "tags": [
-        "elementary",
         "evening",
         "festival",
         "indoor",
-        "stem",
         "weekend"
       ],
-      "family_friendly_score": 0.7,
+      "family_friendly_score": 0.25,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.370355+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.526629+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Paid indoor STEM activity at Astar Explorer."
+      "short_note": "Indoor festival at Astar Explorer."
     },
     {
       "id": "7fdd2071f5dc63b5",
@@ -2561,7 +2542,7 @@
       "rainy_day_friendly": true,
       "registration_url": "https://aplacetobeva.org/event/velveteen-rabbit/",
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.371343+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.527111+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.97,
       "short_note": "Indoor theater performance at A Place To Be."
@@ -2594,7 +2575,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.371698+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.527476+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Dulles SportsPlex."
@@ -2629,7 +2610,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.372183+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.527933+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm."
@@ -2639,7 +2620,7 @@
       "source_name": "Port Discovery Children's Museum",
       "source_url": "https://www.portdiscovery.org/",
       "title": "Sensory-friendly Morning @ Port Discovery",
-      "summary": "Port Discovery, located in Baltimore, Maryland, educates children, inspires curiosity, and is ranked among the top children's museums in the United States.",
+      "summary": null,
       "start": "2026-03-22T09:00:00",
       "end": null,
       "all_day": false,
@@ -2660,11 +2641,11 @@
         "morning",
         "weekend"
       ],
-      "family_friendly_score": 0.75,
+      "family_friendly_score": 0.8,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.372776+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.528556+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Free indoor family-friendly event at Port Discovery Children's Museum."
@@ -2699,7 +2680,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.373596+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.529025+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum."
@@ -2733,7 +2714,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.374309+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.529721+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor animals program at Leesburg Animal Park."
@@ -2768,7 +2749,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.374802+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.530169+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor nature program at Hidden Oaks Nature Center."
@@ -2802,7 +2783,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.375234+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.530603+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle."
@@ -2835,7 +2816,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.375669+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.531038+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Tysons Corner Center."
@@ -2869,7 +2850,7 @@
       "rainy_day_friendly": false,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.376822+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.532173+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Free workshop at Your Preferred Michaels Location."
@@ -2879,7 +2860,7 @@
       "source_name": "McLean Community Center",
       "source_url": "https://mcleancenter.org/about/visit/the-alden-theatre/",
       "title": "The Wizard of Oz @ the Alden Theatre",
-      "summary": "The Alden Theatre is a beautiful, 383-seat performing arts venue in McLean, Va. It is a community resource that presents award-winning entertainment, lectures a",
+      "summary": null,
       "start": "2026-03-22T14:00:00",
       "end": null,
       "all_day": false,
@@ -2899,11 +2880,11 @@
         "theater",
         "weekend"
       ],
-      "family_friendly_score": 0.4,
+      "family_friendly_score": 0.35,
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.377759+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.533134+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor theater performance at The Alden."
@@ -2938,7 +2919,7 @@
       "rainy_day_friendly": true,
       "registration_url": null,
       "image_url": null,
-      "last_verified_at": "2026-03-18T01:00:06.378508+00:00",
+      "last_verified_at": "2026-03-18T01:13:00.533536+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.69,
       "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre."
