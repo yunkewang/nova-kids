@@ -15,11 +15,12 @@ RAW_DIR = DATA_DIR / "raw"
 NORMALIZED_DIR = DATA_DIR / "normalized"
 PUBLISHED_DIR = DATA_DIR / "published" / "events"
 MANUAL_REVIEW_DIR = DATA_DIR / "manual_review"
+CACHE_DIR = DATA_DIR / "cache"
 CONFIG_DIR = ROOT_DIR / "config"
 SOURCES_FILE = CONFIG_DIR / "sources.yaml"
 
 # Ensure runtime directories exist
-for _d in (RAW_DIR, NORMALIZED_DIR, PUBLISHED_DIR, MANUAL_REVIEW_DIR):
+for _d in (RAW_DIR, NORMALIZED_DIR, PUBLISHED_DIR, MANUAL_REVIEW_DIR, CACHE_DIR):
     _d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------

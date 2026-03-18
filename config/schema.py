@@ -105,6 +105,15 @@ class Event(BaseModel):
     location_address: Optional[str] = Field(default=None, description="Street address.")
     latitude: Optional[float] = Field(default=None, ge=-90.0, le=90.0)
     longitude: Optional[float] = Field(default=None, ge=-180.0, le=180.0)
+    geo_confidence: Optional[float] = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Nominatim geocoding confidence score (0–1). "
+            "Present only when coordinates were resolved by the pipeline geocoder."
+        ),
+    )
     city: Optional[str] = Field(default=None)
     county: Optional[str] = Field(
         default=None,

@@ -1,0 +1,394 @@
+{
+  "501 E. Pratt St., Baltimore, MD 21202": {
+    "query": "501 E. Pratt St., Baltimore, MD 21202",
+    "latitude": 39.284758,
+    "longitude": -76.60769,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:32.610247+00:00"
+  },
+  "Mount Vernon Inn Restaurant": {
+    "query": "Mount Vernon Inn Restaurant",
+    "latitude": 38.711061,
+    "longitude": -77.087256,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:33.603747+00:00"
+  },
+  "Sterling Community Center, Sterling, Loudoun County, VA": {
+    "query": "Sterling Community Center, Sterling, Loudoun County, VA",
+    "latitude": 38.999379,
+    "longitude": -77.402559,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:34.604134+00:00"
+  },
+  "National Children's Museum": {
+    "query": "National Children's Museum",
+    "latitude": 53.720087,
+    "longitude": -1.854961,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:35.600292+00:00"
+  },
+  "Scotto's Rigatoni Grill": {
+    "query": "Scotto's Rigatoni Grill",
+    "latitude": 38.985754,
+    "longitude": -77.537128,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:36.589786+00:00"
+  },
+  "Ashburn Ice House, Ashburn, Loudoun County, VA": {
+    "query": "Ashburn Ice House, Ashburn, Loudoun County, VA",
+    "latitude": 39.019604,
+    "longitude": -77.467737,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:37.591672+00:00"
+  },
+  "Bush Tabernacle": {
+    "query": "Bush Tabernacle",
+    "latitude": 39.134078,
+    "longitude": -77.714908,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:38.576973+00:00"
+  },
+  "One Loudoun VA, One Loudoun, VA, 20147, Loudoun, Loudoun County, VA": {
+    "query": "One Loudoun VA, One Loudoun, VA, 20147, Loudoun, Loudoun County, VA",
+    "latitude": 39.052291,
+    "longitude": -77.459069,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:39.562520+00:00"
+  },
+  "Little Oaks Montessori Academy": {
+    "query": "Little Oaks Montessori Academy",
+    "latitude": 49.091376,
+    "longitude": -123.077744,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:40.592322+00:00"
+  },
+  "Virtual": {
+    "query": "Virtual",
+    "latitude": 52.380897,
+    "longitude": 20.086777,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:41.582667+00:00"
+  },
+  "Claude Moore Rec Center": {
+    "query": "Claude Moore Rec Center",
+    "latitude": 39.012642,
+    "longitude": -77.404288,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:42.543503+00:00"
+  },
+  "Park View High School": {
+    "query": "Park View High School",
+    "latitude": 39.013352,
+    "longitude": -77.401249,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:43.523235+00:00"
+  },
+  "Tea with Mrs. B": {
+    "query": "Tea with Mrs. B",
+    "latitude": 51.731637,
+    "longitude": 0.679318,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:44.516237+00:00"
+  },
+  "Great Country Farms": {
+    "query": "Great Country Farms",
+    "latitude": 39.095039,
+    "longitude": -77.824909,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:45.487521+00:00"
+  },
+  "Leesburg Animal Park, Leesburg, Loudoun County, VA": {
+    "query": "Leesburg Animal Park, Leesburg, Loudoun County, VA",
+    "latitude": 39.084431,
+    "longitude": -77.5923,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:46.463738+00:00"
+  },
+  "20427 Exchange St, Ashburn VA 20147": {
+    "query": "20427 Exchange St, Ashburn VA 20147",
+    "latitude": 39.050891,
+    "longitude": -77.454107,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:47.584418+00:00"
+  },
+  "Dulles SportsPlex": {
+    "query": "Dulles SportsPlex",
+    "latitude": 39.016512,
+    "longitude": -77.425636,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:48.552797+00:00"
+  },
+  "650 Jefferson Drive SW, Washington, DC": {
+    "query": "650 Jefferson Drive SW, Washington, DC",
+    "latitude": 38.881418,
+    "longitude": -77.036551,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:49.710627+00:00"
+  },
+  "The Toy Nest, Falls Church, Fairfax County, VA": {
+    "query": "The Toy Nest, Falls Church, Fairfax County, VA",
+    "latitude": 38.871992,
+    "longitude": -77.151066,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:50.809831+00:00"
+  },
+  "Tysons Corner Center, McLean, Fairfax County, VA": {
+    "query": "Tysons Corner Center, McLean, Fairfax County, VA",
+    "latitude": 38.929441,
+    "longitude": -77.224457,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:51.780691+00:00"
+  },
+  "Cascades Library": {
+    "query": "Cascades Library",
+    "latitude": 39.033231,
+    "longitude": -77.394802,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:52.755339+00:00"
+  },
+  "Rust Library": {
+    "query": "Rust Library",
+    "latitude": 39.123555,
+    "longitude": -77.567719,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:53.732409+00:00"
+  },
+  "Brambleton Library": {
+    "query": "Brambleton Library",
+    "latitude": 38.984875,
+    "longitude": -77.536346,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:54.686633+00:00"
+  },
+  "Douglass Community Center": {
+    "query": "Douglass Community Center",
+    "latitude": 38.852388,
+    "longitude": -76.978026,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:55.656707+00:00"
+  },
+  "Animal Welfare League of Arlington, VA, Arlington, Arlington County, VA": {
+    "query": "Animal Welfare League of Arlington, VA, Arlington, Arlington County, VA",
+    "latitude": 38.843506,
+    "longitude": -77.093112,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:56.626332+00:00"
+  },
+  "Cookology": {
+    "query": "Cookology",
+    "latitude": 38.8796,
+    "longitude": -77.111261,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:57.604522+00:00"
+  },
+  "Children's Science Center Lab, Fairfax, Fairfax County, VA": {
+    "query": "Children's Science Center Lab, Fairfax, Fairfax County, VA",
+    "latitude": 38.870651,
+    "longitude": -77.371746,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:58.828374+00:00"
+  },
+  "Claude Moore Park": {
+    "query": "Claude Moore Park",
+    "latitude": 39.015288,
+    "longitude": -77.407331,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:16:59.832244+00:00"
+  },
+  "HOPE Preschool, Ashburn, Loudoun County, VA": {
+    "query": "HOPE Preschool, Ashburn, Loudoun County, VA",
+    "latitude": 39.05093,
+    "longitude": -77.474387,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:00.911047+00:00"
+  },
+  "Astar Explorer": {
+    "query": "Astar Explorer",
+    "latitude": 15.336924,
+    "longitude": 38.934662,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:02.049191+00:00"
+  },
+  "2709 West Ox Road; Visitor Center: 2739 West Ox RoadHerndon, Virginia": {
+    "query": "2709 West Ox Road; Visitor Center: 2739 West Ox RoadHerndon, Virginia",
+    "latitude": 38.934732,
+    "longitude": -77.405243,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:03.160034+00:00"
+  },
+  "Thomas Jefferson Community Theatre": {
+    "query": "Thomas Jefferson Community Theatre",
+    "latitude": 40.793156,
+    "longitude": -73.93546,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:04.370536+00:00"
+  },
+  "Dulles South Rec Center": {
+    "query": "Dulles South Rec Center",
+    "latitude": 38.921429,
+    "longitude": -77.525575,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:05.353686+00:00"
+  },
+  "7701 Royce StreetAnnandale, Virginia": {
+    "query": "7701 Royce StreetAnnandale, Virginia",
+    "latitude": 38.839439,
+    "longitude": -77.212093,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:06.514376+00:00"
+  },
+  "5920 Summers LaneFalls Church, VA 22041": {
+    "query": "5920 Summers LaneFalls Church, VA 22041",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T12:17:07.512606+00:00"
+  },
+  "Minnie H. Peyton Community Center at Bailey's, Falls Church, Fairfax County, VA": {
+    "query": "Minnie H. Peyton Community Center at Bailey's, Falls Church, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T12:17:08.651386+00:00"
+  },
+  "Minnie H. Peyton Community Center at Bailey's, Falls Church, VA": {
+    "query": "Minnie H. Peyton Community Center at Bailey's, Falls Church, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T12:17:09.829194+00:00"
+  },
+  "Minnie H. Peyton Community Center at Bailey's": {
+    "query": "Minnie H. Peyton Community Center at Bailey's",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T12:17:10.863248+00:00"
+  },
+  "Scrawl Books": {
+    "query": "Scrawl Books",
+    "latitude": 38.959176,
+    "longitude": -77.356244,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:11.823878+00:00"
+  },
+  "Madison Community Center & Park": {
+    "query": "Madison Community Center & Park",
+    "latitude": 35.911056,
+    "longitude": -82.543651,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:12.802731+00:00"
+  },
+  "12193 Fair Lakes Promenade DriveFairfax,VA 22033": {
+    "query": "12193 Fair Lakes Promenade DriveFairfax,VA 22033",
+    "latitude": 38.859615,
+    "longitude": -77.366747,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:13.850468+00:00"
+  },
+  "11816 Spectrum Center Suite K-27Reston,VA 20190": {
+    "query": "11816 Spectrum Center Suite K-27Reston,VA 20190",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T12:17:14.976738+00:00"
+  },
+  "Barnes & Noble The Spectrum at Reston Town Center, Reston, Fairfax County, VA": {
+    "query": "Barnes & Noble The Spectrum at Reston Town Center, Reston, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T12:17:16.161023+00:00"
+  },
+  "Barnes & Noble The Spectrum at Reston Town Center, Reston, VA": {
+    "query": "Barnes & Noble The Spectrum at Reston Town Center, Reston, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T12:17:17.222047+00:00"
+  },
+  "Barnes & Noble The Spectrum at Reston Town Center": {
+    "query": "Barnes & Noble The Spectrum at Reston Town Center",
+    "latitude": 38.944246,
+    "longitude": -76.735636,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:18.348140+00:00"
+  },
+  "Franklin Park": {
+    "query": "Franklin Park",
+    "latitude": 41.935308,
+    "longitude": -87.865618,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:19.339520+00:00"
+  },
+  "Muse Paintbar": {
+    "query": "Muse Paintbar",
+    "latitude": 39.116379,
+    "longitude": -77.198153,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:20.320664+00:00"
+  },
+  "1400 Lake Fairfax DriveReston, VA 20190": {
+    "query": "1400 Lake Fairfax DriveReston, VA 20190",
+    "latitude": 38.961164,
+    "longitude": -77.318652,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:21.375088+00:00"
+  },
+  "The Conche": {
+    "query": "The Conche",
+    "latitude": 39.089213,
+    "longitude": -77.524021,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:22.361709+00:00"
+  },
+  "Tackett's Mill": {
+    "query": "Tackett's Mill",
+    "latitude": 38.506235,
+    "longitude": -77.563875,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:23.347492+00:00"
+  },
+  "The Alden": {
+    "query": "The Alden",
+    "latitude": 32.953285,
+    "longitude": -80.05073,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:24.452486+00:00"
+  },
+  "Charles Houston Rec Center": {
+    "query": "Charles Houston Rec Center",
+    "latitude": 38.812717,
+    "longitude": -77.048382,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:25.447040+00:00"
+  },
+  "1234 Ingleside Ave. McLean, VA 22101": {
+    "query": "1234 Ingleside Ave. McLean, VA 22101",
+    "latitude": 38.940549,
+    "longitude": -77.18368,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:26.434544+00:00"
+  },
+  "1600 Village Market Blvd Suite 160, Leesburg, Virginia, 20175": {
+    "query": "1600 Village Market Blvd Suite 160, Leesburg, Virginia, 20175",
+    "latitude": 39.090632,
+    "longitude": -77.52678,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:27.526294+00:00"
+  },
+  "Port Discovery Children's Museum": {
+    "query": "Port Discovery Children's Museum",
+    "latitude": 39.289037,
+    "longitude": -76.606284,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T12:17:28.538426+00:00"
+  },
+  "Your Preferred Michaels Location": {
+    "query": "Your Preferred Michaels Location",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T12:17:29.668060+00:00"
+  }
+}

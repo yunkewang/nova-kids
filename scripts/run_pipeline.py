@@ -270,6 +270,49 @@ def _repair_published_week(week_start: date, dry_run: bool) -> int:
     return 0
 
 
+def _repair_geo_enrich(week_start: date, dry_run: bool) -> int:
+    """
+    Patch an already-published week JSON with lat/lon for events that lack
+    coordinates. Does not re-normalize — loads and updates event dicts directly.
+    Uses the persistent geocode cache to avoid redundant API calls.
+    """
+    from config.settings import PUBLISHED_DIR
+    from enrichment.geocode import geocode_event_dicts, load_cache
+
+    filename = f"week-{week_start.isoformat()}.json"
+    week_path = PUBLISHED_DIR / filename
+    if not week_path.exists():
+        logging.error("Geo-repair: %s not found.", week_path)
+        return 1
+
+    payload = json.loads(week_path.read_text(encoding="utf-8"))
+    event_dicts: list[dict] = payload.get("events", [])
+    if not event_dicts:
+        logging.warning("Geo-repair: no events found in %s.", filename)
+        return 0
+
+    print(f"[geo-repair] Loaded {len(event_dicts)} events from {filename}")
+
+    cache = load_cache()
+    print(f"[geo-repair] Cache: {cache.size} existing entries")
+
+    updated_dicts, stats = geocode_event_dicts(event_dicts, cache)
+    stats.print_summary()
+
+    if dry_run:
+        print("\n[geo-repair] Dry run — skipping write.")
+    else:
+        payload["events"] = updated_dicts
+        payload["generated_at"] = datetime.now(tz=timezone.utc).isoformat()
+        week_path.write_text(
+            json.dumps(payload, indent=2, default=str),
+            encoding="utf-8",
+        )
+        print(f"\n[geo-repair] Updated {filename}")
+
+    return 0
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -327,13 +370,28 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--repair-published-week",
-        metavar="DATE",
+        nargs="?",
+        const="",
         default=None,
         dest="repair_week",
+        metavar="DATE",
         help=(
-            "Re-enrich and re-publish an already-published week file "
-            "(YYYY-MM-DD). Loads the existing week JSON, re-runs normalize + "
-            "dedupe + validate + publish in place. Use --dry-run to preview."
+            "Re-enrich and re-publish an already-published week file. "
+            "Accepts an explicit YYYY-MM-DD date or uses --week-start when "
+            "no date is given. Re-runs normalize + dedupe + validate + publish. "
+            "Combine with --enrich-geo to geocode missing coordinates only "
+            "(faster — skips full re-normalization)."
+        ),
+    )
+    parser.add_argument(
+        "--enrich-geo",
+        action="store_true",
+        dest="enrich_geo",
+        help=(
+            "Geocode events that are missing latitude/longitude using Nominatim. "
+            "In normal pipeline mode: runs after deduplicate. "
+            "With --repair-published-week: patches the existing week JSON "
+            "with coordinates without full re-normalization."
         ),
     )
     parser.add_argument(
@@ -350,14 +408,30 @@ def main(argv: list[str] | None = None) -> int:
     _configure_logging(args.verbose)
 
     # Repair mode — short-circuit the normal pipeline
-    if args.repair_week:
-        try:
-            repair_date = date.fromisoformat(args.repair_week)
-        except ValueError:
-            logging.error("Invalid --repair-published-week: %r (expected YYYY-MM-DD)", args.repair_week)
+    if args.repair_week is not None:
+        # --repair-published-week DATE  →  args.repair_week = "YYYY-MM-DD"
+        # --repair-published-week       →  args.repair_week = "" (uses --week-start)
+        raw_repair_date = args.repair_week or args.week_start
+        if not raw_repair_date:
+            logging.error(
+                "--repair-published-week requires either a DATE argument "
+                "or --week-start DATE"
+            )
             return 1
-        print(f"\n=== NoVA Kids Repair Mode: {args.repair_week} ===\n")
-        return _repair_published_week(repair_date, dry_run=args.dry_run)
+        try:
+            repair_date = date.fromisoformat(raw_repair_date)
+        except ValueError:
+            logging.error(
+                "Invalid repair date: %r (expected YYYY-MM-DD)", raw_repair_date
+            )
+            return 1
+
+        if args.enrich_geo:
+            print(f"\n=== NoVA Kids Geo-Repair: {repair_date} ===\n")
+            return _repair_geo_enrich(repair_date, dry_run=args.dry_run)
+        else:
+            print(f"\n=== NoVA Kids Repair Mode: {repair_date} ===\n")
+            return _repair_published_week(repair_date, dry_run=args.dry_run)
 
     # Parse --week-start
     target_week: date | None = None
@@ -375,6 +449,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Counters for final summary
     n_discovered = n_resolved = n_duplicates_removed = n_manual_review = 0
+    geo_stats = None
 
     # 1. Load sources
     sources = load_sources(filter_ids=args.sources)
@@ -466,6 +541,15 @@ def main(argv: list[str] | None = None) -> int:
     n_duplicates_removed = before_dedupe - len(events)
     print(f"      Events after dedupe: {len(events)} ({n_duplicates_removed} duplicates removed)")
 
+    # 3.5 Geocode (optional)
+    if args.enrich_geo:
+        print("\n[geo] Geocoding events...")
+        from enrichment.geocode import geocode_events, load_cache
+        cache = load_cache()
+        print(f"      Cache: {cache.size} existing entries")
+        events, geo_stats = geocode_events(events, cache)
+        geo_stats.print_summary()
+
     # 5. Validate
     print("\n[4/5] Validating...")
     report = validate_events(events)
@@ -500,6 +584,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.use_dullesmoms or args.reprocess:
         print(f"    Manual review:      {n_manual_review}")
     print(f"    Duplicates removed: {n_duplicates_removed}")
+    if geo_stats is not None:
+        pct = geo_stats.total_with_coords / geo_stats.total * 100 if geo_stats.total else 0
+        print(f"    With coordinates:   {geo_stats.total_with_coords}/{geo_stats.total} ({pct:.0f}% mappable)")
     print(f"    Sources:            {', '.join(s['name'] for s in sources)}\n")
     return 0
 
