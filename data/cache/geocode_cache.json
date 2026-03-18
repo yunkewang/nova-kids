@@ -390,5 +390,257 @@
     "longitude": -77.183973,
     "confidence": 0.9,
     "resolved_at": "2026-03-18T13:41:52.679024+00:00"
+  },
+  "Herndon Fortnightly Library, Herndon, Fairfax County, VA": {
+    "query": "Herndon Fortnightly Library, Herndon, Fairfax County, VA",
+    "latitude": 38.971831,
+    "longitude": -77.387103,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:25:53.213386+00:00"
+  },
+  "John Marshall Library": {
+    "query": "John Marshall Library",
+    "latitude": 38.782762,
+    "longitude": -77.118758,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:25:54.177011+00:00"
+  },
+  "Events at Other Locations, Culmore United Methodist Church": {
+    "query": "Events at Other Locations, Culmore United Methodist Church",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:25:55.227030+00:00"
+  },
+  "Pohick Regional Library, PO DIY": {
+    "query": "Pohick Regional Library, PO DIY",
+    "latitude": 38.774932,
+    "longitude": -77.268109,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:25:56.258617+00:00"
+  },
+  "Kings Park Library": {
+    "query": "Kings Park Library",
+    "latitude": 38.807458,
+    "longitude": -77.256624,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:25:57.220925+00:00"
+  },
+  "Chantilly Regional Library, Chantilly Meeting Room, Chantilly, Fairfax County, VA": {
+    "query": "Chantilly Regional Library, Chantilly Meeting Room, Chantilly, Fairfax County, VA",
+    "latitude": 38.882637,
+    "longitude": -77.408189,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:25:58.500248+00:00"
+  },
+  "Reston Regional Library, Reston, Fairfax County, VA": {
+    "query": "Reston Regional Library, Reston, Fairfax County, VA",
+    "latitude": 38.961469,
+    "longitude": -77.358505,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:25:59.460538+00:00"
+  },
+  "Thomas Jefferson Library, Thomas Jefferson Meeting Room 1, Thomas Jefferson Meeting Room 2": {
+    "query": "Thomas Jefferson Library, Thomas Jefferson Meeting Room 1, Thomas Jefferson Meeting Room 2",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:00.607652+00:00"
+  },
+  "Centreville Regional Library, Centreville Meeting Room 1, Centreville Meeting Room 2, Centreville, Fairfax County, VA": {
+    "query": "Centreville Regional Library, Centreville Meeting Room 1, Centreville Meeting Room 2, Centreville, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:01.852889+00:00"
+  },
+  "Centreville Regional Library, Centreville Meeting Room 1, Centreville Meeting Room 2, Centreville, VA": {
+    "query": "Centreville Regional Library, Centreville Meeting Room 1, Centreville Meeting Room 2, Centreville, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:03.073396+00:00"
+  },
+  "Centreville Regional Library, Centreville Meeting Room 1, Centreville Meeting Room 2, Fairfax County, VA": {
+    "query": "Centreville Regional Library, Centreville Meeting Room 1, Centreville Meeting Room 2, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:04.469744+00:00"
+  },
+  "Centreville Regional Library, Centreville Meeting Room 1, Centreville Meeting Room 2": {
+    "query": "Centreville Regional Library, Centreville Meeting Room 1, Centreville Meeting Room 2",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:05.703390+00:00"
+  },
+  "Oakton Library, Oakton Meeting Room 1, Oakton Meeting Room 2": {
+    "query": "Oakton Library, Oakton Meeting Room 1, Oakton Meeting Room 2",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:06.914215+00:00"
+  },
+  "Courthouse Library, Birch Conference Room": {
+    "query": "Courthouse Library, Birch Conference Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:07.976673+00:00"
+  },
+  "City of Fairfax Regional Library, City of Fairfax Meeting Room 101A, City of Fairfax Meeting Room 101B, Fairfax, Fairfax County, VA": {
+    "query": "City of Fairfax Regional Library, City of Fairfax Meeting Room 101A, City of Fairfax Meeting Room 101B, Fairfax, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:09.223855+00:00"
+  },
+  "City of Fairfax Regional Library, City of Fairfax Meeting Room 101A, City of Fairfax Meeting Room 101B, Fairfax, VA": {
+    "query": "City of Fairfax Regional Library, City of Fairfax Meeting Room 101A, City of Fairfax Meeting Room 101B, Fairfax, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:10.326941+00:00"
+  },
+  "City of Fairfax Regional Library, City of Fairfax Meeting Room 101A, City of Fairfax Meeting Room 101B, Fairfax County, VA": {
+    "query": "City of Fairfax Regional Library, City of Fairfax Meeting Room 101A, City of Fairfax Meeting Room 101B, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:11.485989+00:00"
+  },
+  "City of Fairfax Regional Library, City of Fairfax Meeting Room 101A, City of Fairfax Meeting Room 101B": {
+    "query": "City of Fairfax Regional Library, City of Fairfax Meeting Room 101A, City of Fairfax Meeting Room 101B",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:12.587226+00:00"
+  },
+  "Courthouse Library, Children's Area": {
+    "query": "Courthouse Library, Children's Area",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:13.783865+00:00"
+  },
+  "Shirlington Library, Campbell Room": {
+    "query": "Shirlington Library, Campbell Room",
+    "latitude": 38.840939,
+    "longitude": -77.090316,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:26:14.844239+00:00"
+  },
+  "George Mason Regional Library, George Mason Meeting Room": {
+    "query": "George Mason Regional Library, George Mason Meeting Room",
+    "latitude": 38.827363,
+    "longitude": -77.186767,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:26:15.954845+00:00"
+  },
+  "John Marshall Library, John Marshall Meeting Room 1, John Marshall Meeting Room 2": {
+    "query": "John Marshall Library, John Marshall Meeting Room 1, John Marshall Meeting Room 2",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:17.116383+00:00"
+  },
+  "Courthouse Library, Azalea Conference Room": {
+    "query": "Courthouse Library, Azalea Conference Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:18.294535+00:00"
+  },
+  "Martha Washington Library, Martha Washington Meeting Room 104A , Martha Washington Meeting Room 104B": {
+    "query": "Martha Washington Library, Martha Washington Meeting Room 104A , Martha Washington Meeting Room 104B",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:19.436331+00:00"
+  },
+  "Pohick Regional Library": {
+    "query": "Pohick Regional Library",
+    "latitude": 38.774932,
+    "longitude": -77.268109,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:26:20.402294+00:00"
+  },
+  "Kings Park Library, Kings Park Meeting Room": {
+    "query": "Kings Park Library, Kings Park Meeting Room",
+    "latitude": 38.807458,
+    "longitude": -77.256624,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:26:21.470119+00:00"
+  },
+  "Columbia Pike Library, Drew Room": {
+    "query": "Columbia Pike Library, Drew Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:22.473864+00:00"
+  },
+  "Central Library, Quincy Room": {
+    "query": "Central Library, Quincy Room",
+    "latitude": 38.88397,
+    "longitude": -77.10783,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:26:23.499740+00:00"
+  },
+  "Courthouse Library, Cherry Conference Room": {
+    "query": "Courthouse Library, Cherry Conference Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:24.594266+00:00"
+  },
+  "Central Library, Bluemont Room": {
+    "query": "Central Library, Bluemont Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:25.601531+00:00"
+  },
+  "Cherrydale Library, Loft": {
+    "query": "Cherrydale Library, Loft",
+    "latitude": 38.898717,
+    "longitude": -77.109269,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:26:26.928192+00:00"
+  },
+  "Columbia Pike Library, Children's Area": {
+    "query": "Columbia Pike Library, Children's Area",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:28.010887+00:00"
+  },
+  "Westover Library, Longfellow Room": {
+    "query": "Westover Library, Longfellow Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:29.044369+00:00"
+  },
+  "Aurora Hills Library, Eads Room": {
+    "query": "Aurora Hills Library, Eads Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:30.140776+00:00"
+  },
+  "Columbia Pike Library, 2nd Floor": {
+    "query": "Columbia Pike Library, 2nd Floor",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T20:26:31.269643+00:00"
+  },
+  "Central Library, The Shop": {
+    "query": "Central Library, The Shop",
+    "latitude": 38.301686,
+    "longitude": -77.506959,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T20:26:32.306490+00:00"
   }
 }

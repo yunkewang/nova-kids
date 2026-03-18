@@ -58,7 +58,7 @@ jobs:
       # 3. Run the pipeline
       # -----------------------------------------------------------------------
       - name: Run pipeline
-        run: python scripts/run_pipeline.py --enrich-geo --strict-region
+        run: python scripts/run_pipeline.py --enrich-geo
 
       # -----------------------------------------------------------------------
       # 4. Validate output — fail fast if scrapers returned nothing
