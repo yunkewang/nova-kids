@@ -73,25 +73,62 @@ _VIRTUAL_CONTAINS_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Title-based virtual indicators — strong signals that the event is online-only.
+# Conservative list: only unambiguous terms (webinar is always virtual;
+# "virtual X" compound phrases are clear; zoom/webex/teams in a meeting context).
+_VIRTUAL_TITLE_RE = re.compile(
+    r"\bwebinar\b"
+    r"|webex\b"
+    r"|\blivestream\b|live\s+stream\b"
+    r"|\bvirtual\s+(class|event|workshop|program|session|tour|field\s+trip|"
+    r"storytime|concert|camp|experience)\b"
+    r"|\b(zoom|teams|webex)\s+(call|meeting|class|session|event)\b",
+    re.IGNORECASE,
+)
+
 
 def _is_virtual_location(
     location_name: str | None,
     tags: list | None = None,
+    title: str | None = None,
 ) -> bool:
     """
     Return True if this event is virtual/online and should not be geocoded.
-    Checks both location_name and event tags.
+
+    Checks (in order):
+      1. tags contain "virtual"
+      2. location_name is a known virtual placeholder
+      3. title contains an unambiguous virtual/webinar keyword
     """
     if tags and "virtual" in tags:
         return True
-    if not location_name:
-        return False
-    stripped = location_name.strip()
-    if _VIRTUAL_EXACT_RE.match(stripped):
-        return True
-    if _VIRTUAL_CONTAINS_RE.search(stripped):
+    if location_name:
+        stripped = location_name.strip()
+        if _VIRTUAL_EXACT_RE.match(stripped):
+            return True
+        if _VIRTUAL_CONTAINS_RE.search(stripped):
+            return True
+    if title and _VIRTUAL_TITLE_RE.search(title):
         return True
     return False
+
+
+def _compute_is_mappable(
+    latitude: Optional[float],
+    longitude: Optional[float],
+    location_name: Optional[str] = None,
+    tags: Optional[list] = None,
+    title: Optional[str] = None,
+) -> bool:
+    """
+    Return True only when the event has valid coordinates inside the NoVA/DC
+    service area and is not a virtual/online event.
+    """
+    if _is_virtual_location(location_name, tags, title):
+        return False
+    if latitude is None or longitude is None:
+        return False
+    return _is_in_service_area(latitude, longitude)
 
 
 # ---------------------------------------------------------------------------
@@ -406,27 +443,34 @@ class GeoStats:
     cache_hits: int = 0
     failed: int = 0
     virtual_skipped: int = 0
-    out_of_region_rejected: int = 0   # existing coords that were nulled
-    retried: int = 0                  # events re-geocoded after bad coord nulled
+    virtual_coords_cleared: int = 0  # coords removed from virtual events
+    out_of_region_rejected: int = 0  # existing coords that were nulled
+    retried: int = 0                 # events re-geocoded after bad coord nulled
+    total_mappable: int = 0          # events with is_mappable=True after run
+    total_non_mappable: int = 0      # events with is_mappable=False after run
 
     @property
     def total_with_coords(self) -> int:
         return self.already_geocoded + self.newly_geocoded
 
     def print_summary(self) -> None:
-        pct = self.total_with_coords / self.total * 100 if self.total else 0.0
         print(f"\n  Geo enrichment:")
-        print(f"    events total:          {self.total}")
-        print(f"    already geocoded:      {self.already_geocoded}")
-        print(f"    newly geocoded:        {self.newly_geocoded}")
-        print(f"    cache hits:            {self.cache_hits}")
-        print(f"    virtual skipped:       {self.virtual_skipped}")
+        print(f"    events total:              {self.total}")
+        print(f"    virtual events detected:   {self.virtual_skipped}")
+        if self.virtual_coords_cleared:
+            print(f"    coords cleared (virtual):  {self.virtual_coords_cleared}")
+        print(f"    already geocoded:          {self.already_geocoded}")
+        print(f"    newly geocoded:            {self.newly_geocoded}")
+        print(f"    cache hits:                {self.cache_hits}")
         if self.out_of_region_rejected:
-            print(f"    out-of-region nulled:  {self.out_of_region_rejected}")
+            print(f"    out-of-region nulled:      {self.out_of_region_rejected}")
         if self.retried:
-            print(f"    retried (bad coord):   {self.retried}")
-        print(f"    failed geocodes:       {self.failed}")
-        print(f"    total with coords:     {self.total_with_coords} ({pct:.0f}% mappable)")
+            print(f"    retried (bad coord):       {self.retried}")
+        print(f"    failed geocodes:           {self.failed}")
+        if self.total_mappable or self.total_non_mappable:
+            print(f"    ---")
+            print(f"    total mappable:            {self.total_mappable}")
+            print(f"    total non-mappable:        {self.total_non_mappable}")
 
 
 # ---------------------------------------------------------------------------
@@ -454,8 +498,17 @@ def geocode_events(
     for event in events:
         tags = list(event.tags or [])
 
-        # Never geocode virtual events
-        if _is_virtual_location(event.location_name, tags):
+        # Never geocode virtual events (check tags, location_name, and title)
+        if _is_virtual_location(event.location_name, tags, event.title):
+            if event.latitude is not None:
+                stats.virtual_coords_cleared += 1
+                try:
+                    event = event.model_copy(update={
+                        "latitude": None, "longitude": None,
+                        "geo_confidence": None, "is_mappable": False,
+                    })
+                except Exception:
+                    pass
             stats.virtual_skipped += 1
             enriched.append(event)
             continue
@@ -512,8 +565,26 @@ def geocode_events(
             stats.failed += 1
             enriched.append(event)
 
+    # Final pass: compute is_mappable for every event based on final coordinate state
+    final_enriched: list[Event] = []
+    for event in enriched:
+        tags = list(event.tags or [])
+        correct = _compute_is_mappable(
+            event.latitude, event.longitude, event.location_name, tags, event.title
+        )
+        if event.is_mappable != correct:
+            try:
+                event = event.model_copy(update={"is_mappable": correct})
+            except Exception:
+                pass
+        if correct:
+            stats.total_mappable += 1
+        else:
+            stats.total_non_mappable += 1
+        final_enriched.append(event)
+
     cache.save()
-    return enriched, stats
+    return final_enriched, stats
 
 
 def geocode_event_dicts(
@@ -549,21 +620,24 @@ def geocode_event_dicts(
         lon = ev.get("longitude")
 
         # --- Virtual event handling ---
-        if _is_virtual_location(loc_name, tags):
+        if _is_virtual_location(loc_name, tags, title):
             new_ev = dict(ev)
-            if lat is not None and strict_region:
-                suspicious.append({
-                    "event_id": event_id,
-                    "title": title,
-                    "location_name": loc_name,
-                    "location_address": loc_addr,
-                    "original_latitude": lat,
-                    "original_longitude": lon,
-                    "rejection_reason": "virtual_event",
-                })
+            if lat is not None or lon is not None:
                 new_ev["latitude"] = None
                 new_ev["longitude"] = None
-                stats.out_of_region_rejected += 1
+                new_ev["geo_confidence"] = None
+                stats.virtual_coords_cleared += 1
+                if strict_region:
+                    suspicious.append({
+                        "event_id": event_id,
+                        "title": title,
+                        "location_name": loc_name,
+                        "location_address": loc_addr,
+                        "original_latitude": lat,
+                        "original_longitude": lon,
+                        "rejection_reason": "virtual_event",
+                    })
+            new_ev["is_mappable"] = False
             stats.virtual_skipped += 1
             updated.append(new_ev)
             continue
@@ -634,5 +708,22 @@ def geocode_event_dicts(
             updated.append(new_ev)
             stats.failed += 1
 
+    # Final pass: compute is_mappable for every event based on final coordinate state
+    final_updated: list[dict] = []
+    for ev in updated:
+        tags = ev.get("tags") or []
+        is_mappable = _compute_is_mappable(
+            ev.get("latitude"), ev.get("longitude"),
+            ev.get("location_name"), tags, ev.get("title"),
+        )
+        if ev.get("is_mappable") != is_mappable:
+            ev = dict(ev)
+            ev["is_mappable"] = is_mappable
+        if is_mappable:
+            stats.total_mappable += 1
+        else:
+            stats.total_non_mappable += 1
+        final_updated.append(ev)
+
     cache.save()
-    return updated, stats, suspicious
+    return final_updated, stats, suspicious

@@ -1,6 +1,6 @@
 {
   "week_start": "2026-03-16",
-  "generated_at": "2026-03-18T13:41:52.686213+00:00",
+  "generated_at": "2026-03-18T14:02:02.037049+00:00",
   "source_count": 36,
   "event_count": 86,
   "events": [
@@ -37,7 +37,8 @@
       "last_verified_at": "2026-03-18T01:13:00.484719+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.935,
-      "short_note": "Indoor animals program at National Aquarium."
+      "short_note": "Indoor animals program at National Aquarium.",
+      "is_mappable": true
     },
     {
       "id": "2d0582dced0fcc4f",
@@ -71,7 +72,8 @@
       "last_verified_at": "2026-03-18T01:13:00.489818+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Mount Vernon Inn Restaurant."
+      "short_note": "Indoor family-friendly event at Mount Vernon Inn Restaurant.",
+      "is_mappable": true
     },
     {
       "id": "6aacbd1f0376de1a",
@@ -104,7 +106,8 @@
       "last_verified_at": "2026-03-18T01:13:00.490720+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Sterling Community Center."
+      "short_note": "Indoor family-friendly event at Sterling Community Center.",
+      "is_mappable": true
     },
     {
       "id": "cf133004f7fa173c",
@@ -139,7 +142,8 @@
       "last_verified_at": "2026-03-18T01:13:00.491257+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
-      "short_note": "Indoor family-friendly event at National Children's Museum."
+      "short_note": "Indoor family-friendly event at National Children's Museum.",
+      "is_mappable": true
     },
     {
       "id": "fbb441cd4cd104d2",
@@ -173,7 +177,8 @@
       "last_verified_at": "2026-03-18T01:13:00.491958+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers."
+      "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers.",
+      "is_mappable": true
     },
     {
       "id": "dc3202b89c417fdc",
@@ -207,7 +212,8 @@
       "last_verified_at": "2026-03-18T01:13:00.492461+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
-      "short_note": "Indoor family-friendly event at Scotto's Rigatoni Grill."
+      "short_note": "Indoor family-friendly event at Scotto's Rigatoni Grill.",
+      "is_mappable": true
     },
     {
       "id": "4d387fd759fe015e",
@@ -241,7 +247,8 @@
       "last_verified_at": "2026-03-18T01:13:00.492885+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
-      "short_note": "Indoor skating session at Ashburn Ice House."
+      "short_note": "Indoor skating session at Ashburn Ice House.",
+      "is_mappable": true
     },
     {
       "id": "5c95d6f34efbae3b",
@@ -275,7 +282,8 @@
       "last_verified_at": "2026-03-18T01:13:00.493344+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
-      "short_note": "$8 indoor skating session at Bush Tabernacle."
+      "short_note": "$8 indoor skating session at Bush Tabernacle.",
+      "is_mappable": true
     },
     {
       "id": "a77b2d7ecd4cec2e",
@@ -309,7 +317,8 @@
       "last_verified_at": "2026-03-18T01:13:00.493752+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.97,
-      "short_note": "Join our artist instructors as they take you step-by-step through this masterpiece, no art experience required!"
+      "short_note": "Join our artist instructors as they take you step-by-step through this masterpiece, no art experience required!",
+      "is_mappable": true
     },
     {
       "id": "3bd3f0b5f8ca0bcd",
@@ -342,7 +351,8 @@
       "last_verified_at": "2026-03-18T01:13:00.494411+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Little Oaks Montessori Academy."
+      "short_note": "Indoor family-friendly event at Little Oaks Montessori Academy.",
+      "is_mappable": false
     },
     {
       "id": "f16b0d5163c6873a",
@@ -377,7 +387,8 @@
       "last_verified_at": "2026-03-18T01:13:00.494836+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "$25 online/virtual workshop."
+      "short_note": "$25 online/virtual workshop.",
+      "is_mappable": false
     },
     {
       "id": "4cca91c34ea19ca7",
@@ -411,7 +422,8 @@
       "last_verified_at": "2026-03-18T01:13:00.495274+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Camp program at Claude Moore Rec Center."
+      "short_note": "Camp program at Claude Moore Rec Center.",
+      "is_mappable": true
     },
     {
       "id": "a542fdfea700a3ed",
@@ -444,7 +456,8 @@
       "last_verified_at": "2026-03-18T01:13:00.495730+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
-      "short_note": "Indoor family-friendly event at Park View High School."
+      "short_note": "Indoor family-friendly event at Park View High School.",
+      "is_mappable": true
     },
     {
       "id": "48e23a1c081f37ac",
@@ -477,7 +490,8 @@
       "last_verified_at": "2026-03-18T01:13:00.496125+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
-      "short_note": "Indoor family-friendly event at Tea with Mrs. B."
+      "short_note": "Indoor family-friendly event at Tea with Mrs. B.",
+      "is_mappable": true
     },
     {
       "id": "7ec75c4b447c8802",
@@ -512,7 +526,8 @@
       "last_verified_at": "2026-03-18T01:13:00.496512+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm."
+      "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm.",
+      "is_mappable": true
     },
     {
       "id": "85d252177c635471",
@@ -547,7 +562,8 @@
       "last_verified_at": "2026-03-18T01:13:00.497495+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
-      "short_note": "Indoor family-friendly event at National Children's Museum."
+      "short_note": "Indoor family-friendly event at National Children's Museum.",
+      "is_mappable": true
     },
     {
       "id": "d5887e0879ef05a7",
@@ -581,7 +597,8 @@
       "last_verified_at": "2026-03-18T01:13:00.498199+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers."
+      "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers.",
+      "is_mappable": true
     },
     {
       "id": "314c5775a1b28a01",
@@ -615,7 +632,8 @@
       "last_verified_at": "2026-03-18T01:13:00.498626+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Outdoor animals program at Leesburg Animal Park."
+      "short_note": "Outdoor animals program at Leesburg Animal Park.",
+      "is_mappable": true
     },
     {
       "id": "32d352ec1d46d8fa",
@@ -649,7 +667,8 @@
       "last_verified_at": "2026-03-18T01:13:00.499015+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
-      "short_note": "$8 indoor skating session at Bush Tabernacle."
+      "short_note": "$8 indoor skating session at Bush Tabernacle.",
+      "is_mappable": true
     },
     {
       "id": "06624c485db63a29",
@@ -684,7 +703,8 @@
       "last_verified_at": "2026-03-18T01:13:00.499424+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Indoor storytime at Barnes & Noble."
+      "short_note": "Indoor storytime at Barnes & Noble.",
+      "is_mappable": true
     },
     {
       "id": "013e49a902f8eda2",
@@ -717,7 +737,8 @@
       "last_verified_at": "2026-03-18T01:13:00.499889+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Dulles SportsPlex."
+      "short_note": "Indoor family-friendly event at Dulles SportsPlex.",
+      "is_mappable": true
     },
     {
       "id": "fa8f5e124c995311",
@@ -752,7 +773,8 @@
       "last_verified_at": "2026-03-18T01:13:00.500454+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Indoor STEM activity at Udvar-Hazy Center."
+      "short_note": "Indoor STEM activity at Udvar-Hazy Center.",
+      "is_mappable": true
     },
     {
       "id": "0a1ddda46cc86ce2",
@@ -785,7 +807,8 @@
       "last_verified_at": "2026-03-18T01:13:00.501196+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at The Toy Nest."
+      "short_note": "Indoor family-friendly event at The Toy Nest.",
+      "is_mappable": true
     },
     {
       "id": "4add75f57c434e21",
@@ -818,7 +841,8 @@
       "last_verified_at": "2026-03-18T01:13:00.501686+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Tysons Corner Center."
+      "short_note": "Indoor family-friendly event at Tysons Corner Center.",
+      "is_mappable": true
     },
     {
       "id": "7358282e5c47b82d",
@@ -852,7 +876,8 @@
       "last_verified_at": "2026-03-18T01:13:00.502802+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at The Toy Nest for toddlers."
+      "short_note": "Indoor family-friendly event at The Toy Nest for toddlers.",
+      "is_mappable": true
     },
     {
       "id": "ec0b1c04125eddc3",
@@ -885,7 +910,8 @@
       "last_verified_at": "2026-03-18T01:13:00.503179+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Cascades Library."
+      "short_note": "Indoor family-friendly event at Cascades Library.",
+      "is_mappable": true
     },
     {
       "id": "8c9926f0f5dc2775",
@@ -918,7 +944,8 @@
       "last_verified_at": "2026-03-18T01:13:00.503593+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Rust Library."
+      "short_note": "Indoor family-friendly event at Rust Library.",
+      "is_mappable": true
     },
     {
       "id": "331d880412253814",
@@ -951,7 +978,8 @@
       "last_verified_at": "2026-03-18T01:13:00.503935+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Brambleton Library."
+      "short_note": "Indoor family-friendly event at Brambleton Library.",
+      "is_mappable": true
     },
     {
       "id": "f5d78c212dc04a91",
@@ -984,7 +1012,8 @@
       "last_verified_at": "2026-03-18T01:13:00.504351+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Douglass Community Center."
+      "short_note": "Indoor family-friendly event at Douglass Community Center.",
+      "is_mappable": true
     },
     {
       "id": "9ed33367522fc685",
@@ -1019,7 +1048,8 @@
       "last_verified_at": "2026-03-18T01:13:00.505042+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor animals program at Animal Welfare League of Arlington, VA."
+      "short_note": "Indoor animals program at Animal Welfare League of Arlington, VA.",
+      "is_mappable": true
     },
     {
       "id": "369c77655807445c",
@@ -1053,7 +1083,8 @@
       "last_verified_at": "2026-03-18T01:13:00.505602+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Camp program at Claude Moore Rec Center."
+      "short_note": "Camp program at Claude Moore Rec Center.",
+      "is_mappable": true
     },
     {
       "id": "c56e8f2fdc4bd1d9",
@@ -1086,7 +1117,8 @@
       "last_verified_at": "2026-03-18T01:13:00.506058+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
-      "short_note": "Indoor family-friendly event at Tea with Mrs. B."
+      "short_note": "Indoor family-friendly event at Tea with Mrs. B.",
+      "is_mappable": true
     },
     {
       "id": "d5495480d3da7c11",
@@ -1120,7 +1152,8 @@
       "last_verified_at": "2026-03-18T01:13:00.506410+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor cooking class at Cookology."
+      "short_note": "Indoor cooking class at Cookology.",
+      "is_mappable": true
     },
     {
       "id": "1e75c66d139b1967",
@@ -1155,7 +1188,8 @@
       "last_verified_at": "2026-03-18T01:13:00.506777+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm."
+      "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm.",
+      "is_mappable": true
     },
     {
       "id": "6dbd3a0cc27b68a8",
@@ -1188,7 +1222,8 @@
       "last_verified_at": "2026-03-18T01:13:00.507342+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at The Toy Nest."
+      "short_note": "Indoor family-friendly event at The Toy Nest.",
+      "is_mappable": true
     },
     {
       "id": "c3c1d02cebc374b2",
@@ -1222,7 +1257,8 @@
       "last_verified_at": "2026-03-18T01:13:00.507764+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
-      "short_note": "Indoor skating session at Ashburn Ice House."
+      "short_note": "Indoor skating session at Ashburn Ice House.",
+      "is_mappable": true
     },
     {
       "id": "208a42baaa951b65",
@@ -1257,7 +1293,8 @@
       "last_verified_at": "2026-03-18T01:13:00.508227+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
-      "short_note": "Indoor family-friendly event at National Children's Museum."
+      "short_note": "Indoor family-friendly event at National Children's Museum.",
+      "is_mappable": true
     },
     {
       "id": "08105ac478d96184",
@@ -1291,7 +1328,8 @@
       "last_verified_at": "2026-03-18T01:13:00.508960+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers."
+      "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers.",
+      "is_mappable": true
     },
     {
       "id": "841a866b5fc9ba7a",
@@ -1327,7 +1365,8 @@
       "last_verified_at": "2026-03-18T01:13:00.509360+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor STEM activity at Children's Science Center Lab."
+      "short_note": "Indoor STEM activity at Children's Science Center Lab.",
+      "is_mappable": true
     },
     {
       "id": "cc5a240339e9a779",
@@ -1361,7 +1400,8 @@
       "last_verified_at": "2026-03-18T01:13:00.509750+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Outdoor animals program at Leesburg Animal Park."
+      "short_note": "Outdoor animals program at Leesburg Animal Park.",
+      "is_mappable": true
     },
     {
       "id": "05f24d47d77375d8",
@@ -1395,7 +1435,8 @@
       "last_verified_at": "2026-03-18T01:13:00.510155+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
-      "short_note": "$8 indoor skating session at Bush Tabernacle."
+      "short_note": "$8 indoor skating session at Bush Tabernacle.",
+      "is_mappable": true
     },
     {
       "id": "c37e47136228ceb9",
@@ -1428,7 +1469,8 @@
       "last_verified_at": "2026-03-18T01:13:00.510548+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Outdoor family-friendly event at Claude Moore Park."
+      "short_note": "Outdoor family-friendly event at Claude Moore Park.",
+      "is_mappable": true
     },
     {
       "id": "227722eb24186df8",
@@ -1461,7 +1503,8 @@
       "last_verified_at": "2026-03-18T01:13:00.510950+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Dulles SportsPlex."
+      "short_note": "Indoor family-friendly event at Dulles SportsPlex.",
+      "is_mappable": true
     },
     {
       "id": "599f1dadb92246cb",
@@ -1494,7 +1537,8 @@
       "last_verified_at": "2026-03-18T01:13:00.511422+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Outdoor family-friendly event at Claude Moore Park."
+      "short_note": "Outdoor family-friendly event at Claude Moore Park.",
+      "is_mappable": true
     },
     {
       "id": "a4104856a568e4c8",
@@ -1528,7 +1572,8 @@
       "last_verified_at": "2026-03-18T01:13:00.511837+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at HOPE Preschool."
+      "short_note": "Indoor family-friendly event at HOPE Preschool.",
+      "is_mappable": true
     },
     {
       "id": "f354eb126bcc7a4b",
@@ -1562,7 +1607,8 @@
       "last_verified_at": "2026-03-18T01:13:00.512232+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor festival at Astar Explorer."
+      "short_note": "Indoor festival at Astar Explorer.",
+      "is_mappable": true
     },
     {
       "id": "ae7dc7f2c9ee4c77",
@@ -1596,7 +1642,8 @@
       "last_verified_at": "2026-03-18T01:13:00.512706+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Cascades Library."
+      "short_note": "Indoor family-friendly event at Cascades Library.",
+      "is_mappable": true
     },
     {
       "id": "2fbce8edcee2bacb",
@@ -1630,7 +1677,8 @@
       "last_verified_at": "2026-03-18T01:13:00.513189+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Outdoor nature program at Frying Pan Farm and Equestrian."
+      "short_note": "Outdoor nature program at Frying Pan Farm and Equestrian.",
+      "is_mappable": true
     },
     {
       "id": "52a61a359ec744e9",
@@ -1665,7 +1713,8 @@
       "last_verified_at": "2026-03-18T01:13:00.513654+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.69,
-      "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre."
+      "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre.",
+      "is_mappable": true
     },
     {
       "id": "38a100a1a5cf7a88",
@@ -1699,7 +1748,8 @@
       "last_verified_at": "2026-03-18T01:13:00.514123+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
-      "short_note": "Indoor skating session at Ashburn Ice House."
+      "short_note": "Indoor skating session at Ashburn Ice House.",
+      "is_mappable": true
     },
     {
       "id": "82fc4cded7e59364",
@@ -1734,7 +1784,8 @@
       "last_verified_at": "2026-03-18T01:13:00.514577+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm."
+      "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm.",
+      "is_mappable": true
     },
     {
       "id": "e74b3561b5fba3bf",
@@ -1767,7 +1818,8 @@
       "last_verified_at": "2026-03-18T01:13:00.515152+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Dulles SportsPlex."
+      "short_note": "Indoor family-friendly event at Dulles SportsPlex.",
+      "is_mappable": true
     },
     {
       "id": "eb0f873384ac0eda",
@@ -1799,7 +1851,8 @@
       "last_verified_at": "2026-03-18T01:13:00.515592+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Family-friendly event at Dulles South Rec Center."
+      "short_note": "Family-friendly event at Dulles South Rec Center.",
+      "is_mappable": true
     },
     {
       "id": "1ecc935fa12ce1c2",
@@ -1834,7 +1887,8 @@
       "last_verified_at": "2026-03-18T01:13:00.516085+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Indoor nature program at Hidden Oaks Nature Center."
+      "short_note": "Indoor nature program at Hidden Oaks Nature Center.",
+      "is_mappable": true
     },
     {
       "id": "5e3a738185c52a30",
@@ -1867,7 +1921,8 @@
       "last_verified_at": "2026-03-18T01:13:00.516566+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Cascades Library."
+      "short_note": "Indoor family-friendly event at Cascades Library.",
+      "is_mappable": true
     },
     {
       "id": "1cecd24ca4ca05c7",
@@ -1902,7 +1957,8 @@
       "last_verified_at": "2026-03-18T01:13:00.517016+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
-      "short_note": "Indoor family-friendly event at National Children's Museum."
+      "short_note": "Indoor family-friendly event at National Children's Museum.",
+      "is_mappable": true
     },
     {
       "id": "437d2cdf764d3b95",
@@ -1936,7 +1992,8 @@
       "last_verified_at": "2026-03-18T01:13:00.517717+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Outdoor animals program at Leesburg Animal Park."
+      "short_note": "Outdoor animals program at Leesburg Animal Park.",
+      "is_mappable": true
     },
     {
       "id": "e855755571fc9a4c",
@@ -1970,7 +2027,8 @@
       "last_verified_at": "2026-03-18T01:13:00.518229+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Indoor family-friendly event at Minnie H. Peyton Community Center at Bailey's."
+      "short_note": "Indoor family-friendly event at Minnie H. Peyton Community Center at Bailey's.",
+      "is_mappable": true
     },
     {
       "id": "1fb1fee2c0fef5d3",
@@ -2004,7 +2062,8 @@
       "last_verified_at": "2026-03-18T01:13:00.518778+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
-      "short_note": "Indoor storytime at Scrawl Books."
+      "short_note": "Indoor storytime at Scrawl Books.",
+      "is_mappable": true
     },
     {
       "id": "fc515a71406f7ea2",
@@ -2037,7 +2096,8 @@
       "last_verified_at": "2026-03-18T01:13:00.519171+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Madison Community Center & Park."
+      "short_note": "Indoor family-friendly event at Madison Community Center & Park.",
+      "is_mappable": true
     },
     {
       "id": "9ccefd271d034484",
@@ -2071,7 +2131,8 @@
       "last_verified_at": "2026-03-18T01:13:00.519565+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
-      "short_note": "$8 indoor skating session at Bush Tabernacle."
+      "short_note": "$8 indoor skating session at Bush Tabernacle.",
+      "is_mappable": true
     },
     {
       "id": "91e88166f992bd73",
@@ -2106,7 +2167,8 @@
       "last_verified_at": "2026-03-18T01:13:00.519987+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Indoor storytime at Barnes & Noble Fair Lakes Promenade."
+      "short_note": "Indoor storytime at Barnes & Noble Fair Lakes Promenade.",
+      "is_mappable": true
     },
     {
       "id": "1004144fce6c986d",
@@ -2140,7 +2202,8 @@
       "last_verified_at": "2026-03-18T01:13:00.520571+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Indoor storytime at Barnes & Noble The Spectrum at Reston Town Center."
+      "short_note": "Indoor storytime at Barnes & Noble The Spectrum at Reston Town Center.",
+      "is_mappable": true
     },
     {
       "id": "cb658fe869f50402",
@@ -2174,7 +2237,8 @@
       "last_verified_at": "2026-03-18T01:13:00.521049+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Outdoor nature program at Franklin Park."
+      "short_note": "Outdoor nature program at Franklin Park.",
+      "is_mappable": true
     },
     {
       "id": "0b3f44850d71e659",
@@ -2208,7 +2272,8 @@
       "last_verified_at": "2026-03-18T01:13:00.521444+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "($37) indoor arts program at Muse Paintbar."
+      "short_note": "($37) indoor arts program at Muse Paintbar.",
+      "is_mappable": true
     },
     {
       "id": "2753f57d1688e5ec",
@@ -2241,7 +2306,8 @@
       "last_verified_at": "2026-03-18T01:13:00.521950+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Outdoor family-friendly event at Lake Fairfax Park."
+      "short_note": "Outdoor family-friendly event at Lake Fairfax Park.",
+      "is_mappable": true
     },
     {
       "id": "1e3fedf75a225c59",
@@ -2274,7 +2340,8 @@
       "last_verified_at": "2026-03-18T01:13:00.522333+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Rust Library."
+      "short_note": "Indoor family-friendly event at Rust Library.",
+      "is_mappable": true
     },
     {
       "id": "d1d6b47d2aad1d89",
@@ -2308,7 +2375,8 @@
       "last_verified_at": "2026-03-18T01:13:00.522803+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "$24.75 indoor cooking class at The Conche."
+      "short_note": "$24.75 indoor cooking class at The Conche.",
+      "is_mappable": true
     },
     {
       "id": "fe808900cc5edb35",
@@ -2341,7 +2409,8 @@
       "last_verified_at": "2026-03-18T01:13:00.523824+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Tackett's Mill."
+      "short_note": "Indoor family-friendly event at Tackett's Mill.",
+      "is_mappable": true
     },
     {
       "id": "6c2afab986b4195f",
@@ -2376,7 +2445,8 @@
       "last_verified_at": "2026-03-18T01:13:00.524308+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.69,
-      "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre."
+      "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre.",
+      "is_mappable": true
     },
     {
       "id": "d67da87f9f902e44",
@@ -2410,7 +2480,8 @@
       "last_verified_at": "2026-03-18T01:13:00.524798+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor theater performance at The Alden."
+      "short_note": "Indoor theater performance at The Alden.",
+      "is_mappable": true
     },
     {
       "id": "59dd986e3e98819b",
@@ -2443,7 +2514,8 @@
       "last_verified_at": "2026-03-18T01:13:00.525188+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Charles Houston Rec Center."
+      "short_note": "Indoor family-friendly event at Charles Houston Rec Center.",
+      "is_mappable": true
     },
     {
       "id": "6ec8be4db924a9a3",
@@ -2478,7 +2550,8 @@
       "last_verified_at": "2026-03-18T01:13:00.525687+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.97,
-      "short_note": "Indoor music program at McLean Community Center."
+      "short_note": "Indoor music program at McLean Community Center.",
+      "is_mappable": true
     },
     {
       "id": "cb5dc7ff8b43e332",
@@ -2512,7 +2585,8 @@
       "last_verified_at": "2026-03-18T01:13:00.526629+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor festival at Astar Explorer."
+      "short_note": "Indoor festival at Astar Explorer.",
+      "is_mappable": true
     },
     {
       "id": "7fdd2071f5dc63b5",
@@ -2545,7 +2619,8 @@
       "last_verified_at": "2026-03-18T01:13:00.527111+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.97,
-      "short_note": "Indoor theater performance at A Place To Be."
+      "short_note": "Indoor theater performance at A Place To Be.",
+      "is_mappable": true
     },
     {
       "id": "4175869337cdda11",
@@ -2578,7 +2653,8 @@
       "last_verified_at": "2026-03-18T01:13:00.527476+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Dulles SportsPlex."
+      "short_note": "Indoor family-friendly event at Dulles SportsPlex.",
+      "is_mappable": true
     },
     {
       "id": "ee5ecbf9e331a4a2",
@@ -2613,7 +2689,8 @@
       "last_verified_at": "2026-03-18T01:13:00.527933+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm."
+      "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm.",
+      "is_mappable": true
     },
     {
       "id": "7d36695af9e89d36",
@@ -2648,7 +2725,8 @@
       "last_verified_at": "2026-03-18T01:13:00.528556+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Free indoor family-friendly event at Port Discovery Children's Museum."
+      "short_note": "Free indoor family-friendly event at Port Discovery Children's Museum.",
+      "is_mappable": true
     },
     {
       "id": "4b2e3493e907ae6c",
@@ -2683,7 +2761,8 @@
       "last_verified_at": "2026-03-18T01:13:00.529025+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
-      "short_note": "Indoor family-friendly event at National Children's Museum."
+      "short_note": "Indoor family-friendly event at National Children's Museum.",
+      "is_mappable": true
     },
     {
       "id": "4327f0e85c207c99",
@@ -2717,7 +2796,8 @@
       "last_verified_at": "2026-03-18T01:13:00.529721+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Outdoor animals program at Leesburg Animal Park."
+      "short_note": "Outdoor animals program at Leesburg Animal Park.",
+      "is_mappable": true
     },
     {
       "id": "5cdb2ffcc91493da",
@@ -2752,7 +2832,8 @@
       "last_verified_at": "2026-03-18T01:13:00.530169+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
-      "short_note": "Indoor nature program at Hidden Oaks Nature Center."
+      "short_note": "Indoor nature program at Hidden Oaks Nature Center.",
+      "is_mappable": true
     },
     {
       "id": "b780b82015a1b099",
@@ -2786,7 +2867,8 @@
       "last_verified_at": "2026-03-18T01:13:00.530603+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
-      "short_note": "$8 indoor skating session at Bush Tabernacle."
+      "short_note": "$8 indoor skating session at Bush Tabernacle.",
+      "is_mappable": true
     },
     {
       "id": "b24fa121f9e08579",
@@ -2819,7 +2901,8 @@
       "last_verified_at": "2026-03-18T01:13:00.531038+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor family-friendly event at Tysons Corner Center."
+      "short_note": "Indoor family-friendly event at Tysons Corner Center.",
+      "is_mappable": true
     },
     {
       "id": "b3cda4b278323b72",
@@ -2853,7 +2936,8 @@
       "last_verified_at": "2026-03-18T01:13:00.532173+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
-      "short_note": "Free workshop at Your Preferred Michaels Location."
+      "short_note": "Free workshop at Your Preferred Michaels Location.",
+      "is_mappable": false
     },
     {
       "id": "fa0655878f1aa8f9",
@@ -2887,7 +2971,8 @@
       "last_verified_at": "2026-03-18T01:13:00.533134+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
-      "short_note": "Indoor theater performance at The Alden."
+      "short_note": "Indoor theater performance at The Alden.",
+      "is_mappable": true
     },
     {
       "id": "2cb42d6d01489d0e",
@@ -2922,7 +3007,8 @@
       "last_verified_at": "2026-03-18T01:13:00.533536+00:00",
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.69,
-      "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre."
+      "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre.",
+      "is_mappable": true
     }
   ]
 }

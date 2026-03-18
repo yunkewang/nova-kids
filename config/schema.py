@@ -114,6 +114,14 @@ class Event(BaseModel):
             "Present only when coordinates were resolved by the pipeline geocoder."
         ),
     )
+    is_mappable: bool = Field(
+        default=False,
+        description=(
+            "True when the event has valid coordinates inside the NoVA/DC metro "
+            "service area and is not a virtual/online event. "
+            "iOS clients should use this field to decide whether to show a map pin."
+        ),
+    )
     city: Optional[str] = Field(default=None)
     county: Optional[str] = Field(
         default=None,
