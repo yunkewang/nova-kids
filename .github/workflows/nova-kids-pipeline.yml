@@ -1,0 +1,158 @@
+name: NoVA Kids Pipeline
+
+on:
+  # Run daily at 10:00 UTC (6 AM ET / 5 AM EST)
+  schedule:
+    - cron: '0 10 * * *'
+
+  # Allow manual runs from the GitHub Actions tab
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (do not commit changes)'
+        required: false
+        default: 'false'
+        type: boolean
+
+# Only one run at a time — cancel in-flight if a newer run is queued
+concurrency:
+  group: nova-kids-pipeline
+  cancel-in-progress: false
+
+jobs:
+  run-pipeline:
+    name: Scrape, enrich, and publish
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # needed to commit + push back to main
+
+    steps:
+      # -----------------------------------------------------------------------
+      # 1. Checkout
+      # -----------------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Use default GITHUB_TOKEN with write permission granted above.
+          # persist-credentials is true by default — allows the push step below.
+          fetch-depth: 1
+
+      # -----------------------------------------------------------------------
+      # 2. Python environment
+      # -----------------------------------------------------------------------
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Print environment info
+        run: |
+          echo "Trigger  : ${{ github.event_name }}"
+          echo "Dry run  : ${{ inputs.dry_run || 'false' }}"
+          echo "Ref      : ${{ github.ref }}"
+          echo "Runner   : ${{ runner.os }}"
+          python --version
+          echo ""
+          pip list --format=columns | grep -E "requests|pydantic|beautifulsoup4|PyYAML|lxml"
+
+      # -----------------------------------------------------------------------
+      # 3. Run the pipeline
+      # -----------------------------------------------------------------------
+      - name: Run NoVA Kids pipeline
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "  Command: python scripts/run_pipeline.py --enrich-geo --strict-region"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          python scripts/run_pipeline.py --enrich-geo --strict-region
+
+      # -----------------------------------------------------------------------
+      # 4. Detect changes
+      # -----------------------------------------------------------------------
+      - name: Check for changes
+        id: changes
+        run: |
+          # Stage the files we care about committing.
+          # data/raw/ and data/normalized/ are gitignored — they won't appear here.
+          git add \
+            data/published/events/ \
+            public/events/ \
+            data/cache/geocode_cache.json
+
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes detected — nothing to commit."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Changes detected:"
+            git diff --cached --stat
+          fi
+
+      # -----------------------------------------------------------------------
+      # 5. Commit and push (skipped on dry run or no changes)
+      # -----------------------------------------------------------------------
+      - name: Commit and push
+        if: >
+          steps.changes.outputs.changed == 'true' &&
+          (github.event_name == 'schedule' ||
+           (github.event_name == 'workflow_dispatch' && inputs.dry_run != 'true'))
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Count changed files for the log
+          CHANGED=$(git diff --cached --name-only | wc -l | tr -d ' ')
+
+          git commit -m "chore: auto-update NoVA Kids event data [skip ci]
+
+          Triggered by: ${{ github.event_name }}
+          Files changed: ${CHANGED}"
+
+          git push origin main
+
+          echo ""
+          echo "✓ Committed and pushed ${CHANGED} file(s) to main."
+
+      # -----------------------------------------------------------------------
+      # 6. Summary
+      # -----------------------------------------------------------------------
+      - name: Summarize
+        if: always()
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "  Pipeline summary"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "  Trigger  : ${{ github.event_name }}"
+          echo "  Changes  : ${{ steps.changes.outputs.changed }}"
+
+          if [ -d data/published/events ]; then
+            echo ""
+            echo "  Published files:"
+            ls -lh data/published/events/
+          fi
+
+          if [ -f data/manual_review/suspicious_geocodes.json ]; then
+            COUNT=$(python3 -c "import json; d=json.load(open('data/manual_review/suspicious_geocodes.json')); print(len(d))" 2>/dev/null || echo "?")
+            echo ""
+            echo "  Suspicious geocodes on file: ${COUNT}"
+          fi
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      # -----------------------------------------------------------------------
+      # 7. Upload artifacts
+      # -----------------------------------------------------------------------
+      - name: Upload pipeline artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nova-kids-pipeline-${{ github.run_number }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            data/published/events/
+            data/manual_review/suspicious_geocodes.json

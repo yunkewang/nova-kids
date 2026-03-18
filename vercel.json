@@ -1,0 +1,15 @@
+{
+  "framework": null,
+  "outputDirectory": "public",
+  "buildCommand": "",
+  "headers": [
+    {
+      "source": "/events/(.*)",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json; charset=utf-8" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=300, stale-while-revalidate=60" }
+      ]
+    }
+  ]
+}

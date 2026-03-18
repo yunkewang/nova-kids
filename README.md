@@ -9,16 +9,71 @@ activities iOS app.
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Repository Layout](#repository-layout)
-3. [Quick Start](#quick-start)
-4. [Running the Pipeline Locally](#running-the-pipeline-locally)
-5. [Seed Discovery (DullesMoms)](#seed-discovery-dullesmoms)
-6. [Running Seed Discovery Locally](#running-seed-discovery-locally)
-7. [CLI Scripts](#cli-scripts)
-6. [Adding a New Source](#adding-a-new-source)
-7. [Weekly Publish Format](#weekly-publish-format)
-8. [Git Workflow](#git-workflow)
-9. [Using Claude Code to Maintain This Repo](#using-claude-code-to-maintain-this-repo)
+2. [GitHub Actions — Automatic Data Refresh](#github-actions--automatic-data-refresh)
+3. [Repository Layout](#repository-layout)
+4. [Quick Start](#quick-start)
+5. [Running the Pipeline Locally](#running-the-pipeline-locally)
+6. [Seed Discovery (DullesMoms)](#seed-discovery-dullesmoms)
+7. [Running Seed Discovery Locally](#running-seed-discovery-locally)
+8. [CLI Scripts](#cli-scripts)
+9. [Adding a New Source](#adding-a-new-source)
+10. [Weekly Publish Format](#weekly-publish-format)
+11. [Vercel Deployment](#vercel-deployment)
+12. [Git Workflow](#git-workflow)
+13. [Using Claude Code to Maintain This Repo](#using-claude-code-to-maintain-this-repo)
+
+---
+
+## GitHub Actions — Automatic Data Refresh
+
+The pipeline runs automatically every day via GitHub Actions, scrapes all
+enabled sources, geocodes events, and commits the updated JSON back to `main`.
+
+### Workflow file
+
+```
+.github/workflows/nova-kids-pipeline.yml
+```
+
+### Schedule
+
+Runs daily at **10:00 UTC** (6 AM ET). Also triggerable manually.
+
+### What it does
+
+1. Checks out the repo
+2. Installs Python 3.11 + dependencies
+3. Runs `python scripts/run_pipeline.py --enrich-geo --strict-region`
+4. Stages changes to `data/published/events/`, `public/events/`, and `data/cache/geocode_cache.json`
+5. If any files changed: commits with message `chore: auto-update NoVA Kids event data [skip ci]` and pushes to `main`
+6. If no files changed: exits cleanly with no commit
+
+### How to run manually
+
+1. Go to **Actions** tab in GitHub
+2. Select **NoVA Kids Pipeline**
+3. Click **Run workflow**
+4. Optionally check **Dry run** to test without committing
+
+### Files updated automatically
+
+| File | Purpose |
+|------|---------|
+| `data/published/events/week-YYYY-MM-DD.json` | Current week's events (consumed by iOS app) |
+| `data/published/events/index.json` | Week index (consumed by iOS app) |
+| `public/events/` | Vercel static hosting copies |
+| `data/cache/geocode_cache.json` | Geocode cache (speeds up future runs) |
+
+### Infinite loop prevention
+
+The auto-commit message contains `[skip ci]`. The workflow is triggered only
+by `schedule` and `workflow_dispatch` — **not by push** — so bot commits never
+retrigger the workflow regardless.
+
+### No secrets required
+
+The workflow uses the built-in `GITHUB_TOKEN` with `contents: write` permission.
+No personal access tokens or repository secrets are needed.
 
 ---
 
@@ -334,9 +389,55 @@ fetches the specific weekly file it needs.
 
 ---
 
-## iOS App — API URLs
+## Vercel Deployment
 
-The app consumes raw JSON served directly from GitHub. Use the `main` branch
+This repo deploys to Vercel as a **static JSON hosting** site — no Python
+backend, no server, no build step. Vercel simply serves the files in `public/`.
+
+### How it works
+
+```
+data/published/events/   ← pipeline writes here
+        ↓  scripts/sync_public.py  (runs automatically after every publish)
+public/events/           ← Vercel serves this
+```
+
+`vercel.json` sets `"framework": null` and `"outputDirectory": "public"` so
+Vercel skips framework detection entirely and serves the static files directly.
+
+### iOS App — Vercel URLs
+
+```
+https://<your-vercel-domain>/events/index.json
+https://<your-vercel-domain>/events/week-YYYY-MM-DD.json
+```
+
+**Example fetch sequence (Swift):**
+
+```swift
+let base = URL(string: "https://<your-vercel-domain>")!
+// 1. Fetch index:
+let indexURL = base.appendingPathComponent("events/index.json")
+// 2. Decode → read latest_week (e.g. "2026-03-16")
+// 3. Fetch week file:
+let weekURL = base.appendingPathComponent("events/week-\(latestWeek).json")
+```
+
+### Keeping public/ in sync
+
+After every pipeline run the sync runs automatically. To sync manually:
+
+```bash
+python scripts/sync_public.py
+```
+
+Then commit `public/events/` along with `data/published/events/` in the same PR.
+
+---
+
+## iOS App — API URLs (GitHub raw, legacy)
+
+The app can also consume raw JSON directly from GitHub. Use the `main` branch
 `raw.githubusercontent.com` URLs so the app always reads the latest merged data
 without any backend infrastructure.
 

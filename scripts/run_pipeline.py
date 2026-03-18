@@ -193,6 +193,24 @@ def save_normalized(events: list[Event]) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Public sync — keeps public/events/ in step with data/published/events/
+# ---------------------------------------------------------------------------
+
+def _sync_public() -> None:
+    """Copy all published JSON files into public/events/ for Vercel hosting."""
+    import shutil
+    src_dir = Path(__file__).parent.parent / "data" / "published" / "events"
+    dst_dir = Path(__file__).parent.parent / "public" / "events"
+    dst_dir.mkdir(parents=True, exist_ok=True)
+    count = 0
+    for src_file in sorted(src_dir.glob("*.json")):
+        shutil.copy2(src_file, dst_dir / src_file.name)
+        count += 1
+    if count:
+        print(f"[sync] {count} file(s) → public/events/")
+
+
+# ---------------------------------------------------------------------------
 # Repair mode
 # ---------------------------------------------------------------------------
 
@@ -266,6 +284,7 @@ def _repair_published_week(week_start: date, dry_run: bool) -> int:
     else:
         result = publish_events(repaired, week_start=week_start)
         print(f"[repair] Republished {result.event_count} events → {result.output_path.name}")
+        _sync_public()
 
     return 0
 
@@ -338,6 +357,7 @@ def _repair_geo_enrich(
             encoding="utf-8",
         )
         print(f"\n[geo-repair] Updated {filename}")
+        _sync_public()
 
     return 0
 
@@ -617,6 +637,7 @@ def main(argv: list[str] | None = None) -> int:
         result = publish_events(events, week_start=target_week)
         print(f"      Written: {result.output_path.name}")
         print(f"      Index updated: {result.index_path.name}")
+        _sync_public()
 
     # Summary
     elapsed = (datetime.now(tz=timezone.utc) - started_at).total_seconds()
