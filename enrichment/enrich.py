@@ -196,7 +196,16 @@ def compute_family_friendly_score(event_data: dict[str, Any], tags: list[str]) -
     title_lower = (event_data.get("title") or "").lower()
     if any(kw in title_lower for kw in
            ["children", "kids", "family", "toddler", "baby", "preschool", "storytime",
-            " tot", "tots", " camp", "junior", "skating", "skate"]):
+            " tot", "tots", " camp", "junior", "skating", "skate",
+            "playground", "sensory", "playtime", "play time", "little ones"]):
+        score += 0.10
+
+    # Kid-friendly venue type boost — libraries and community/rec centers host
+    # primarily youth programs; bump score without inventing age tags
+    location_lower = (event_data.get("location_name") or "").lower()
+    if any(kw in location_lower for kw in
+           ["library", "community center", "rec center", "recreation center",
+            "toy nest", "science center"]):
         score += 0.10
 
     # Weather

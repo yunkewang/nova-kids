@@ -161,7 +161,10 @@ def normalize_title(title: str) -> str:
     for i, word in enumerate(words):
         lower = word.lower()
         if i == 0 or lower not in _LOWERCASE_WORDS:
-            result.append(word.capitalize())
+            word = word.capitalize()
+            # Fix "Mrs.b" → "Mrs. B" — single initial glued to abbreviation
+            word = re.sub(r'(\.)([a-z])$', lambda m: m.group(1) + ' ' + m.group(2).upper(), word)
+            result.append(word)
         else:
             result.append(lower)
 
@@ -193,17 +196,31 @@ _GENERIC_SUMMARY_TEXTS = frozenset([
 # Matched case-insensitively at the START of the cleaned summary text.
 _VENUE_SUMMARY_BLURB_RE = re.compile(
     r"^(?:"
+    # "Visit our / Explore our" — bookstore, paint-bar, venue pages
+    r"visit\s+our\s+"
+    r"|explore\s+our\s+"
+    # "Our <X> school/center nurtures/offers" — Montessori, preschool blurbs
+    r"|our\s+\w[\w\s]{2,20}\s+(?:school|center|studio)\s+\w"
     # Venue "offers" / "features" / "is a X" descriptions
-    r"the\s+\w[\w\s]{2,30}\s+(?:community\s+center|rec(?:reation)?\s+center|library)"
+    r"|the\s+\w[\w\s]{2,30}\s+(?:community\s+center|rec(?:reation)?\s+center|library)"
     r"\s+(?:offers|features|is\s+a\b)"
     r"|\w[\w\s]{2,30}\s+(?:recreation\s+center|community\s+center)\s+features"
+    # Named venue "is dedicated to" / "features a" / "is a beautiful"
+    r"|the\s+(?:claude\s+moore|alden\s+theatre?|charles\s+houston)\s+\w"
+    r"|claude\s+moore\s+(?:rec(?:reation)?|park)\s+"
+    r"|madison\s+features?\s+a\s+\w"
+    r"|dulles\s+south\s+rec\s+and"
+    r"|franklin\s+park\s+is\s+a\b"
+    r"|port\s+discovery,?\s+located"
+    r"|[a-z][\w\s'.-]{5,50}\s+is\s+a\s+beautiful\b"
     # Venue opening history ("X first opened its doors" / "Since YYYY, X")
     r"|since\s+\d{4},?\s+\w"
     r"|[a-z][\w\s]{2,40}\s+first\s+opened\s+its\s+doors"
     # Toy Nest homepage
     r"|a\s+toy\s+library\s+and\s+indoor\s+play"
-    # AWLA homepage header fragment
+    # AWLA / event registration CTA fragments
     r"|all\s+in\s+for\s+animals\b"
+    r"|children\s+register\b"
     # URL-only summaries
     r"|learn\s+more\s+at\s+(?:www\.|https?://)"
     # Fairfax parks boilerplate
@@ -214,7 +231,7 @@ _VENUE_SUMMARY_BLURB_RE = re.compile(
     r"|tackett.?s\s+mill\s+center\s+is"
     # 501(c)3 nonprofit boilerplate ("X is a 501(c)3 non-profit organization")
     r"|.{5,60}\s+is\s+a\s+501\(c\)"
-    # Generic venue "is a/an [adjective] facility/school/museum" opener
+    # Generic venue "is a/an [adjective] facility" opener
     r"|[A-Za-z][\w\s']{3,50}\s+is\s+an?\s+(?:indoor|award-winning|vibrant|unique|community|premier|family-friendly)\s+"
     r")",
     re.IGNORECASE,

@@ -159,12 +159,22 @@ _BOILERPLATE_OPENER_RE = re.compile(
     r"|the\s+claude\s+moore\s+\w+\s+is"
     r"|port\s+discovery,?\s+located"
     r"|a\s+toy\s+library"
+    r"|visit\s+our\s+"
+    r"|explore\s+our\s+"
+    r"|our\s+\w[\w\s]{2,20}\s+(?:school|center|studio)\s+\w"
     r"|since\s+\d{4},?\s"
     r"|all\s+in\s+for\s+animals"
+    r"|children\s+register\b"
     r"|learn\s+more\s+at\s+(?:www\.|https?://)"
     r"|fairfax\s+county,?\s+virginia\s*-"
     r"|live\s+webinar\s+\w+\s+\d{1,2}"
     r"|tackett.?s\s+mill\s+center"
+    r"|the\s+(?:claude\s+moore|alden\s+theatre?|charles\s+houston)\s+\w"
+    r"|claude\s+moore\s+(?:rec(?:reation)?|park)\s+"
+    r"|madison\s+features?\s+a\s+\w"
+    r"|dulles\s+south\s+rec\s+and"
+    r"|franklin\s+park\s+is\s+a\b"
+    r"|[a-z][\w\s'.-]{5,50}\s+is\s+a\s+beautiful\b"
     r")",
     re.IGNORECASE,
 )
