@@ -24,9 +24,10 @@ KNOWN_VENUES: list[tuple[str, VenueHint]] = [
     ("aquarium",                {"tags": ["indoor", "museum", "animals"], "rainy_day_friendly": True}),
     ("leesburg animal park",    {"tags": ["outdoor", "animals"],          "rainy_day_friendly": False, "county": "Loudoun"}),
     # ── Museums ─────────────────────────────────────────────────────────────
-    ("national children's museum", {"tags": ["indoor", "museum"],         "rainy_day_friendly": True}),
-    ("childrens museum",           {"tags": ["indoor", "museum"],         "rainy_day_friendly": True}),
-    ("smithsonian",                {"tags": ["indoor", "museum"],         "rainy_day_friendly": True, "city": "Washington"}),
+    ("national children's museum", {"tags": ["indoor", "museum"],             "rainy_day_friendly": True}),
+    ("childrens museum",           {"tags": ["indoor", "museum"],             "rainy_day_friendly": True}),
+    ("children's science center",  {"tags": ["indoor", "museum", "stem"],    "rainy_day_friendly": True, "city": "Fairfax", "county": "Fairfax"}),
+    ("smithsonian",                {"tags": ["indoor", "museum"],             "rainy_day_friendly": True, "city": "Washington"}),
     ("natural history",            {"tags": ["indoor", "museum", "nature"],"rainy_day_friendly": True}),
     ("air and space",              {"tags": ["indoor", "museum", "stem"], "rainy_day_friendly": True}),
     ("udvar",                      {"tags": ["indoor", "museum", "stem"], "rainy_day_friendly": True}),
@@ -87,8 +88,25 @@ KNOWN_VENUES: list[tuple[str, VenueHint]] = [
     ("lcps",                {"tags": ["indoor"],  "rainy_day_friendly": True, "county": "Loudoun"}),
     ("family academy",      {"tags": ["indoor"],  "rainy_day_friendly": True, "county": "Loudoun"}),
     # ── Sports Facilities ────────────────────────────────────────────────────
-    ("sportsplex",          {"tags": ["indoor", "sports"], "rainy_day_friendly": True, "county": "Loudoun"}),
-    ("dulles sportsplex",   {"tags": ["indoor", "sports"], "rainy_day_friendly": True, "county": "Loudoun"}),
+    # No "sports" tag here — venue hosts sports AND non-sports events (e.g. consignment sales)
+    ("sportsplex",          {"tags": ["indoor"], "rainy_day_friendly": True, "county": "Loudoun"}),
+    ("dulles sportsplex",   {"tags": ["indoor"], "rainy_day_friendly": True, "county": "Loudoun"}),
+    # ── Toy Libraries / Indoor Play ────────────────────────────────────────────
+    ("toy nest",            {"tags": ["indoor"], "rainy_day_friendly": True, "city": "Falls Church", "county": "Fairfax"}),
+    # ── Cooking / Culinary Studios ─────────────────────────────────────────────
+    ("cookology",           {"tags": ["indoor", "cooking"], "rainy_day_friendly": True}),
+    # ── Preschools / Educational Centers ──────────────────────────────────────
+    ("hope preschool",      {"tags": ["indoor", "preschool"], "rainy_day_friendly": True, "city": "Ashburn", "county": "Loudoun"}),
+    # ── Animal Shelters / Welfare ──────────────────────────────────────────────
+    ("animal welfare league", {"tags": ["indoor", "animals"], "rainy_day_friendly": True, "city": "Arlington", "county": "Arlington"}),
+    # ── Performing Arts / Therapy Centers ──────────────────────────────────────
+    ("a place to be",       {"tags": ["indoor", "theater"], "rainy_day_friendly": True}),
+    # ── Tea / Social Experiences ───────────────────────────────────────────────
+    ("tea with mrs",        {"tags": ["indoor"], "rainy_day_friendly": True}),
+    # ── Shopping / Event Centers ───────────────────────────────────────────────
+    ("tackett's mill",      {"tags": ["indoor"], "rainy_day_friendly": True, "county": "Prince William"}),
+    # ── Chocolate / Confectionery Studios ──────────────────────────────────────
+    ("conche",              {"tags": ["indoor", "cooking"], "rainy_day_friendly": True}),
     # ── Virtual ──────────────────────────────────────────────────────────────
     ("virtual",             {"tags": ["virtual"],          "rainy_day_friendly": True}),
 ]
