@@ -142,7 +142,7 @@ python scripts/run_pipeline.py --dry-run
 python scripts/run_pipeline.py --source fairfax_park_authority
 
 # Validate an existing events file
-python scripts/validate_events.py data/published/events/week-2025-06-02.json
+python scripts/validate_events.py data/published/events/week-2026-03-16.json
 ```
 
 ---
@@ -310,10 +310,10 @@ so manual annotations are preserved across runs.
 
 ```json
 {
-  "week_start": "2025-06-02",
-  "generated_at": "2025-06-03T02:00:00+00:00",
-  "source_count": 3,
-  "event_count": 42,
+  "week_start": "2026-03-16",
+  "generated_at": "2026-03-18T01:00:00+00:00",
+  "source_count": 5,
+  "event_count": 86,
   "events": [ ... ]
 }
 ```
@@ -323,14 +323,47 @@ so manual annotations are preserved across runs.
 ```json
 {
   "version": "1",
-  "generated_at": "2025-06-03T02:00:00+00:00",
-  "available_weeks": ["2025-05-26", "2025-06-02"],
-  "latest_week": "2025-06-02"
+  "generated_at": "2026-03-18T01:00:00+00:00",
+  "available_weeks": ["2026-03-16"],
+  "latest_week": "2026-03-16"
 }
 ```
 
 The iOS app fetches `index.json` first to discover available weeks, then
 fetches the specific weekly file it needs.
+
+---
+
+## iOS App — API URLs
+
+The app consumes raw JSON served directly from GitHub. Use the `main` branch
+`raw.githubusercontent.com` URLs so the app always reads the latest merged data
+without any backend infrastructure.
+
+### Index (fetch this first)
+
+```
+https://raw.githubusercontent.com/yunkewang/nova-kids/main/data/published/events/index.json
+```
+
+### Weekly event file (construct from `latest_week` in the index)
+
+```
+https://raw.githubusercontent.com/yunkewang/nova-kids/main/data/published/events/week-{YYYY-MM-DD}.json
+```
+
+**Example fetch sequence (Swift):**
+
+```swift
+let indexURL = URL(string: "https://raw.githubusercontent.com/yunkewang/nova-kids/main/data/published/events/index.json")!
+// 1. Decode index → read latest_week (e.g. "2026-03-16")
+// 2. Build week URL:
+let weekURL = URL(string: "https://raw.githubusercontent.com/yunkewang/nova-kids/main/data/published/events/week-\(latestWeek).json")!
+// 3. Decode week file → read events array
+```
+
+New week files are merged to `main` via pull request each week. The index
+`latest_week` field advances automatically — no app release needed.
 
 ---
 
