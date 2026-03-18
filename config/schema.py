@@ -122,6 +122,14 @@ class Event(BaseModel):
             "iOS clients should use this field to decide whether to show a map pin."
         ),
     )
+    geo_within_service_region: bool = Field(
+        default=False,
+        description=(
+            "True when the event's coordinates fall within the NoVA/DC/Baltimore "
+            "metro service area bounding box, regardless of virtual status. "
+            "False when coordinates are absent, failed, or out of region."
+        ),
+    )
     city: Optional[str] = Field(default=None)
     county: Optional[str] = Field(
         default=None,

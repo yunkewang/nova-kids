@@ -1,6 +1,6 @@
 {
   "week_start": "2026-03-16",
-  "generated_at": "2026-03-18T14:02:02.037049+00:00",
+  "generated_at": "2026-03-18T14:16:29.682925+00:00",
   "source_count": 36,
   "event_count": 86,
   "events": [
@@ -38,7 +38,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.935,
       "short_note": "Indoor animals program at National Aquarium.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "2d0582dced0fcc4f",
@@ -73,7 +74,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Mount Vernon Inn Restaurant.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "6aacbd1f0376de1a",
@@ -107,7 +109,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Sterling Community Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "cf133004f7fa173c",
@@ -143,7 +146,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "fbb441cd4cd104d2",
@@ -178,7 +182,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "dc3202b89c417fdc",
@@ -213,7 +218,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor family-friendly event at Scotto's Rigatoni Grill.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "4d387fd759fe015e",
@@ -248,7 +254,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor skating session at Ashburn Ice House.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "5c95d6f34efbae3b",
@@ -283,7 +290,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "a77b2d7ecd4cec2e",
@@ -318,7 +326,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.97,
       "short_note": "Join our artist instructors as they take you step-by-step through this masterpiece, no art experience required!",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "3bd3f0b5f8ca0bcd",
@@ -352,7 +361,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Little Oaks Montessori Academy.",
-      "is_mappable": false
+      "is_mappable": false,
+      "geo_within_service_region": false
     },
     {
       "id": "f16b0d5163c6873a",
@@ -388,7 +398,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "$25 online/virtual workshop.",
-      "is_mappable": false
+      "is_mappable": false,
+      "geo_within_service_region": false
     },
     {
       "id": "4cca91c34ea19ca7",
@@ -423,7 +434,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Camp program at Claude Moore Rec Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "a542fdfea700a3ed",
@@ -457,7 +469,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor family-friendly event at Park View High School.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "48e23a1c081f37ac",
@@ -491,7 +504,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor family-friendly event at Tea with Mrs. B.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "7ec75c4b447c8802",
@@ -527,7 +541,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "85d252177c635471",
@@ -563,7 +578,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "d5887e0879ef05a7",
@@ -598,7 +614,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "314c5775a1b28a01",
@@ -633,7 +650,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor animals program at Leesburg Animal Park.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "32d352ec1d46d8fa",
@@ -668,7 +686,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "06624c485db63a29",
@@ -704,7 +723,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor storytime at Barnes & Noble.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "013e49a902f8eda2",
@@ -738,7 +758,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Dulles SportsPlex.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "fa8f5e124c995311",
@@ -774,7 +795,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor STEM activity at Udvar-Hazy Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "0a1ddda46cc86ce2",
@@ -808,7 +830,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at The Toy Nest.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "4add75f57c434e21",
@@ -842,7 +865,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Tysons Corner Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "7358282e5c47b82d",
@@ -877,7 +901,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at The Toy Nest for toddlers.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "ec0b1c04125eddc3",
@@ -911,7 +936,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Cascades Library.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "8c9926f0f5dc2775",
@@ -945,7 +971,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Rust Library.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "331d880412253814",
@@ -979,7 +1006,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Brambleton Library.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "f5d78c212dc04a91",
@@ -1013,7 +1041,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Douglass Community Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "9ed33367522fc685",
@@ -1049,7 +1078,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor animals program at Animal Welfare League of Arlington, VA.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "369c77655807445c",
@@ -1084,7 +1114,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Camp program at Claude Moore Rec Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "c56e8f2fdc4bd1d9",
@@ -1118,7 +1149,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor family-friendly event at Tea with Mrs. B.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "d5495480d3da7c11",
@@ -1153,7 +1185,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor cooking class at Cookology.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "1e75c66d139b1967",
@@ -1189,7 +1222,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "6dbd3a0cc27b68a8",
@@ -1223,7 +1257,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at The Toy Nest.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "c3c1d02cebc374b2",
@@ -1258,7 +1293,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor skating session at Ashburn Ice House.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "208a42baaa951b65",
@@ -1294,7 +1330,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "08105ac478d96184",
@@ -1329,7 +1366,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Sterling Community Center for toddlers.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "841a866b5fc9ba7a",
@@ -1366,7 +1404,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor STEM activity at Children's Science Center Lab.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "cc5a240339e9a779",
@@ -1401,7 +1440,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor animals program at Leesburg Animal Park.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "05f24d47d77375d8",
@@ -1436,7 +1476,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "c37e47136228ceb9",
@@ -1470,7 +1511,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor family-friendly event at Claude Moore Park.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "227722eb24186df8",
@@ -1504,7 +1546,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Dulles SportsPlex.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "599f1dadb92246cb",
@@ -1538,7 +1581,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor family-friendly event at Claude Moore Park.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "a4104856a568e4c8",
@@ -1573,7 +1617,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at HOPE Preschool.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "f354eb126bcc7a4b",
@@ -1608,7 +1653,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor festival at Astar Explorer.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "ae7dc7f2c9ee4c77",
@@ -1643,7 +1689,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Cascades Library.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "2fbce8edcee2bacb",
@@ -1678,7 +1725,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Outdoor nature program at Frying Pan Farm and Equestrian.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "52a61a359ec744e9",
@@ -1714,7 +1762,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.69,
       "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "38a100a1a5cf7a88",
@@ -1749,7 +1798,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor skating session at Ashburn Ice House.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "82fc4cded7e59364",
@@ -1785,7 +1835,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "e74b3561b5fba3bf",
@@ -1819,7 +1870,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Dulles SportsPlex.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "eb0f873384ac0eda",
@@ -1852,7 +1904,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Family-friendly event at Dulles South Rec Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "1ecc935fa12ce1c2",
@@ -1888,7 +1941,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor nature program at Hidden Oaks Nature Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "5e3a738185c52a30",
@@ -1922,7 +1976,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Cascades Library.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "1cecd24ca4ca05c7",
@@ -1958,7 +2013,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "437d2cdf764d3b95",
@@ -1993,7 +2049,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor animals program at Leesburg Animal Park.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "e855755571fc9a4c",
@@ -2028,7 +2085,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor family-friendly event at Minnie H. Peyton Community Center at Bailey's.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "1fb1fee2c0fef5d3",
@@ -2063,7 +2121,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.76,
       "short_note": "Indoor storytime at Scrawl Books.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "fc515a71406f7ea2",
@@ -2097,7 +2156,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Madison Community Center & Park.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "9ccefd271d034484",
@@ -2132,7 +2192,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "91e88166f992bd73",
@@ -2168,7 +2229,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor storytime at Barnes & Noble Fair Lakes Promenade.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "1004144fce6c986d",
@@ -2203,7 +2265,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor storytime at Barnes & Noble The Spectrum at Reston Town Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "cb658fe869f50402",
@@ -2238,7 +2301,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor nature program at Franklin Park.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "0b3f44850d71e659",
@@ -2273,7 +2337,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "($37) indoor arts program at Muse Paintbar.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "2753f57d1688e5ec",
@@ -2307,7 +2372,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Outdoor family-friendly event at Lake Fairfax Park.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "1e3fedf75a225c59",
@@ -2341,7 +2407,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Rust Library.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "d1d6b47d2aad1d89",
@@ -2376,7 +2443,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "$24.75 indoor cooking class at The Conche.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "fe808900cc5edb35",
@@ -2410,7 +2478,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Tackett's Mill.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "6c2afab986b4195f",
@@ -2446,7 +2515,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.69,
       "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "d67da87f9f902e44",
@@ -2481,7 +2551,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor theater performance at The Alden.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "59dd986e3e98819b",
@@ -2515,7 +2586,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Charles Houston Rec Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "6ec8be4db924a9a3",
@@ -2551,7 +2623,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.97,
       "short_note": "Indoor music program at McLean Community Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "cb5dc7ff8b43e332",
@@ -2586,7 +2659,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor festival at Astar Explorer.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "7fdd2071f5dc63b5",
@@ -2620,7 +2694,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.97,
       "short_note": "Indoor theater performance at A Place To Be.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "4175869337cdda11",
@@ -2654,7 +2729,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Dulles SportsPlex.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "ee5ecbf9e331a4a2",
@@ -2690,7 +2766,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Pick your own apples, pumpkins, strawberries, peaches, sunflowers and more at our Virginia farm.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "7d36695af9e89d36",
@@ -2726,7 +2803,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Free indoor family-friendly event at Port Discovery Children's Museum.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "4b2e3493e907ae6c",
@@ -2762,7 +2840,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Indoor family-friendly event at National Children's Museum.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "4327f0e85c207c99",
@@ -2797,7 +2876,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Outdoor animals program at Leesburg Animal Park.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "5cdb2ffcc91493da",
@@ -2833,7 +2913,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.865,
       "short_note": "Indoor nature program at Hidden Oaks Nature Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "b780b82015a1b099",
@@ -2868,7 +2949,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.83,
       "short_note": "$8 indoor skating session at Bush Tabernacle.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "b24fa121f9e08579",
@@ -2902,7 +2984,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor family-friendly event at Tysons Corner Center.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "b3cda4b278323b72",
@@ -2937,7 +3020,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.725,
       "short_note": "Free workshop at Your Preferred Michaels Location.",
-      "is_mappable": false
+      "is_mappable": false,
+      "geo_within_service_region": false
     },
     {
       "id": "fa0655878f1aa8f9",
@@ -2972,7 +3056,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.795,
       "short_note": "Indoor theater performance at The Alden.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     },
     {
       "id": "2cb42d6d01489d0e",
@@ -3008,7 +3093,8 @@
       "extracted_from": "seed_resolved",
       "extraction_confidence": 0.69,
       "short_note": "Indoor theater performance at Thomas Jefferson Community Theatre.",
-      "is_mappable": true
+      "is_mappable": true,
+      "geo_within_service_region": true
     }
   ]
 }

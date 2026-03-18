@@ -73,16 +73,29 @@ _VIRTUAL_CONTAINS_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Title-based virtual indicators — strong signals that the event is online-only.
-# Conservative list: only unambiguous terms (webinar is always virtual;
-# "virtual X" compound phrases are clear; zoom/webex/teams in a meeting context).
+# Title-based virtual indicators — signals that the event is online-only.
+# Errs on the side of caution: prefer hiding a physical event from the map
+# over plotting a virtual event as a physical pin.
 _VIRTUAL_TITLE_RE = re.compile(
     r"\bwebinar\b"
-    r"|webex\b"
-    r"|\blivestream\b|live\s+stream\b"
-    r"|\bvirtual\s+(class|event|workshop|program|session|tour|field\s+trip|"
-    r"storytime|concert|camp|experience)\b"
-    r"|\b(zoom|teams|webex)\s+(call|meeting|class|session|event)\b",
+    r"|\bwebex\b"
+    r"|\blivestream\b"
+    r"|live\s+stream\b"
+    r"|\bvirtual\b"                             # any "Virtual" in title
+    r"|\bzoom\b"                                # Zoom (video platform)
+    r"|\bonline\s+(class|course|event|program|session|storytime|workshop|"
+    r"camp|activity|activities|field\s*trip|meeting|seminar|registration)\b"
+    r"|\b(zoom|teams|webex)\s+(call|link|meeting|class|session|event|webinar)\b",
+    re.IGNORECASE,
+)
+
+# Summary / short_note phrases that indicate online-only attendance.
+# Only checked when title/location detection is inconclusive.
+_VIRTUAL_SUMMARY_RE = re.compile(
+    r"\b(join\s+(us\s+)?online|attend(ing)?\s+online|virtual\s+event|"
+    r"online\s+event|hosted\s+(virtually|online)|broadcast\s+(live\s+)?online|"
+    r"zoom\s+(link|meeting|call)|teams\s+(link|meeting|call)|"
+    r"webex\s+(link|meeting)|no\s+in[- ]person|not\s+(held\s+)?in[- ]person)\b",
     re.IGNORECASE,
 )
 
@@ -91,14 +104,17 @@ def _is_virtual_location(
     location_name: str | None,
     tags: list | None = None,
     title: str | None = None,
+    summary: str | None = None,
+    short_note: str | None = None,
 ) -> bool:
     """
     Return True if this event is virtual/online and should not be geocoded.
 
     Checks (in order):
       1. tags contain "virtual"
-      2. location_name is a known virtual placeholder
-      3. title contains an unambiguous virtual/webinar keyword
+      2. location_name is a known virtual placeholder (exact or substring)
+      3. title contains an unambiguous virtual/webinar/zoom keyword
+      4. summary or short_note indicates online-only attendance
     """
     if tags and "virtual" in tags:
         return True
@@ -110,7 +126,36 @@ def _is_virtual_location(
             return True
     if title and _VIRTUAL_TITLE_RE.search(title):
         return True
+    if summary and _VIRTUAL_SUMMARY_RE.search(summary):
+        return True
+    if short_note and _VIRTUAL_SUMMARY_RE.search(short_note):
+        return True
     return False
+
+
+def _compute_map_fields(
+    latitude: Optional[float],
+    longitude: Optional[float],
+    location_name: Optional[str] = None,
+    tags: Optional[list] = None,
+    title: Optional[str] = None,
+    summary: Optional[str] = None,
+    short_note: Optional[str] = None,
+) -> tuple[bool, bool]:
+    """
+    Compute (is_mappable, geo_within_service_region) from event fields.
+
+    geo_within_service_region — True when coordinates exist and are inside the
+        NoVA/DC/Baltimore metro bounding box, regardless of virtual status.
+    is_mappable — True only when geo_within_service_region AND not virtual.
+    """
+    geo_within = (
+        latitude is not None
+        and longitude is not None
+        and _is_in_service_area(latitude, longitude)
+    )
+    is_virtual = _is_virtual_location(location_name, tags, title, summary, short_note)
+    return geo_within and not is_virtual, geo_within
 
 
 def _compute_is_mappable(
@@ -119,16 +164,14 @@ def _compute_is_mappable(
     location_name: Optional[str] = None,
     tags: Optional[list] = None,
     title: Optional[str] = None,
+    summary: Optional[str] = None,
+    short_note: Optional[str] = None,
 ) -> bool:
-    """
-    Return True only when the event has valid coordinates inside the NoVA/DC
-    service area and is not a virtual/online event.
-    """
-    if _is_virtual_location(location_name, tags, title):
-        return False
-    if latitude is None or longitude is None:
-        return False
-    return _is_in_service_area(latitude, longitude)
+    """Convenience wrapper — returns only is_mappable."""
+    is_mappable, _ = _compute_map_fields(
+        latitude, longitude, location_name, tags, title, summary, short_note
+    )
+    return is_mappable
 
 
 # ---------------------------------------------------------------------------
@@ -162,6 +205,47 @@ def _normalize_geo_query(text: str) -> str:
         text = text[: m.start()]
     return re.sub(r"\s+", " ", text).strip().strip(",:;-")
 
+
+# Known NoVA/DC/Baltimore venues → authoritative city qualifier.
+# Keys are lowercase substrings of normalized venue names.
+# These are injected as the highest-priority geocoding query when matched,
+# preventing Photon from returning a same-named place elsewhere.
+_KNOWN_VENUE_HINTS: dict[str, str] = {
+    "alden theatre":                "McLean, VA",
+    "alden theater":                "McLean, VA",
+    "ashburn ice house":            "Ashburn, VA",
+    "barnes & noble ashburn":       "Ashburn, VA",
+    "barnes and noble ashburn":     "Ashburn, VA",
+    "birchmere":                    "Alexandria, VA",
+    "bull run regional park":       "Centreville, VA",
+    "bush tabernacle":              "Purcellville, VA",
+    "cascades library":             "Sterling, VA",
+    "cascades branch":              "Sterling, VA",
+    "claude moore colonial farm":   "McLean, VA",
+    "cox farms":                    "Centreville, VA",
+    "dulles town center":           "Dulles, VA",
+    "fair oaks mall":               "Fairfax, VA",
+    "fairfax corner":               "Fairfax, VA",
+    "frying pan farm":              "Herndon, VA",
+    "herndon community center":     "Herndon, VA",
+    "kincaid farmstead":            "Sterling, VA",
+    "leesburg animal park":         "Leesburg, VA",
+    "luray caverns":                "Luray, VA",
+    "manassas museum":              "Manassas, VA",
+    "mclean community center":      "McLean, VA",
+    "national aquarium":            "Baltimore, MD",
+    "national children's museum":   "Washington, DC",
+    "national children's museum":   "Washington, DC",
+    "one loudoun":                  "Ashburn, VA",
+    "port discovery":               "Baltimore, MD",
+    "reston community center":      "Reston, VA",
+    "sky meadows":                  "Delaplane, VA",
+    "sterling community center":    "Sterling, VA",
+    "tysons corner center":         "Tysons, VA",
+    "wolf trap":                    "Vienna, VA",
+    "wolftrap":                     "Vienna, VA",
+    "workhouse arts":               "Lorton, VA",
+}
 
 # Mapping from normalized county name → full regional qualifier
 _COUNTY_TO_REGION: dict[str, str] = {
@@ -201,6 +285,15 @@ def _build_geo_queries(
 
     county_lower = (county or "").lower().strip()
     county_region = _COUNTY_TO_REGION.get(county_lower, "")
+
+    # Known-venue hint: prepend a high-confidence local query when we recognise
+    # the venue name, preventing Photon from returning a same-named far-away place.
+    if name:
+        name_lower = name.lower()
+        for venue_key, hint_city in _KNOWN_VENUE_HINTS.items():
+            if venue_key in name_lower:
+                candidates.append(f"{name}, {hint_city}")
+                break
 
     # Address-based queries (highest specificity)
     if addr:
@@ -498,8 +591,8 @@ def geocode_events(
     for event in events:
         tags = list(event.tags or [])
 
-        # Never geocode virtual events (check tags, location_name, and title)
-        if _is_virtual_location(event.location_name, tags, event.title):
+        # Never geocode virtual events (check tags, location_name, title, summary, short_note)
+        if _is_virtual_location(event.location_name, tags, event.title, event.summary, event.short_note):
             if event.latitude is not None:
                 stats.virtual_coords_cleared += 1
                 try:
@@ -565,19 +658,25 @@ def geocode_events(
             stats.failed += 1
             enriched.append(event)
 
-    # Final pass: compute is_mappable for every event based on final coordinate state
+    # Final pass: compute is_mappable + geo_within_service_region for every event
     final_enriched: list[Event] = []
     for event in enriched:
         tags = list(event.tags or [])
-        correct = _compute_is_mappable(
-            event.latitude, event.longitude, event.location_name, tags, event.title
+        is_mappable, geo_within = _compute_map_fields(
+            event.latitude, event.longitude, event.location_name, tags,
+            event.title, event.summary, event.short_note,
         )
-        if event.is_mappable != correct:
+        updates: dict = {}
+        if event.is_mappable != is_mappable:
+            updates["is_mappable"] = is_mappable
+        if event.geo_within_service_region != geo_within:
+            updates["geo_within_service_region"] = geo_within
+        if updates:
             try:
-                event = event.model_copy(update={"is_mappable": correct})
+                event = event.model_copy(update=updates)
             except Exception:
                 pass
-        if correct:
+        if is_mappable:
             stats.total_mappable += 1
         else:
             stats.total_non_mappable += 1
@@ -615,12 +714,14 @@ def geocode_event_dicts(
         loc_name = ev.get("location_name")
         loc_addr = ev.get("location_address")
         title = ev.get("title", "?")
+        summary = ev.get("summary")
+        short_note = ev.get("short_note")
         event_id = ev.get("id", "?")
         lat = ev.get("latitude")
         lon = ev.get("longitude")
 
         # --- Virtual event handling ---
-        if _is_virtual_location(loc_name, tags, title):
+        if _is_virtual_location(loc_name, tags, title, summary, short_note):
             new_ev = dict(ev)
             if lat is not None or lon is not None:
                 new_ev["latitude"] = None
@@ -636,6 +737,8 @@ def geocode_event_dicts(
                         "original_latitude": lat,
                         "original_longitude": lon,
                         "rejection_reason": "virtual_event",
+                        "virtual_detected": True,
+                        "out_of_region_detected": False,
                     })
             new_ev["is_mappable"] = False
             stats.virtual_skipped += 1
@@ -666,6 +769,8 @@ def geocode_event_dicts(
                         "original_latitude": lat,
                         "original_longitude": lon,
                         "rejection_reason": f"out_of_service_area ({lat:.4f},{lon:.4f})",
+                        "virtual_detected": False,
+                        "out_of_region_detected": True,
                     })
                     stats.out_of_region_rejected += 1
                     stats.retried += 1
@@ -708,17 +813,23 @@ def geocode_event_dicts(
             updated.append(new_ev)
             stats.failed += 1
 
-    # Final pass: compute is_mappable for every event based on final coordinate state
+    # Final pass: compute is_mappable + geo_within_service_region for every event
     final_updated: list[dict] = []
     for ev in updated:
         tags = ev.get("tags") or []
-        is_mappable = _compute_is_mappable(
+        is_mappable, geo_within = _compute_map_fields(
             ev.get("latitude"), ev.get("longitude"),
             ev.get("location_name"), tags, ev.get("title"),
+            ev.get("summary"), ev.get("short_note"),
         )
-        if ev.get("is_mappable") != is_mappable:
+        needs_update = (
+            ev.get("is_mappable") != is_mappable
+            or ev.get("geo_within_service_region") != geo_within
+        )
+        if needs_update:
             ev = dict(ev)
             ev["is_mappable"] = is_mappable
+            ev["geo_within_service_region"] = geo_within
         if is_mappable:
             stats.total_mappable += 1
         else:
