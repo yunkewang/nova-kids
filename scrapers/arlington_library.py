@@ -2,91 +2,106 @@
 Scraper for Arlington Public Library events.
 
 Source: https://library.arlingtonva.us/events/
-Type:   HTML (BeautifulSoup)
+Type:   JSON API (LibCal/SpringShare AJAX)
 
-APL uses the LibCal system; this scraper targets children/family events.
+The public events page loads events via JavaScript from the LibCal AJAX API.
+This scraper calls the API directly, targeting children/family audiences.
+
+API endpoint: https://arlingtonva.libcal.com/ajax/calendar/list
+Parameters:
+    c          = 12881                 (calendar ID)
+    date       = YYYY-MM-DD            (start date, today)
+    days       = 14                    (look-ahead window)
+    audience[] = 176                   Babies / Preschoolers
+    audience[] = 177                   Elementary
+    audience[] = 173                   Families
+    offset     = N                     (pagination)
+
+Response JSON: {total_results, perpage, status, results: [...]}
 """
 
 from __future__ import annotations
 
 import logging
+from datetime import date
 from typing import Any
-from urllib.parse import urljoin
-
-from bs4 import BeautifulSoup
 
 from scrapers.base import BaseScraper
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "https://library.arlingtonva.us/events/"
+LIBCAL_URL = "https://arlingtonva.libcal.com/ajax/calendar/list"
+CALENDAR_ID = 12881
+AUDIENCE_IDS = [176, 177, 173]  # Babies/Preschoolers, Elementary, Families
+DAYS_WINDOW = 14
+MAX_PAGES = 20  # safety cap
 
 
 class ArlingtonLibraryScraper(BaseScraper):
-    """Scrapes children/family events from Arlington Public Library."""
+    """Scrapes children/family events from Arlington Public Library via LibCal API."""
 
     source_id = "arlington_public_library"
     source_name = "Arlington Public Library"
 
     def fetch_raw(self) -> list[dict[str, Any]]:
+        today = date.today().isoformat()
+        base_params: list[tuple[str, Any]] = [
+            ("c", CALENDAR_ID),
+            ("date", today),
+            ("days", DAYS_WINDOW),
+        ]
+        for aud in AUDIENCE_IDS:
+            base_params.append(("audience[]", aud))
+
+        headers = {
+            "X-Requested-With": "XMLHttpRequest",
+            "Referer": "https://arlingtonva.libcal.com/calendar",
+        }
+
         records: list[dict[str, Any]] = []
-        url: str | None = BASE_URL
+        offset = 0
 
-        while url:
-            logger.debug("Fetching: %s", url)
+        for _ in range(MAX_PAGES):
+            params = base_params + [("offset", offset)]
             try:
-                response = self.get(url)
+                response = self.get(LIBCAL_URL, params=params, headers=headers)
+                data = response.json()
             except Exception as exc:
-                logger.warning("Failed to fetch %s: %s", url, exc)
+                logger.warning("LibCal fetch failed at offset %d: %s", offset, exc)
                 break
 
-            soup = BeautifulSoup(response.text, "lxml")
-            cards = soup.select(
-                "div.s-lc-ea-evt, article.event-item, div.lc-event-card"
-            )
-
-            if not cards:
-                logger.debug("No event cards found — stopping pagination.")
+            results = data.get("results") or []
+            if not results:
                 break
 
-            for card in cards:
-                raw = self._parse_card(card)
-                if raw:
-                    records.append(raw)
+            for event in results:
+                records.append(self._map_event(event))
 
-            next_el = soup.select_one("a.next, a[aria-label='Next'], a[rel='next']")
-            url = next_el["href"] if next_el else None
+            total = data.get("total_results", 0)
+            perpage = data.get("perpage", 20) or 20
+            offset += perpage
+            if offset >= total:
+                break
 
+        logger.debug("Fetched %d raw events from %s", len(records), self.source_name)
         return records
 
-    def _parse_card(self, card: BeautifulSoup) -> dict[str, Any] | None:
-        title_el = card.select_one("h3 a, h2 a, .s-lc-ea-evt-nm a, .event-title a")
-        if not title_el:
-            return None
-
-        title = title_el.get_text(strip=True)
-        href = title_el.get("href", "")
-        event_url = href if href.startswith("http") else urljoin(BASE_URL, href)
-
-        date_el = card.select_one(
-            ".s-lc-ea-dt, .event-date, time, .lc-event-date"
-        )
-        date_text = date_el.get_text(strip=True) if date_el else None
-
-        location_el = card.select_one(
-            ".s-lc-ea-loc, .event-location, .lc-event-location"
-        )
-        location_text = location_el.get_text(strip=True) if location_el else None
-
-        summary_el = card.select_one(".s-lc-ea-desc p, .event-description p")
-        summary_text = summary_el.get_text(strip=True) if summary_el else None
+    def _map_event(self, event: dict[str, Any]) -> dict[str, Any]:
+        campus = event.get("campus") or ""
+        location = event.get("location") or ""
+        location_text = ", ".join(p for p in [campus, location] if p) or None
 
         return {
             "source_id": self.source_id,
             "source_name": self.source_name,
-            "source_url": event_url,
-            "title": title,
-            "date_text": date_text,
+            "source_url": event.get("url") or "",
+            "title": event.get("title") or "",
+            "date_text": event.get("startdt"),       # "2026-03-16 10:00:00"
+            "end_text": event.get("enddt"),
             "location_text": location_text,
-            "summary_text": summary_text,
+            "summary_text": event.get("shortdesc") or event.get("description"),
+            "all_day": event.get("all_day", False),
+            "online_event": event.get("online_event", False),
+            "featured_image": event.get("featured_image"),
+            "libcal_id": event.get("id"),
         }

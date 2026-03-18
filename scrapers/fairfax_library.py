@@ -1,99 +1,107 @@
 """
 Scraper for Fairfax County Public Library events.
 
-Source: https://www.fairfaxcounty.gov/library/programs-events
-Type:   HTML (BeautifulSoup)
+Source: https://librarycalendar.fairfaxcounty.gov/calendar
+Type:   JSON API (LibCal/SpringShare AJAX)
 
-FCPL lists events for all 23 branches on a single page with filters.
-This scraper targets the family/children category.
+The old HTML page (/library/programs-events) no longer exists.  Events are
+served via the LibCal AJAX API — this scraper calls it directly.
+
+API endpoint: https://librarycalendar.fairfaxcounty.gov/ajax/calendar/list
+Parameters:
+    c          = 6524                  (calendar ID)
+    date       = YYYY-MM-DD            (start date, today)
+    days       = 14                    (look-ahead window)
+    audience[] = 2185                  School Age
+    audience[] = 2186                  Preschoolers
+    audience[] = 2187                  Babies / Toddlers
+    offset     = N                     (pagination)
+
+Response JSON: {total_results, perpage, status, results: [...]}
 """
 
 from __future__ import annotations
 
 import logging
+from datetime import date
 from typing import Any
-from urllib.parse import urljoin
-
-from bs4 import BeautifulSoup
 
 from scrapers.base import BaseScraper
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "https://www.fairfaxcounty.gov/library/programs-events"
-# Filter for children and family programs
-EVENTS_URL = BASE_URL + "?category=children"
+LIBCAL_URL = "https://librarycalendar.fairfaxcounty.gov/ajax/calendar/list"
+CALENDAR_ID = 6524
+AUDIENCE_IDS = [2185, 2186, 2187]  # School Age, Preschoolers, Babies/Toddlers
+DAYS_WINDOW = 14
+MAX_PAGES = 20  # safety cap
 
 
 class FairfaxLibraryScraper(BaseScraper):
-    """Scrapes children/family events from Fairfax County Public Library."""
+    """Scrapes children/family events from Fairfax County Public Library via LibCal API."""
 
     source_id = "fairfax_county_library"
     source_name = "Fairfax County Public Library"
 
     def fetch_raw(self) -> list[dict[str, Any]]:
+        today = date.today().isoformat()
+        base_params: list[tuple[str, Any]] = [
+            ("c", CALENDAR_ID),
+            ("date", today),
+            ("days", DAYS_WINDOW),
+        ]
+        for aud in AUDIENCE_IDS:
+            base_params.append(("audience[]", aud))
+
+        headers = {
+            "X-Requested-With": "XMLHttpRequest",
+            "Referer": "https://librarycalendar.fairfaxcounty.gov/calendar",
+        }
+
         records: list[dict[str, Any]] = []
-        page = 0
+        offset = 0
 
-        while True:
-            url = EVENTS_URL if page == 0 else f"{EVENTS_URL}&page={page}"
-            logger.debug("Fetching page %d: %s", page, url)
-
+        for _ in range(MAX_PAGES):
+            params = base_params + [("offset", offset)]
             try:
-                response = self.get(url)
+                response = self.get(LIBCAL_URL, params=params, headers=headers)
+                data = response.json()
             except Exception as exc:
-                logger.warning("Failed to fetch page %d: %s", page, exc)
+                logger.warning("LibCal fetch failed at offset %d: %s", offset, exc)
                 break
 
-            soup = BeautifulSoup(response.text, "lxml")
-            rows = soup.select(
-                "div.views-row, article.event-teaser, li.event-listing"
-            )
-
-            if not rows:
-                logger.debug("No event rows on page %d — stopping.", page)
+            results = data.get("results") or []
+            if not results:
                 break
 
-            for row in rows:
-                raw = self._parse_row(row)
-                if raw:
-                    records.append(raw)
+            for event in results:
+                records.append(self._map_event(event))
 
-            next_el = soup.select_one("a[rel='next'], li.pager-next a")
-            if not next_el:
+            total = data.get("total_results", 0)
+            perpage = data.get("perpage", 20) or 20
+            offset += perpage
+            if offset >= total:
                 break
-            page += 1
 
+        logger.debug("Fetched %d raw events from %s", len(records), self.source_name)
         return records
 
-    def _parse_row(self, row: BeautifulSoup) -> dict[str, Any] | None:
-        title_el = row.select_one("h3 a, h2 a, .field--name-title a, .event-title a")
-        if not title_el:
-            return None
-
-        title = title_el.get_text(strip=True)
-        href = title_el.get("href", "")
-        event_url = href if href.startswith("http") else urljoin(BASE_URL, href)
-
-        date_el = row.select_one(
-            ".field--name-field-date, .date-display-single, time"
-        )
-        date_text = date_el.get_text(strip=True) if date_el else None
-
-        branch_el = row.select_one(
-            ".field--name-field-location, .library-branch, .event-location"
-        )
-        location_text = branch_el.get_text(strip=True) if branch_el else None
-
-        summary_el = row.select_one(".field--name-body p, .event-description p")
-        summary_text = summary_el.get_text(strip=True) if summary_el else None
+    def _map_event(self, event: dict[str, Any]) -> dict[str, Any]:
+        campus = event.get("campus") or ""
+        location = event.get("location") or ""
+        location_text = ", ".join(p for p in [campus, location] if p) or None
 
         return {
             "source_id": self.source_id,
             "source_name": self.source_name,
-            "source_url": event_url,
-            "title": title,
-            "date_text": date_text,
+            "source_url": event.get("url") or "",
+            "title": event.get("title") or "",
+            "date_text": event.get("startdt"),       # "2026-03-16 10:00:00"
+            "end_text": event.get("enddt"),
             "location_text": location_text,
-            "summary_text": summary_text,
+            "summary_text": event.get("shortdesc") or event.get("description"),
+            "all_day": event.get("all_day", False),
+            "online_event": event.get("online_event", False),
+            "featured_image": event.get("featured_image"),
+            "libcal_id": event.get("id"),
         }

@@ -1,20 +1,20 @@
 name: NoVA Kids Pipeline
 
 on:
-  # Run daily at 10:00 UTC (6 AM ET / 5 AM EST)
+  # Run daily at 10:00 UTC (6 AM ET)
   schedule:
     - cron: '0 10 * * *'
 
-  # Allow manual runs from the GitHub Actions tab
+  # Manual trigger from the Actions tab
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry run (do not commit changes)'
+        description: 'Dry run — run pipeline but do not commit changes'
         required: false
         default: 'false'
         type: boolean
 
-# Only one run at a time — cancel in-flight if a newer run is queued
+# Only one pipeline run at a time
 concurrency:
   group: nova-kids-pipeline
   cancel-in-progress: false
@@ -25,59 +25,88 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write   # needed to commit + push back to main
+      contents: write   # required to commit + push back to main
 
     steps:
       # -----------------------------------------------------------------------
       # 1. Checkout
       # -----------------------------------------------------------------------
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # Use default GITHUB_TOKEN with write permission granted above.
-          # persist-credentials is true by default — allows the push step below.
-          fetch-depth: 1
 
       # -----------------------------------------------------------------------
-      # 2. Python environment
+      # 2. Python
       # -----------------------------------------------------------------------
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
+          cache-dependency-path: requirements.txt
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Print environment info
+      - name: Print environment
         run: |
-          echo "Trigger  : ${{ github.event_name }}"
-          echo "Dry run  : ${{ inputs.dry_run || 'false' }}"
-          echo "Ref      : ${{ github.ref }}"
-          echo "Runner   : ${{ runner.os }}"
+          echo "Trigger : ${{ github.event_name }}"
+          echo "Dry run : ${{ inputs.dry_run || 'false' }}"
           python --version
-          echo ""
-          pip list --format=columns | grep -E "requests|pydantic|beautifulsoup4|PyYAML|lxml"
+          pip show requests pydantic beautifulsoup4 PyYAML | grep -E "^(Name|Version)"
 
       # -----------------------------------------------------------------------
       # 3. Run the pipeline
       # -----------------------------------------------------------------------
-      - name: Run NoVA Kids pipeline
-        run: |
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "  Command: python scripts/run_pipeline.py --enrich-geo --strict-region"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          python scripts/run_pipeline.py --enrich-geo --strict-region
+      - name: Run pipeline
+        run: python scripts/run_pipeline.py --enrich-geo --strict-region
 
       # -----------------------------------------------------------------------
-      # 4. Detect changes
+      # 4. Validate output — fail fast if scrapers returned nothing
+      #
+      #    publish_events() always writes a week file, even for 0 events.
+      #    Without this guard a broken scraper run would silently overwrite
+      #    good published data with an empty file.
+      # -----------------------------------------------------------------------
+      - name: Validate published output
+        run: |
+          python3 - <<'EOF'
+          import json, sys
+          from pathlib import Path
+
+          index_path = Path("data/published/events/index.json")
+          if not index_path.exists():
+              print("ERROR: index.json not found — pipeline did not publish.")
+              sys.exit(1)
+
+          index = json.loads(index_path.read_text())
+          latest = index.get("latest_week", "")
+          week_path = Path(f"data/published/events/week-{latest}.json")
+          if not week_path.exists():
+              print(f"ERROR: week file {week_path.name} not found.")
+              sys.exit(1)
+
+          data = json.loads(week_path.read_text())
+          count = data.get("event_count", 0)
+          print(f"Latest week  : {latest}")
+          print(f"Event count  : {count}")
+
+          # Require at least 10 events before allowing a commit.
+          # This prevents a broken scraper run from overwriting good data.
+          MIN_EVENTS = 10
+          if count < MIN_EVENTS:
+              print(f"FAIL: only {count} events published (minimum {MIN_EVENTS}).")
+              print("Pipeline output will NOT be committed to protect existing data.")
+              sys.exit(1)
+
+          print(f"OK: {count} events — safe to commit.")
+          EOF
+
+      # -----------------------------------------------------------------------
+      # 5. Detect whether tracked files actually changed
       # -----------------------------------------------------------------------
       - name: Check for changes
         id: changes
         run: |
-          # Stage the files we care about committing.
-          # data/raw/ and data/normalized/ are gitignored — they won't appear here.
           git add \
             data/published/events/ \
             public/events/ \
@@ -85,15 +114,15 @@ jobs:
 
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "No changes detected — nothing to commit."
+            echo "No changes — data is already up to date."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
-            echo "Changes detected:"
+            echo "Changed files:"
             git diff --cached --stat
           fi
 
       # -----------------------------------------------------------------------
-      # 5. Commit and push (skipped on dry run or no changes)
+      # 6. Commit and push (skipped on dry run or when nothing changed)
       # -----------------------------------------------------------------------
       - name: Commit and push
         if: >
@@ -104,49 +133,33 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Count changed files for the log
-          CHANGED=$(git diff --cached --name-only | wc -l | tr -d ' ')
-
+          N=$(git diff --cached --name-only | wc -l | tr -d ' ')
           git commit -m "chore: auto-update NoVA Kids event data [skip ci]
 
           Triggered by: ${{ github.event_name }}
-          Files changed: ${CHANGED}"
+          Files changed: ${N}"
 
           git push origin main
-
-          echo ""
-          echo "✓ Committed and pushed ${CHANGED} file(s) to main."
+          echo "Pushed ${N} changed file(s) to main."
 
       # -----------------------------------------------------------------------
-      # 6. Summary
+      # 7. Summary (always runs so we get output even on failure)
       # -----------------------------------------------------------------------
-      - name: Summarize
+      - name: Summary
         if: always()
         run: |
-          echo ""
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "  Pipeline summary"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "  Trigger  : ${{ github.event_name }}"
-          echo "  Changes  : ${{ steps.changes.outputs.changed }}"
-
+          echo "Trigger  : ${{ github.event_name }}"
+          echo "Changed  : ${{ steps.changes.outputs.changed || 'n/a' }}"
           if [ -d data/published/events ]; then
             echo ""
-            echo "  Published files:"
+            echo "Published files:"
             ls -lh data/published/events/
           fi
 
-          if [ -f data/manual_review/suspicious_geocodes.json ]; then
-            COUNT=$(python3 -c "import json; d=json.load(open('data/manual_review/suspicious_geocodes.json')); print(len(d))" 2>/dev/null || echo "?")
-            echo ""
-            echo "  Suspicious geocodes on file: ${COUNT}"
-          fi
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
       # -----------------------------------------------------------------------
-      # 7. Upload artifacts
+      # 8. Upload published JSON as a workflow artifact (7-day retention)
       # -----------------------------------------------------------------------
-      - name: Upload pipeline artifacts
+      - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:

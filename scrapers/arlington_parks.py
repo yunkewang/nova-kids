@@ -1,17 +1,23 @@
 """
 Scraper for Arlington County Parks & Recreation events.
 
-Source: https://parks.arlingtonva.us/events/
-Type:   HTML (BeautifulSoup)
+Source: https://www.arlingtonva.us/Government/Departments/Parks-Recreation/Parks-Events
+Type:   HTML (BeautifulSoup) — Sitecore CMS, page 1 only
 
-Starter implementation — selectors must be verified against the live page.
+The old URL (parks.arlingtonva.us/events/) now redirects to a generic
+department page.  The live events listing is at the URL above.
+
+Pagination uses Sitecore's encrypted __SEAMLESSVIEWSTATE and cannot be
+driven by simple GET requests — only the first page (~10 events) is scraped.
+
+Akamai edge caching blocks generic browser User-Agents with 403;
+the pipeline's own UA (NoVAKidsPipeline/1.0) is allowed through.
 """
 
 from __future__ import annotations
 
 import logging
 from typing import Any
-from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
@@ -19,87 +25,81 @@ from scrapers.base import BaseScraper
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "https://parks.arlingtonva.us/events/"
+EVENTS_URL = (
+    "https://www.arlingtonva.us"
+    "/Government/Departments/Parks-Recreation/Parks-Events"
+)
+BASE_URL = "https://www.arlingtonva.us"
 
 
 class ArlingtonParksRecScraper(BaseScraper):
-    """Scrapes public event listings from Arlington County Parks & Recreation."""
+    """Scrapes public event listings from Arlington County Parks & Recreation (page 1 only)."""
 
     source_id = "arlington_parks_rec"
     source_name = "Arlington County Parks & Recreation"
 
     def fetch_raw(self) -> list[dict[str, Any]]:
-        records: list[dict[str, Any]] = []
-        url: str | None = BASE_URL
+        try:
+            response = self.get(EVENTS_URL)
+        except Exception as exc:
+            logger.warning("Failed to fetch %s: %s", EVENTS_URL, exc)
+            return []
 
-        while url:
-            logger.debug("Fetching: %s", url)
-            try:
-                response = self.get(url)
-            except Exception as exc:
-                logger.warning("Failed to fetch %s: %s", url, exc)
-                break
+        soup = BeautifulSoup(response.text, "lxml")
+        cards = soup.select("div.list-item-container")
 
-            soup = BeautifulSoup(response.text, "lxml")
-            event_cards = soup.select(
-                "article.tribe-events-calendar-list__event-article, "
-                "div.tribe-event, "
-                ".tribe-events-calendar-list__event"
+        if not cards:
+            logger.warning(
+                "No event cards found on %s — page structure may have changed.",
+                EVENTS_URL,
             )
+            return []
 
-            if not event_cards:
-                logger.debug("No event cards found — stopping pagination.")
-                break
+        records = []
+        for card in cards:
+            raw = self._parse_card(card)
+            if raw:
+                records.append(raw)
 
-            for card in event_cards:
-                raw = self._parse_card(card)
-                if raw:
-                    records.append(raw)
-
-            # The Events Calendar plugin uses rel=next for pagination
-            next_el = soup.select_one("a.tribe-events-c-nav__next, a[rel='next']")
-            url = next_el["href"] if next_el else None
-
+        logger.debug("Parsed %d cards from %s", len(records), EVENTS_URL)
         return records
 
     def _parse_card(self, card: BeautifulSoup) -> dict[str, Any] | None:
-        title_el = card.select_one(
-            ".tribe-events-calendar-list__event-title a, h3 a, h2 a"
-        )
-        if not title_el:
+        link_el = card.select_one("a[href*='/Parks-Events/']")
+        if not link_el:
             return None
 
+        href = link_el.get("href", "")
+        event_url = href if href.startswith("http") else f"{BASE_URL}{href}"
+
+        title_el = card.select_one("h2.list-item-title")
+        if not title_el:
+            return None
         title = title_el.get_text(strip=True)
-        href = title_el.get("href", "")
-        event_url = href if href.startswith("http") else urljoin(BASE_URL, href)
 
-        # The Events Calendar plugin uses <abbr> with machine-readable dates
-        start_el = card.select_one("abbr.tribe-events-abbr--start, time.tribe-event-date-start")
-        start_text = (
-            start_el.get("title") or start_el.get_text(strip=True)
-            if start_el
-            else None
-        )
-        end_el = card.select_one("abbr.tribe-events-abbr--end, time.tribe-event-date-end")
-        end_text = (
-            end_el.get("title") or end_el.get_text(strip=True)
-            if end_el
-            else None
-        )
+        # Date parts rendered as separate spans, e.g.:
+        # <span class="part-month">Mar</span>
+        # <span class="part-date">18</span>
+        # <span class="part-year">2026</span>
+        month_el = card.select_one("span.part-month, .part-month")
+        day_el = card.select_one("span.part-date, .part-date")
+        year_el = card.select_one("span.part-year, .part-year")
+        date_parts = [
+            el.get_text(strip=True)
+            for el in [month_el, day_el, year_el]
+            if el
+        ]
+        date_text = " ".join(date_parts) if date_parts else None
 
-        venue_el = card.select_one(".tribe-venue, .tribe-events-calendar-list__event-venue")
-        location_text = venue_el.get_text(strip=True) if venue_el else None
-
-        summary_el = card.select_one(".tribe-events-calendar-list__event-description p")
-        summary_text = summary_el.get_text(strip=True) if summary_el else None
+        desc_el = card.select_one("span.list-item-block-desc, .list-item-block-desc")
+        summary_text = desc_el.get_text(strip=True) if desc_el else None
 
         return {
             "source_id": self.source_id,
             "source_name": self.source_name,
             "source_url": event_url,
             "title": title,
-            "start_text": start_text,
-            "end_text": end_text,
-            "location_text": location_text,
+            "date_text": date_text,
+            "location_text": None,
             "summary_text": summary_text,
         }

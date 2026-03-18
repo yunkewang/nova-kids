@@ -11,36 +11,41 @@ sources:
   - id: fairfax_park_authority
     name: Fairfax County Park Authority
     source_type: html
-    base_url: https://www.fairfaxcounty.gov/parks/park-events
+    base_url: https://www.fairfaxcounty.gov/parks/park-events-calendar
     enabled: true
     notes: >
-      Park events listing. Scrape the public event calendar.
-      Respect robots.txt and add polite delays between requests.
+      Drupal Views events calendar. Paginated via ?park-events-calendar=&page=N.
+      Stops when no a[rel='next'] link is present.
 
   - id: arlington_parks_rec
     name: Arlington County Parks & Recreation
     source_type: html
-    base_url: https://parks.arlingtonva.us/events/
+    base_url: https://www.arlingtonva.us/Government/Departments/Parks-Recreation/Parks-Events
     enabled: true
     notes: >
-      Public parks events page. HTML scraping with pagination.
+      Sitecore CMS. Only page 1 (~10 events) is accessible via GET.
+      Pagination uses encrypted __SEAMLESSVIEWSTATE — cannot be driven externally.
+      Akamai blocks browser UAs; pipeline UA (NoVAKidsPipeline/1.0) is allowed.
 
   - id: fairfax_county_library
     name: Fairfax County Public Library
-    source_type: html
-    base_url: https://www.fairfaxcounty.gov/library/programs-events
+    source_type: api
+    base_url: https://librarycalendar.fairfaxcounty.gov/ajax/calendar/list
     enabled: true
     notes: >
-      FCPL events page. Filter for family/children programs.
-      May have RSS feeds per branch — prefer those when available.
+      LibCal (SpringShare) AJAX API. Calendar ID 6524.
+      Audience IDs: 2185 (School Age), 2186 (Preschoolers), 2187 (Babies/Toddlers).
+      Requires X-Requested-With: XMLHttpRequest header.
 
   - id: arlington_public_library
     name: Arlington Public Library
-    source_type: html
-    base_url: https://library.arlingtonva.us/events/
+    source_type: api
+    base_url: https://arlingtonva.libcal.com/ajax/calendar/list
     enabled: true
     notes: >
-      APL events page. Filter for kids and family events.
+      LibCal (SpringShare) AJAX API. Calendar ID 12881.
+      Audience IDs: 176 (Babies/Preschoolers), 177 (Elementary), 173 (Families).
+      Requires X-Requested-With: XMLHttpRequest header.
 
   - id: eventbrite_nova_family
     name: Eventbrite — Northern Virginia Family Events
