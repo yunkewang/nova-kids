@@ -3,13 +3,16 @@ Geocoding service for the NoVA Kids pipeline.
 
 Enriches events with latitude/longitude using the Photon (komoot.io) geocoding
 API — an OpenStreetMap-based geocoder with no API key or strict rate limit.
-Results are cached persistently in data/cache/geocode_cache.json to avoid
-redundant API calls across pipeline runs.
+Results are cached persistently in data/cache/geocode_cache.json.
+
+All geocode queries are constrained to the NoVA / DC metro service area via
+Photon's bbox parameter. Results outside the service area are rejected and the
+next fallback query is tried. Virtual events are never geocoded.
 
 Public entry points:
-    geocode_events(events, cache=None)       → (list[Event], GeoStats)
-    geocode_event_dicts(dicts, cache=None)   → (list[dict], GeoStats)
-    load_cache()                             → GeoCache
+    geocode_events(events, cache=None)                   → (list[Event], GeoStats)
+    geocode_event_dicts(dicts, cache=None, strict=False) → (list[dict], GeoStats, list[dict])
+    load_cache()                                         → GeoCache
 """
 
 from __future__ import annotations
@@ -30,20 +33,69 @@ from config.settings import CACHE_DIR
 
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
-
-GEO_CACHE_FILE = CACHE_DIR / "geocode_cache.json"
-
-# Photon (komoot.io) — OSM-based geocoder, no API key, no strict rate limit.
-PHOTON_URL = "https://photon.komoot.io/api/"
-PHOTON_USER_AGENT = "NoVAKidsPipeline/1.0 (family activities aggregator)"
-PHOTON_MIN_DELAY = 0.5  # seconds — be polite; Photon has no hard rate limit
-
 
 # ---------------------------------------------------------------------------
-# Address normalization for geocoding
+# Service area — Northern Virginia / DC metro bounding box
+# ---------------------------------------------------------------------------
+# Covers: NoVA counties, DC, and nearby DMV metro (incl. Baltimore for venues
+# like the National Aquarium and Port Discovery that are legitimately included).
+#
+# Format used by Photon: "lon_min,lat_min,lon_max,lat_max"
+# Lat 38.3–39.6, Lon -78.6–-76.3
+
+_LAT_MIN, _LAT_MAX = 38.3, 39.6
+_LON_MIN, _LON_MAX = -78.6, -76.3
+
+_PHOTON_BBOX = f"{_LON_MIN},{_LAT_MIN},{_LON_MAX},{_LAT_MAX}"
+
+
+def _is_in_service_area(lat: float, lon: float) -> bool:
+    """Return True if (lat, lon) falls within the NoVA/DC metro bounding box."""
+    return _LAT_MIN <= lat <= _LAT_MAX and _LON_MIN <= lon <= _LON_MAX
+
+
+# ---------------------------------------------------------------------------
+# Virtual / non-physical location detection
+# ---------------------------------------------------------------------------
+
+# Location names that are exactly a virtual indicator (whole-string match)
+_VIRTUAL_EXACT_RE = re.compile(
+    r"^(virtual|online|webinar|remote|zoom|livestream|live\s*stream|"
+    r"tbd|tba|n/?a|to\s+be\s+(announced|determined)|"
+    r"your\s+preferred\s+\w[\w\s]*|anywhere|various\s+locations?)$",
+    re.IGNORECASE,
+)
+
+# Location names that contain virtual indicators as substrings
+_VIRTUAL_CONTAINS_RE = re.compile(
+    r"\b(virtual\s+event|online\s+(event|class|program|session|meeting)|"
+    r"zoom\s+meeting|live\s*stream|webinar)\b",
+    re.IGNORECASE,
+)
+
+
+def _is_virtual_location(
+    location_name: str | None,
+    tags: list | None = None,
+) -> bool:
+    """
+    Return True if this event is virtual/online and should not be geocoded.
+    Checks both location_name and event tags.
+    """
+    if tags and "virtual" in tags:
+        return True
+    if not location_name:
+        return False
+    stripped = location_name.strip()
+    if _VIRTUAL_EXACT_RE.match(stripped):
+        return True
+    if _VIRTUAL_CONTAINS_RE.search(stripped):
+        return True
+    return False
+
+
+# ---------------------------------------------------------------------------
+# Address normalization for geocoding queries
 # ---------------------------------------------------------------------------
 
 _PHONE_RE = re.compile(r"\s*\(?\d{3}\)?[\s\-\.]\d{3}[\s\-\.]\d{4}")
@@ -58,10 +110,8 @@ _DUP_WORD_RE = re.compile(r"\b(\w+)\s+\1\b", re.IGNORECASE)
 def _normalize_geo_query(text: str) -> str:
     """
     Normalize a raw location string into a clean geocoding query.
-
     - Removes duplicate adjacent words ("Farm Farm" → "Farm")
-    - Removes phone numbers
-    - Removes URLs
+    - Removes phone numbers and URLs
     - Truncates at boilerplate markers ("Get Directions", "Store Hours", etc.)
     - Collapses whitespace and strips trailing punctuation
     """
@@ -76,6 +126,18 @@ def _normalize_geo_query(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip().strip(",:;-")
 
 
+# Mapping from normalized county name → full regional qualifier
+_COUNTY_TO_REGION: dict[str, str] = {
+    "fairfax":        "Fairfax County, VA",
+    "arlington":      "Arlington, VA",
+    "loudoun":        "Loudoun County, VA",
+    "prince william": "Prince William County, VA",
+    "alexandria":     "Alexandria, VA",
+    "falls church":   "Falls Church, VA",
+    "dc":             "Washington, DC",
+}
+
+
 def _build_geo_queries(
     location_address: str | None,
     location_name: str | None,
@@ -84,28 +146,44 @@ def _build_geo_queries(
 ) -> list[str]:
     """
     Build geocoding query candidates in priority order:
-      1. Full location_address (most specific)
-      2. venue name + city + county + VA
-      3. venue name + city + VA
-      4. venue name alone (last resort)
+      1. Full street address + city (most specific, avoids wrong-state matches)
+      2. Full street address alone
+      3. venue + city + county + VA
+      4. venue + city + VA
+      5. venue + county region (e.g. "Fairfax County, VA") — even without city
+      6. venue alone (last resort; bbox still constrains to service area)
+
+    Bare venue names without any regional context are always last, never first.
+    The Photon bbox constraint means even bare names usually resolve correctly,
+    but adding county context prevents wrong matches within the region.
     """
     candidates: list[str] = []
 
-    if location_address:
-        q = _normalize_geo_query(location_address)
-        if q:
-            candidates.append(q)
+    addr = _normalize_geo_query(location_address or "")
+    name = _normalize_geo_query(location_name or "")
 
-    if location_name:
-        name = _normalize_geo_query(location_name)
-        if name:
-            if city and county:
-                candidates.append(f"{name}, {city}, {county} County, VA")
-            if city:
-                candidates.append(f"{name}, {city}, VA")
-            candidates.append(name)
+    county_lower = (county or "").lower().strip()
+    county_region = _COUNTY_TO_REGION.get(county_lower, "")
 
-    # Deduplicate while preserving priority order
+    # Address-based queries (highest specificity)
+    if addr:
+        if city:
+            candidates.append(f"{addr}, {city}")
+        candidates.append(addr)
+
+    # Venue-based queries with regional context
+    if name:
+        if city and county:
+            candidates.append(f"{name}, {city}, {county} County, VA")
+        if city:
+            candidates.append(f"{name}, {city}, VA")
+        if county_region:
+            # Include even when city is absent — critical for county-only events
+            candidates.append(f"{name}, {county_region}")
+        # Bare venue name — always last; bbox prevents global drift
+        candidates.append(name)
+
+    # Deduplicate preserving priority order
     seen: set[str] = set()
     result: list[str] = []
     for q in candidates:
@@ -131,7 +209,7 @@ class GeoResult:
 class GeoCache:
     """Persistent JSON-backed geocode cache keyed by normalized query string."""
 
-    def __init__(self, path: Path = GEO_CACHE_FILE) -> None:
+    def __init__(self, path: Path = CACHE_DIR / "geocode_cache.json") -> None:
         self._path = path
         self._data: dict[str, dict] = {}
         self._dirty = False
@@ -165,6 +243,30 @@ class GeoCache:
         self._data[result.query] = asdict(result)
         self._dirty = True
 
+    def invalidate(self, query: str) -> bool:
+        """Remove a cache entry so it will be re-geocoded. Returns True if found."""
+        if query in self._data:
+            del self._data[query]
+            self._dirty = True
+            return True
+        return False
+
+    def invalidate_out_of_region(self) -> int:
+        """
+        Remove all cached entries whose coordinates fall outside the service area.
+        Returns count of invalidated entries.
+        """
+        bad_keys = [
+            k for k, v in self._data.items()
+            if v.get("latitude") is not None
+            and not _is_in_service_area(v["latitude"], v["longitude"])
+        ]
+        for k in bad_keys:
+            del self._data[k]
+        if bad_keys:
+            self._dirty = True
+        return len(bad_keys)
+
     def save(self) -> None:
         """Flush cache to disk only if modified."""
         if not self._dirty:
@@ -189,18 +291,20 @@ def load_cache() -> GeoCache:
 
 
 # ---------------------------------------------------------------------------
-# Photon geocoding API (komoot.io — OSM-based, no API key required)
+# Photon geocoding API — always bbox-constrained to service area
 # ---------------------------------------------------------------------------
+
+PHOTON_URL = "https://photon.komoot.io/api/"
+PHOTON_USER_AGENT = "NoVAKidsPipeline/1.0 (family activities aggregator)"
+PHOTON_MIN_DELAY = 0.5  # seconds — polite rate limiting
 
 _last_request_time: float = 0.0
 
 
 def _call_photon(query: str) -> Optional[GeoResult]:
     """
-    Single Photon (komoot.io) API call with polite rate limiting.
-    Returns GeoResult on success, None on any failure.
-
-    Photon response is GeoJSON: features[0].geometry.coordinates = [lon, lat]
+    Call Photon with service-area bbox constraint.
+    Returns GeoResult on success, None on failure or empty results.
     """
     global _last_request_time
     wait = PHOTON_MIN_DELAY - (time.monotonic() - _last_request_time)
@@ -210,7 +314,7 @@ def _call_photon(query: str) -> Optional[GeoResult]:
     try:
         resp = requests.get(
             PHOTON_URL,
-            params={"q": query, "limit": 1},
+            params={"q": query, "limit": 1, "bbox": _PHOTON_BBOX},
             headers={"User-Agent": PHOTON_USER_AGENT},
             timeout=10,
         )
@@ -221,7 +325,6 @@ def _call_photon(query: str) -> Optional[GeoResult]:
         if features:
             coords = features[0]["geometry"]["coordinates"]  # [lon, lat]
             props = features[0].get("properties", {})
-            # Assign a simple confidence: 0.9 if osm_id present, else 0.5
             confidence = 0.9 if props.get("osm_id") else 0.5
             return GeoResult(
                 query=query,
@@ -242,9 +345,11 @@ def _resolve_with_fallbacks(
     cache: GeoCache,
 ) -> tuple[Optional[GeoResult], bool]:
     """
-    Try each query in priority order.
-    Checks cache first; calls API if not cached.
-    Caches failures so future runs skip already-failed queries.
+    Try each query in priority order, with service-area validation at every step.
+
+    - Cache hits with out-of-region coordinates are skipped (bad old entries).
+    - API results outside the service area are rejected and cached as failures.
+    - Returns the first result that is within the service area.
 
     Returns (result_or_None, was_cache_hit).
     """
@@ -252,28 +357,45 @@ def _resolve_with_fallbacks(
         cached = cache.get(query)
         if cached is not None:
             if cached.latitude is not None:
-                return cached, True    # cache hit with valid coordinates
-            continue                   # cached failure — try next query
+                if _is_in_service_area(cached.latitude, cached.longitude):
+                    return cached, True   # valid cache hit
+                # Cached but out of service area — skip to next query
+                logger.debug(
+                    "Skipping out-of-region cached result for %r (%.4f, %.4f)",
+                    query, cached.latitude, cached.longitude,
+                )
+                continue
+            continue  # cached failure
 
+        # Not in cache — call the API (always bbox-constrained)
         result = _call_photon(query)
-        if result is not None:
-            cache.set(result)
-            return result, False       # fresh API result
-
-        # Cache the failure to avoid retrying in future runs
-        cache.set(GeoResult(
-            query=query,
-            latitude=None,
-            longitude=None,
-            confidence=None,
-            resolved_at=datetime.now(tz=timezone.utc).isoformat(),
-        ))
+        if result is not None and result.latitude is not None:
+            if _is_in_service_area(result.latitude, result.longitude):
+                cache.set(result)
+                return result, False  # fresh valid result
+            # Out of region even with bbox — cache as failure, try next query
+            logger.debug(
+                "Rejected out-of-region API result for %r: (%.4f, %.4f)",
+                query, result.latitude, result.longitude,
+            )
+            cache.set(GeoResult(
+                query=query,
+                latitude=None, longitude=None, confidence=None,
+                resolved_at=datetime.now(tz=timezone.utc).isoformat(),
+            ))
+        else:
+            # API returned nothing within bbox — cache failure
+            cache.set(GeoResult(
+                query=query,
+                latitude=None, longitude=None, confidence=None,
+                resolved_at=datetime.now(tz=timezone.utc).isoformat(),
+            ))
 
     return None, False
 
 
 # ---------------------------------------------------------------------------
-# Stats
+# Stats and review output
 # ---------------------------------------------------------------------------
 
 @dataclass
@@ -283,6 +405,9 @@ class GeoStats:
     newly_geocoded: int = 0
     cache_hits: int = 0
     failed: int = 0
+    virtual_skipped: int = 0
+    out_of_region_rejected: int = 0   # existing coords that were nulled
+    retried: int = 0                  # events re-geocoded after bad coord nulled
 
     @property
     def total_with_coords(self) -> int:
@@ -291,12 +416,17 @@ class GeoStats:
     def print_summary(self) -> None:
         pct = self.total_with_coords / self.total * 100 if self.total else 0.0
         print(f"\n  Geo enrichment:")
-        print(f"    events total:       {self.total}")
-        print(f"    already geocoded:   {self.already_geocoded}")
-        print(f"    newly geocoded:     {self.newly_geocoded}")
-        print(f"    cache hits:         {self.cache_hits}")
-        print(f"    failed geocodes:    {self.failed}")
-        print(f"    total with coords:  {self.total_with_coords} ({pct:.0f}% mappable)")
+        print(f"    events total:          {self.total}")
+        print(f"    already geocoded:      {self.already_geocoded}")
+        print(f"    newly geocoded:        {self.newly_geocoded}")
+        print(f"    cache hits:            {self.cache_hits}")
+        print(f"    virtual skipped:       {self.virtual_skipped}")
+        if self.out_of_region_rejected:
+            print(f"    out-of-region nulled:  {self.out_of_region_rejected}")
+        if self.retried:
+            print(f"    retried (bad coord):   {self.retried}")
+        print(f"    failed geocodes:       {self.failed}")
+        print(f"    total with coords:     {self.total_with_coords} ({pct:.0f}% mappable)")
 
 
 # ---------------------------------------------------------------------------
@@ -308,13 +438,12 @@ def geocode_events(
     cache: Optional[GeoCache] = None,
 ) -> tuple[list[Event], GeoStats]:
     """
-    Enrich a list of Event objects with lat/lon coordinates.
+    Enrich Event objects with lat/lon.
 
-    - Skips events that already have both latitude and longitude.
-    - Tries location_address first, then venue+city fallbacks.
-    - Saves the cache after processing.
-
-    Returns (enriched_events, stats).
+    - Virtual events are skipped (no coordinates assigned).
+    - All geocode results are bbox-constrained to the NoVA/DC service area.
+    - Events with existing out-of-region coordinates are re-geocoded.
+    - Returns (enriched_events, stats).
     """
     if cache is None:
         cache = load_cache()
@@ -323,16 +452,27 @@ def geocode_events(
     enriched: list[Event] = []
 
     for event in events:
-        if event.latitude is not None and event.longitude is not None:
-            stats.already_geocoded += 1
+        tags = list(event.tags or [])
+
+        # Never geocode virtual events
+        if _is_virtual_location(event.location_name, tags):
+            stats.virtual_skipped += 1
             enriched.append(event)
             continue
 
+        # Check existing coordinates
+        if event.latitude is not None and event.longitude is not None:
+            if _is_in_service_area(event.latitude, event.longitude):
+                stats.already_geocoded += 1
+                enriched.append(event)
+                continue
+            # Has coordinates but outside service area — null and retry
+            stats.out_of_region_rejected += 1
+            stats.retried += 1
+            # Fall through to re-geocode
+
         queries = _build_geo_queries(
-            event.location_address,
-            event.location_name,
-            event.city,
-            event.county,
+            event.location_address, event.location_name, event.city, event.county
         )
         if not queries:
             stats.failed += 1
@@ -361,9 +501,16 @@ def geocode_events(
                 enriched.append(event)
                 stats.failed += 1
         else:
+            # Ensure any bad existing coordinates are cleared
+            if event.latitude is not None:
+                try:
+                    event = event.model_copy(update={
+                        "latitude": None, "longitude": None, "geo_confidence": None,
+                    })
+                except Exception:
+                    pass
             stats.failed += 1
             enriched.append(event)
-            logger.debug("No geocode result for '%s'", event.title)
 
     cache.save()
     return enriched, stats
@@ -372,55 +519,120 @@ def geocode_events(
 def geocode_event_dicts(
     event_dicts: list[dict],
     cache: Optional[GeoCache] = None,
-) -> tuple[list[dict], GeoStats]:
+    strict_region: bool = False,
+) -> tuple[list[dict], GeoStats, list[dict]]:
     """
     Enrich raw event dicts (from published JSON) with lat/lon.
 
-    Used by repair-geo mode where re-constructing Event objects is unnecessary.
-    Preserves all existing fields; only adds/updates latitude and longitude.
+    strict_region=True activates repair behavior:
+      - Events with existing out-of-region coordinates are nulled and re-geocoded.
+      - Virtual events with coordinates are nulled.
+      - Rejected/suspicious geocodes are collected and returned.
 
-    Returns (updated_dicts, stats).
+    Returns (updated_dicts, stats, suspicious_geocodes).
+    suspicious_geocodes is a list of dicts suitable for writing to a review file.
     """
     if cache is None:
         cache = load_cache()
 
     stats = GeoStats(total=len(event_dicts))
     updated: list[dict] = []
+    suspicious: list[dict] = []
 
     for ev in event_dicts:
-        if ev.get("latitude") is not None and ev.get("longitude") is not None:
-            stats.already_geocoded += 1
-            updated.append(ev)
+        tags = ev.get("tags") or []
+        loc_name = ev.get("location_name")
+        loc_addr = ev.get("location_address")
+        title = ev.get("title", "?")
+        event_id = ev.get("id", "?")
+        lat = ev.get("latitude")
+        lon = ev.get("longitude")
+
+        # --- Virtual event handling ---
+        if _is_virtual_location(loc_name, tags):
+            new_ev = dict(ev)
+            if lat is not None and strict_region:
+                suspicious.append({
+                    "event_id": event_id,
+                    "title": title,
+                    "location_name": loc_name,
+                    "location_address": loc_addr,
+                    "original_latitude": lat,
+                    "original_longitude": lon,
+                    "rejection_reason": "virtual_event",
+                })
+                new_ev["latitude"] = None
+                new_ev["longitude"] = None
+                stats.out_of_region_rejected += 1
+            stats.virtual_skipped += 1
+            updated.append(new_ev)
             continue
 
+        # --- Existing coordinates ---
+        has_coords = lat is not None and lon is not None
+        if has_coords:
+            if _is_in_service_area(lat, lon):
+                if strict_region:
+                    # Good coords — keep as-is
+                    stats.already_geocoded += 1
+                    updated.append(ev)
+                    continue
+                else:
+                    stats.already_geocoded += 1
+                    updated.append(ev)
+                    continue
+            else:
+                # Out of region
+                if strict_region:
+                    suspicious.append({
+                        "event_id": event_id,
+                        "title": title,
+                        "location_name": loc_name,
+                        "location_address": loc_addr,
+                        "original_latitude": lat,
+                        "original_longitude": lon,
+                        "rejection_reason": f"out_of_service_area ({lat:.4f},{lon:.4f})",
+                    })
+                    stats.out_of_region_rejected += 1
+                    stats.retried += 1
+                    # Fall through to re-geocode
+                else:
+                    # Non-strict: preserve existing coordinates unchanged
+                    stats.already_geocoded += 1
+                    updated.append(ev)
+                    continue
+
+        # --- Geocode (new or retry) ---
         queries = _build_geo_queries(
-            ev.get("location_address"),
-            ev.get("location_name"),
-            ev.get("city"),
-            ev.get("county"),
+            loc_addr, loc_name, ev.get("city"), ev.get("county")
         )
         if not queries:
             stats.failed += 1
-            updated.append(ev)
+            new_ev = dict(ev)
+            new_ev["latitude"] = None
+            new_ev["longitude"] = None
+            updated.append(new_ev)
             continue
 
         result, was_cache_hit = _resolve_with_fallbacks(queries, cache)
 
+        new_ev = dict(ev)
         if result is not None and result.latitude is not None:
             if was_cache_hit:
                 stats.cache_hits += 1
-            new_ev = dict(ev)
             new_ev["latitude"] = result.latitude
             new_ev["longitude"] = result.longitude
             updated.append(new_ev)
             stats.newly_geocoded += 1
             logger.debug(
                 "Geocoded '%s' → (%.5f, %.5f) via %r",
-                ev.get("title", "?"), result.latitude, result.longitude, result.query,
+                title, result.latitude, result.longitude, result.query,
             )
         else:
+            new_ev["latitude"] = None
+            new_ev["longitude"] = None
+            updated.append(new_ev)
             stats.failed += 1
-            updated.append(ev)
 
     cache.save()
-    return updated, stats
+    return updated, stats, suspicious

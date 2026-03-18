@@ -20,13 +20,6 @@
     "confidence": 0.9,
     "resolved_at": "2026-03-18T12:16:34.604134+00:00"
   },
-  "National Children's Museum": {
-    "query": "National Children's Museum",
-    "latitude": 53.720087,
-    "longitude": -1.854961,
-    "confidence": 0.9,
-    "resolved_at": "2026-03-18T12:16:35.600292+00:00"
-  },
   "Scotto's Rigatoni Grill": {
     "query": "Scotto's Rigatoni Grill",
     "latitude": 38.985754,
@@ -55,20 +48,6 @@
     "confidence": 0.9,
     "resolved_at": "2026-03-18T12:16:39.562520+00:00"
   },
-  "Little Oaks Montessori Academy": {
-    "query": "Little Oaks Montessori Academy",
-    "latitude": 49.091376,
-    "longitude": -123.077744,
-    "confidence": 0.9,
-    "resolved_at": "2026-03-18T12:16:40.592322+00:00"
-  },
-  "Virtual": {
-    "query": "Virtual",
-    "latitude": 52.380897,
-    "longitude": 20.086777,
-    "confidence": 0.9,
-    "resolved_at": "2026-03-18T12:16:41.582667+00:00"
-  },
   "Claude Moore Rec Center": {
     "query": "Claude Moore Rec Center",
     "latitude": 39.012642,
@@ -82,13 +61,6 @@
     "longitude": -77.401249,
     "confidence": 0.9,
     "resolved_at": "2026-03-18T12:16:43.523235+00:00"
-  },
-  "Tea with Mrs. B": {
-    "query": "Tea with Mrs. B",
-    "latitude": 51.731637,
-    "longitude": 0.679318,
-    "confidence": 0.9,
-    "resolved_at": "2026-03-18T12:16:44.516237+00:00"
   },
   "Great Country Farms": {
     "query": "Great Country Farms",
@@ -202,26 +174,12 @@
     "confidence": 0.9,
     "resolved_at": "2026-03-18T12:17:00.911047+00:00"
   },
-  "Astar Explorer": {
-    "query": "Astar Explorer",
-    "latitude": 15.336924,
-    "longitude": 38.934662,
-    "confidence": 0.9,
-    "resolved_at": "2026-03-18T12:17:02.049191+00:00"
-  },
   "2709 West Ox Road; Visitor Center: 2739 West Ox RoadHerndon, Virginia": {
     "query": "2709 West Ox Road; Visitor Center: 2739 West Ox RoadHerndon, Virginia",
     "latitude": 38.934732,
     "longitude": -77.405243,
     "confidence": 0.9,
     "resolved_at": "2026-03-18T12:17:03.160034+00:00"
-  },
-  "Thomas Jefferson Community Theatre": {
-    "query": "Thomas Jefferson Community Theatre",
-    "latitude": 40.793156,
-    "longitude": -73.93546,
-    "confidence": 0.9,
-    "resolved_at": "2026-03-18T12:17:04.370536+00:00"
   },
   "Dulles South Rec Center": {
     "query": "Dulles South Rec Center",
@@ -272,13 +230,6 @@
     "confidence": 0.9,
     "resolved_at": "2026-03-18T12:17:11.823878+00:00"
   },
-  "Madison Community Center & Park": {
-    "query": "Madison Community Center & Park",
-    "latitude": 35.911056,
-    "longitude": -82.543651,
-    "confidence": 0.9,
-    "resolved_at": "2026-03-18T12:17:12.802731+00:00"
-  },
   "12193 Fair Lakes Promenade DriveFairfax,VA 22033": {
     "query": "12193 Fair Lakes Promenade DriveFairfax,VA 22033",
     "latitude": 38.859615,
@@ -314,13 +265,6 @@
     "confidence": 0.9,
     "resolved_at": "2026-03-18T12:17:18.348140+00:00"
   },
-  "Franklin Park": {
-    "query": "Franklin Park",
-    "latitude": 41.935308,
-    "longitude": -87.865618,
-    "confidence": 0.9,
-    "resolved_at": "2026-03-18T12:17:19.339520+00:00"
-  },
   "Muse Paintbar": {
     "query": "Muse Paintbar",
     "latitude": 39.116379,
@@ -348,13 +292,6 @@
     "longitude": -77.563875,
     "confidence": 0.9,
     "resolved_at": "2026-03-18T12:17:23.347492+00:00"
-  },
-  "The Alden": {
-    "query": "The Alden",
-    "latitude": 32.953285,
-    "longitude": -80.05073,
-    "confidence": 0.9,
-    "resolved_at": "2026-03-18T12:17:24.452486+00:00"
   },
   "Charles Houston Rec Center": {
     "query": "Charles Houston Rec Center",
@@ -390,5 +327,68 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-03-18T12:17:29.668060+00:00"
+  },
+  "National Children's Museum": {
+    "query": "National Children's Museum",
+    "latitude": 38.894273,
+    "longitude": -77.029893,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T13:41:44.009747+00:00"
+  },
+  "Little Oaks Montessori Academy": {
+    "query": "Little Oaks Montessori Academy",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-18T13:41:45.051277+00:00"
+  },
+  "Tea with Mrs. B": {
+    "query": "Tea with Mrs. B",
+    "latitude": 38.689641,
+    "longitude": -76.536914,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T13:41:46.067296+00:00"
+  },
+  "Astar Explorer, Fairfax County, VA": {
+    "query": "Astar Explorer, Fairfax County, VA",
+    "latitude": 38.957269,
+    "longitude": -77.360461,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T13:41:47.353529+00:00"
+  },
+  "Thomas Jefferson Community Theatre": {
+    "query": "Thomas Jefferson Community Theatre",
+    "latitude": 38.870019,
+    "longitude": -77.096009,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T13:41:48.431997+00:00"
+  },
+  "5920 Summers LaneFalls Church, VA 22041, Falls Church": {
+    "query": "5920 Summers LaneFalls Church, VA 22041, Falls Church",
+    "latitude": 38.869993,
+    "longitude": -77.179302,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T13:41:49.533578+00:00"
+  },
+  "Madison Community Center & Park": {
+    "query": "Madison Community Center & Park",
+    "latitude": 38.923256,
+    "longitude": -77.123711,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T13:41:50.625101+00:00"
+  },
+  "Franklin Park, Loudoun County, VA": {
+    "query": "Franklin Park, Loudoun County, VA",
+    "latitude": 39.131375,
+    "longitude": -77.745581,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T13:41:51.583608+00:00"
+  },
+  "The Alden": {
+    "query": "The Alden",
+    "latitude": 38.940847,
+    "longitude": -77.183973,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-18T13:41:52.679024+00:00"
   }
 }

@@ -270,13 +270,23 @@ def _repair_published_week(week_start: date, dry_run: bool) -> int:
     return 0
 
 
-def _repair_geo_enrich(week_start: date, dry_run: bool) -> int:
+def _repair_geo_enrich(
+    week_start: date,
+    dry_run: bool,
+    strict_region: bool = False,
+) -> int:
     """
     Patch an already-published week JSON with lat/lon for events that lack
     coordinates. Does not re-normalize — loads and updates event dicts directly.
-    Uses the persistent geocode cache to avoid redundant API calls.
+
+    strict_region=True additionally:
+      - Nulls existing coordinates that fall outside the NoVA/DC service area.
+      - Skips virtual events and nulls any coordinates they hold.
+      - Retries geocoding for events whose coordinates were nulled.
+      - Writes suspicious geocodes to data/manual_review/suspicious_geocodes.json.
+      - Purges out-of-region entries from the geocode cache before running.
     """
-    from config.settings import PUBLISHED_DIR
+    from config.settings import PUBLISHED_DIR, MANUAL_REVIEW_DIR
     from enrichment.geocode import geocode_event_dicts, load_cache
 
     filename = f"week-{week_start.isoformat()}.json"
@@ -291,13 +301,32 @@ def _repair_geo_enrich(week_start: date, dry_run: bool) -> int:
         logging.warning("Geo-repair: no events found in %s.", filename)
         return 0
 
-    print(f"[geo-repair] Loaded {len(event_dicts)} events from {filename}")
+    mode = "strict-region" if strict_region else "standard"
+    print(f"[geo-repair] Loaded {len(event_dicts)} events from {filename} [{mode}]")
 
     cache = load_cache()
     print(f"[geo-repair] Cache: {cache.size} existing entries")
 
-    updated_dicts, stats = geocode_event_dicts(event_dicts, cache)
+    if strict_region:
+        purged = cache.invalidate_out_of_region()
+        if purged:
+            print(f"[geo-repair] Purged {purged} out-of-region cache entries")
+
+    updated_dicts, stats, suspicious = geocode_event_dicts(
+        event_dicts, cache, strict_region=strict_region
+    )
     stats.print_summary()
+
+    if suspicious:
+        print(f"\n  Suspicious geocodes identified: {len(suspicious)}")
+        for s in suspicious:
+            print(f"    [{s['rejection_reason']}] {s['title']}")
+        if not dry_run:
+            suspicious_path = MANUAL_REVIEW_DIR / "suspicious_geocodes.json"
+            suspicious_path.write_text(
+                json.dumps(suspicious, indent=2), encoding="utf-8"
+            )
+            print(f"  Written to {suspicious_path.name}")
 
     if dry_run:
         print("\n[geo-repair] Dry run — skipping write.")
@@ -388,10 +417,21 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         dest="enrich_geo",
         help=(
-            "Geocode events that are missing latitude/longitude using Nominatim. "
+            "Geocode events that are missing latitude/longitude using Photon. "
             "In normal pipeline mode: runs after deduplicate. "
             "With --repair-published-week: patches the existing week JSON "
             "with coordinates without full re-normalization."
+        ),
+    )
+    parser.add_argument(
+        "--strict-region",
+        action="store_true",
+        dest="strict_region",
+        help=(
+            "Enforce NoVA/DC metro service-area validation. "
+            "With --repair-published-week --enrich-geo: also nulls existing "
+            "out-of-region coordinates, skips virtual events, and writes "
+            "suspicious geocodes to data/manual_review/suspicious_geocodes.json."
         ),
     )
     parser.add_argument(
@@ -428,7 +468,11 @@ def main(argv: list[str] | None = None) -> int:
 
         if args.enrich_geo:
             print(f"\n=== NoVA Kids Geo-Repair: {repair_date} ===\n")
-            return _repair_geo_enrich(repair_date, dry_run=args.dry_run)
+            return _repair_geo_enrich(
+                repair_date,
+                dry_run=args.dry_run,
+                strict_region=getattr(args, "strict_region", False),
+            )
         else:
             print(f"\n=== NoVA Kids Repair Mode: {repair_date} ===\n")
             return _repair_published_week(repair_date, dry_run=args.dry_run)
