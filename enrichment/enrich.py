@@ -34,10 +34,10 @@ _TAG_RULES: list[tuple[str, list[str]]] = [
                     r"\bmath\b", r"\brobotics\b", r"\bcoding\b"]),
     ("arts",       [r"\bart\b", r"\bdrawing\b", r"\bpainting\b", r"\bcraft\b",
                     r"\bceramics\b", r"\bsketch\b"]),
-    ("crafts",     [r"\bcraft\b", r"\bmaking\b", r"\bdiy\b", r"\bbuilding\b"]),
+    ("crafts",     [r"\bcrafts?\b", r"\bmaking\b", r"\bdiy\b"]),
     ("music",      [r"\bmusic\b", r"\bconcert\b", r"\bsinging\b", r"\bband\b",
                     r"\borchestra\b", r"\bchoir\b"]),
-    ("theater",    [r"\btheater\b", r"\btheatre\b", r"\bplay\b", r"\bpuppet\b",
+    ("theater",    [r"\btheater\b", r"\btheatre\b", r"\bstage\s+play\b", r"\bpuppet\b",
                     r"\bperformance\b", r"\bshow\b"]),
     ("sports",     [r"\bsports?\b", r"\bsoccer\b", r"\bbasketball\b", r"\btennis\b",
                     r"\bswimming\b", r"\bgymnastics\b", r"\bkickball\b"]),
@@ -48,7 +48,8 @@ _TAG_RULES: list[tuple[str, list[str]]] = [
     ("cooking",    [r"\bcook\b", r"\bcooking\b", r"\bculinary\b", r"\bbaking\b",
                     r"\bfood\b"]),
     ("fitness",    [r"\bfitness\b", r"\bexercise\b", r"\byoga\b", r"\bmovement\b"]),
-    ("workshop",   [r"\bworkshop\b", r"\bclass\b", r"\bprogram\b", r"\bsession\b"]),
+    ("workshop",   [r"\bworkshop\b", r"\bclass\b", r"\bprogram\b", r"\bsession\b",
+                    r"\bwebinar\b", r"\bseminar\b"]),
     ("camp",       [r"\bcamp\b", r"\bsummer camp\b", r"\bday camp\b"]),
     ("festival",   [r"\bfestival\b", r"\bfair\b", r"\bcelebration\b"]),
     ("holiday",    [r"\bholiday\b", r"\bhalloween\b", r"\bthanksgiving\b",
@@ -56,6 +57,7 @@ _TAG_RULES: list[tuple[str, list[str]]] = [
                     r"\bvalentine\b", r"\bpresidents\b"]),
     # Age groups
     ("toddler",    [r"\btoddler\b", r"\bbaby\b", r"\binfant\b", r"\blap sit\b",
+                    r"\btots?\b",
                     r"\bages?\s*0", r"\bages?\s*1\b", r"\bages?\s*2\b",
                     r"\bages?\s*3\b"]),
     ("preschool",  [r"\bpreschool\b", r"\bpre-?k\b", r"\bages?\s*[34]\b"]),
@@ -180,9 +182,9 @@ def compute_family_friendly_score(event_data: dict[str, Any], tags: list[str]) -
     if "indoor" in tag_set:
         score += 0.10
 
-    # Activity richness (expanded to include animals and museum)
+    # Activity richness (sports added — skating, ice, rec activities are enriching)
     enriching_tags = {"storytime", "arts", "crafts", "stem", "nature", "music",
-                      "theater", "cooking", "workshop", "animals", "museum"}
+                      "theater", "cooking", "workshop", "animals", "museum", "sports"}
     if tag_set & enriching_tags:
         score += 0.10
 
@@ -193,7 +195,8 @@ def compute_family_friendly_score(event_data: dict[str, Any], tags: list[str]) -
     # Child-centric title keywords
     title_lower = (event_data.get("title") or "").lower()
     if any(kw in title_lower for kw in
-           ["children", "kids", "family", "toddler", "baby", "preschool", "storytime"]):
+           ["children", "kids", "family", "toddler", "baby", "preschool", "storytime",
+            " tot", "tots", " camp", "junior", "skating", "skate"]):
         score += 0.10
 
     # Weather

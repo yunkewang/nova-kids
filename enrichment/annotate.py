@@ -83,7 +83,8 @@ def _age_phrase(event_data: dict[str, Any]) -> str | None:
 def _venue_phrase(event_data: dict[str, Any]) -> str | None:
     """Return 'at <venue>' phrase if location is known."""
     location = event_data.get("location_name")
-    if location and len(location) < 60:
+    # Don't say "at Virtual" — setting phrase already covers this
+    if location and location.lower().strip() not in ("virtual", "online") and len(location) < 60:
         return f"at {location}"
     city = event_data.get("city")
     county = event_data.get("county")
@@ -94,8 +95,17 @@ def _venue_phrase(event_data: dict[str, Any]) -> str | None:
     return None
 
 
-def _activity_phrase(tags: list[str]) -> str | None:
-    """Return a brief activity description from tags."""
+def _activity_phrase(tags: list[str], title: str = "") -> str | None:
+    """Return a brief activity description from tags (and title for specificity)."""
+    title_lower = title.lower()
+
+    # Sports: be more specific when title gives us context
+    if "sports" in tags:
+        if any(kw in title_lower for kw in ("skate", "skating", "ice", "rink")):
+            return "skating session"
+        if "swim" in tags or any(kw in title_lower for kw in ("swim", "pool", "aquatic")):
+            return "swim session"
+
     # Priority-ordered activity descriptors
     activity_map = [
         ("storytime", "storytime"),
@@ -104,6 +114,7 @@ def _activity_phrase(tags: list[str]) -> str | None:
         ("crafts", "craft activity"),
         ("music", "music program"),
         ("theater", "theater performance"),
+        ("animals", "animals program"),
         ("nature", "nature program"),
         ("sports", "sports activity"),
         ("swim", "swim program"),
@@ -143,11 +154,17 @@ _BOILERPLATE_OPENER_RE = re.compile(
     r"|just\s+minutes\s+from"
     r"|eat,?\s+drink"
     r"|dulles\s+sportsplex\s+is"
-    r"|the\s+(?:alden|charles|cascades|rust|brambleton|ashburn)\s+\w+\s+is"
+    r"|the\s+(?:alden|charles|cascades|rust|brambleton|ashburn|sterling|udvar)\s+\w+\s+is"
     r"|the\s+sterling\s+community\s+center\s+offers"
     r"|the\s+claude\s+moore\s+\w+\s+is"
     r"|port\s+discovery,?\s+located"
     r"|a\s+toy\s+library"
+    r"|since\s+\d{4},?\s"
+    r"|all\s+in\s+for\s+animals"
+    r"|learn\s+more\s+at\s+(?:www\.|https?://)"
+    r"|fairfax\s+county,?\s+virginia\s*-"
+    r"|live\s+webinar\s+\w+\s+\d{1,2}"
+    r"|tackett.?s\s+mill\s+center"
     r")",
     re.IGNORECASE,
 )
@@ -186,7 +203,7 @@ def generate_short_note(event_data: dict[str, Any]) -> str | None:
             and not _MULTI_SENTENCE_RE.search(summary_clean)
             and not _is_boilerplate_summary(summary_clean)
         ):
-            if not summary_clean.endswith("."):
+            if not summary_clean.endswith((".", "!", "?")):
                 summary_clean += "."
             return summary_clean
 
@@ -194,7 +211,7 @@ def generate_short_note(event_data: dict[str, Any]) -> str | None:
 
     cost = _cost_phrase(event_data)
     setting = _setting_phrase(tags)
-    activity = _activity_phrase(tags)
+    activity = _activity_phrase(tags, title=event_data.get("title") or "")
     venue = _venue_phrase(event_data)
     age = _age_phrase(event_data)
 

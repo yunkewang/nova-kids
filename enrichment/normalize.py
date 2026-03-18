@@ -75,6 +75,18 @@ _GENERIC_TITLE_PATTERNS = re.compile(
 # separated terms ("Great Country Farms – Pick You Own, Strawberries, U-pick…")
 _SEO_STUFFED_TITLE_RE = re.compile(r"\s*[–—]\s*.{0,60},.{0,60},")
 
+# Sentence-style decorative tagline after em-dash: "Name – Verb. Verb. Verb."
+# Matches patterns like "Children's Science Center – Explore. Create. Inspire"
+_TAGLINE_DASH_RE = re.compile(r"\s*[–—]\s*[A-Z][a-z]+[.!]\s+[A-Z]")
+
+# Geographic city/state qualifier appended to venue names
+# e.g. "National Children's Museum of Washington Dc" → strip " of Washington Dc"
+_GEO_QUALIFIER_RE = re.compile(
+    r"\s+of\s+(?:Washington\s+D\.?C\.?|New\s+York\s+City|New\s+York|"
+    r"[A-Z][a-zA-Z]+\s+[A-Z][a-zA-Z]+)\s*$",
+    re.IGNORECASE,
+)
+
 # Site taglines that are clearly not specific event titles
 _SITE_TAGLINE_RE = re.compile(
     r"(?:"
@@ -112,6 +124,15 @@ def clean_event_title(title: str | None) -> str | None:
         dash_pos = re.search(r"\s*[–—]", title)
         if dash_pos:
             title = title[: dash_pos.start()].strip()
+
+    # Strip em-dash + sentence-style decorative tagline (e.g. "– Explore. Create.")
+    if _TAGLINE_DASH_RE.search(title):
+        dash_pos = re.search(r"\s*[–—]", title)
+        if dash_pos:
+            title = title[: dash_pos.start()].strip()
+
+    # Strip geographic city/state qualifier appended to venue names
+    title = _GEO_QUALIFIER_RE.sub("", title).strip()
 
     # Strip pipe site-name suffix ("Event | Brand")
     if " | " in title:
@@ -168,6 +189,37 @@ _GENERIC_SUMMARY_TEXTS = frozenset([
     "arlington, virginia",
 ])
 
+# Venue homepage / marketing blurb openers — clearly not event-specific summaries.
+# Matched case-insensitively at the START of the cleaned summary text.
+_VENUE_SUMMARY_BLURB_RE = re.compile(
+    r"^(?:"
+    # Venue "offers" / "features" / "is a X" descriptions
+    r"the\s+\w[\w\s]{2,30}\s+(?:community\s+center|rec(?:reation)?\s+center|library)"
+    r"\s+(?:offers|features|is\s+a\b)"
+    r"|\w[\w\s]{2,30}\s+(?:recreation\s+center|community\s+center)\s+features"
+    # Venue opening history ("X first opened its doors" / "Since YYYY, X")
+    r"|since\s+\d{4},?\s+\w"
+    r"|[a-z][\w\s]{2,40}\s+first\s+opened\s+its\s+doors"
+    # Toy Nest homepage
+    r"|a\s+toy\s+library\s+and\s+indoor\s+play"
+    # AWLA homepage header fragment
+    r"|all\s+in\s+for\s+animals\b"
+    # URL-only summaries
+    r"|learn\s+more\s+at\s+(?:www\.|https?://)"
+    # Fairfax parks boilerplate
+    r"|fairfax\s+county,?\s+virginia\s*-"
+    # Stale webinar date lines ("Live Webinar May 16, 2024 …")
+    r"|live\s+webinar\s+\w+\s+\d{1,2}"
+    # Tackett's Mill homepage
+    r"|tackett.?s\s+mill\s+center\s+is"
+    # 501(c)3 nonprofit boilerplate ("X is a 501(c)3 non-profit organization")
+    r"|.{5,60}\s+is\s+a\s+501\(c\)"
+    # Generic venue "is a/an [adjective] facility/school/museum" opener
+    r"|[A-Za-z][\w\s']{3,50}\s+is\s+an?\s+(?:indoor|award-winning|vibrant|unique|community|premier|family-friendly)\s+"
+    r")",
+    re.IGNORECASE,
+)
+
 
 def clean_summary(text: str | None) -> str | None:
     """
@@ -198,6 +250,9 @@ def clean_summary(text: str | None) -> str | None:
         return None
 
     if text.lower().rstrip(".") in _GENERIC_SUMMARY_TEXTS:
+        return None
+
+    if _VENUE_SUMMARY_BLURB_RE.match(text):
         return None
 
     return text
@@ -286,6 +341,9 @@ def _clean_location_raw(text: str) -> tuple[str, str | None]:
     - "• City, ST" DullesMoms suffix
     - "• ParentOrg" bullet separators (keep only pre-bullet name)
     """
+    # 0. Remove consecutively duplicated words ("Frying Pan Farm Farm" → "Frying Pan Farm")
+    text = re.sub(r"\b(\w+)\s+\1\b", r"\1", text, flags=re.IGNORECASE)
+
     # 1. Cut at boilerplate markers
     m = _LOC_BOILERPLATE_RE.search(text)
     if m:
