@@ -642,5 +642,117 @@
     "longitude": -77.506959,
     "confidence": 0.9,
     "resolved_at": "2026-03-18T20:26:32.306490+00:00"
+  },
+  "Burke Centre Library": {
+    "query": "Burke Centre Library",
+    "latitude": 38.787004,
+    "longitude": -77.317037,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-19T10:30:18.823512+00:00"
+  },
+  "Reston Regional Library, Reston Meeting Room 1 , Reston Meeting Room 2, Reston, Fairfax County, VA": {
+    "query": "Reston Regional Library, Reston Meeting Room 1 , Reston Meeting Room 2, Reston, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:20.079347+00:00"
+  },
+  "Reston Regional Library, Reston Meeting Room 1 , Reston Meeting Room 2, Reston, VA": {
+    "query": "Reston Regional Library, Reston Meeting Room 1 , Reston Meeting Room 2, Reston, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:21.261019+00:00"
+  },
+  "Reston Regional Library, Reston Meeting Room 1 , Reston Meeting Room 2, Fairfax County, VA": {
+    "query": "Reston Regional Library, Reston Meeting Room 1 , Reston Meeting Room 2, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:22.458869+00:00"
+  },
+  "Reston Regional Library, Reston Meeting Room 1 , Reston Meeting Room 2": {
+    "query": "Reston Regional Library, Reston Meeting Room 1 , Reston Meeting Room 2",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:23.574910+00:00"
+  },
+  "Chantilly Regional Library, Chantilly, Fairfax County, VA": {
+    "query": "Chantilly Regional Library, Chantilly, Fairfax County, VA",
+    "latitude": 38.882637,
+    "longitude": -77.408189,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-19T10:30:24.565974+00:00"
+  },
+  "Thomas Jefferson Library, Thomas Jefferson Group Study Room": {
+    "query": "Thomas Jefferson Library, Thomas Jefferson Group Study Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:25.625510+00:00"
+  },
+  "Central Library, Barbara M. Donnellan Auditorium": {
+    "query": "Central Library, Barbara M. Donnellan Auditorium",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:26.724778+00:00"
+  },
+  "Lorton Library, Lorton Meeting Room": {
+    "query": "Lorton Library, Lorton Meeting Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:27.856893+00:00"
+  },
+  "Glencarlyn Library": {
+    "query": "Glencarlyn Library",
+    "latitude": 38.863589,
+    "longitude": -77.125889,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-19T10:30:28.841107+00:00"
+  },
+  "Sherwood Regional Library, Sherwood Meeting Room": {
+    "query": "Sherwood Regional Library, Sherwood Meeting Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:29.978646+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:31.290992+00:00"
+  },
+  "Westover Library, Children's Area": {
+    "query": "Westover Library, Children's Area",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:32.331433+00:00"
+  },
+  "Children's Area": {
+    "query": "Children's Area",
+    "latitude": 38.989677,
+    "longitude": -77.957078,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-19T10:30:33.329203+00:00"
+  },
+  "*Off-Site, Walter Reed Community Center / 2909 16th St S / Arlington, VA / 22204, Arlington, Arlington County, VA": {
+    "query": "*Off-Site, Walter Reed Community Center / 2909 16th St S / Arlington, VA / 22204, Arlington, Arlington County, VA",
+    "latitude": 38.857678,
+    "longitude": -77.086682,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-19T10:30:34.504765+00:00"
+  },
+  "Central Library, Glebe Room": {
+    "query": "Central Library, Glebe Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-19T10:30:35.645886+00:00"
   }
 }
