@@ -754,5 +754,103 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-03-19T10:30:35.645886+00:00"
+  },
+  "Kings Park Library, Kings Park Conference Room": {
+    "query": "Kings Park Library, Kings Park Conference Room",
+    "latitude": 38.807458,
+    "longitude": -77.256624,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-20T10:28:56.107320+00:00"
+  },
+  "Herndon Fortnightly Library, Herndon Fortnightly Maker Lab, Herndon, Fairfax County, VA": {
+    "query": "Herndon Fortnightly Library, Herndon Fortnightly Maker Lab, Herndon, Fairfax County, VA",
+    "latitude": 38.971831,
+    "longitude": -77.387103,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-20T10:28:57.340454+00:00"
+  },
+  "Centreville Regional Library, Centreville, Fairfax County, VA": {
+    "query": "Centreville Regional Library, Centreville, Fairfax County, VA",
+    "latitude": 38.83746,
+    "longitude": -77.440858,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-20T10:28:58.434962+00:00"
+  },
+  "Centreville Regional Library, Centreville Conference Room, Centreville, Fairfax County, VA": {
+    "query": "Centreville Regional Library, Centreville Conference Room, Centreville, Fairfax County, VA",
+    "latitude": 38.83746,
+    "longitude": -77.440858,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-20T10:28:59.721455+00:00"
+  },
+  "Oakton Library, Oakton Conference Room": {
+    "query": "Oakton Library, Oakton Conference Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-20T10:29:00.867207+00:00"
+  },
+  "Herndon Fortnightly Library, Herndon Fortnightly Conference Room, Herndon, Fairfax County, VA": {
+    "query": "Herndon Fortnightly Library, Herndon Fortnightly Conference Room, Herndon, Fairfax County, VA",
+    "latitude": 38.971831,
+    "longitude": -77.387103,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-20T10:29:02.121990+00:00"
+  },
+  "Westover Library": {
+    "query": "Westover Library",
+    "latitude": 38.886021,
+    "longitude": -77.142258,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-20T10:29:03.060251+00:00"
+  },
+  "Martha Washington Library, Martha Washington Conference Room": {
+    "query": "Martha Washington Library, Martha Washington Conference Room",
+    "latitude": 38.773059,
+    "longitude": -77.062834,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-20T10:29:04.259541+00:00"
+  },
+  "Reston Regional Library, Reston ELL and Citizenship Center, Reston, Fairfax County, VA": {
+    "query": "Reston Regional Library, Reston ELL and Citizenship Center, Reston, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-20T10:29:09.558722+00:00"
+  },
+  "Reston Regional Library, Reston ELL and Citizenship Center, Reston, VA": {
+    "query": "Reston Regional Library, Reston ELL and Citizenship Center, Reston, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-20T10:29:10.633725+00:00"
+  },
+  "Reston Regional Library, Reston ELL and Citizenship Center, Fairfax County, VA": {
+    "query": "Reston Regional Library, Reston ELL and Citizenship Center, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-20T10:29:11.733225+00:00"
+  },
+  "Reston Regional Library, Reston ELL and Citizenship Center": {
+    "query": "Reston Regional Library, Reston ELL and Citizenship Center",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-20T10:29:13.022294+00:00"
+  },
+  "Great Falls Library, Great Falls Meeting Room": {
+    "query": "Great Falls Library, Great Falls Meeting Room",
+    "latitude": 38.998321,
+    "longitude": -77.286956,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-20T10:29:14.288266+00:00"
+  },
+  "Aurora Hills Library, Aurora Hills Senior Center (735 18th St S, Arlington, VA 22202), Arlington, Arlington County, VA": {
+    "query": "Aurora Hills Library, Aurora Hills Senior Center (735 18th St S, Arlington, VA 22202), Arlington, Arlington County, VA",
+    "latitude": 38.85749,
+    "longitude": -77.059018,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-20T10:29:15.401196+00:00"
   }
 }
