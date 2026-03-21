@@ -271,7 +271,50 @@ def generate_short_note(event_data: dict[str, Any]) -> str | None:
 # Multi-sentence guard
 # ---------------------------------------------------------------------------
 
-_SENTENCE_BOUNDARY = re.compile(r"(?<=[.!?])\s+(?=[A-Z])")
+# Potential sentence boundary: `.!?` followed by whitespace + capital letter.
+_POTENTIAL_BOUNDARY = re.compile(r"[.!?]\s+(?=[A-Z])")
+
+# Words that end sentences but are NOT sentence-ending (abbreviations / initials).
+# Keyed as lowercase without the trailing period.
+_ABBREVS: frozenset[str] = frozenset([
+    # honorifics / titles
+    "mr", "mrs", "ms", "dr", "prof", "rev", "sr", "jr", "lt", "capt",
+    "sgt", "cpl", "pvt", "maj", "gen", "col",
+    # geographic / address
+    "st", "ave", "blvd", "rd", "ln", "ct", "pl", "dr", "mt", "ft",
+    # business / org
+    "inc", "co", "corp", "llc", "ltd",
+    # single uppercase letters (initials like "E.", "M.", "J.")
+    *[chr(c) for c in range(ord("a"), ord("z") + 1)],
+    *[chr(c) for c in range(ord("A"), ord("Z") + 1)],
+])
+
+
+def _has_multiple_sentences(text: str) -> bool:
+    """
+    Return True only if *text* contains 2+ real sentences.
+
+    A boundary is real only when the word immediately before the `.`
+    is not a known abbreviation or single-letter initial.
+    """
+    # Strip trailing terminal punctuation so the final `.` does not split.
+    stripped = text.rstrip().rstrip(".!?")
+    # Split at every potential boundary position.
+    parts = _POTENTIAL_BOUNDARY.split(stripped)
+    if len(parts) <= 1:
+        return False
+
+    # For each break, inspect the last token of the preceding segment.
+    for part in parts[:-1]:
+        tokens = part.split()
+        if not tokens:
+            continue
+        last_token = tokens[-1].rstrip(".!?,;:")
+        if last_token.lower() in _ABBREVS:
+            continue  # abbreviation — not a real sentence boundary
+        return True  # a non-abbreviation word ended with `.` → real boundary
+
+    return False
 
 
 def validate_short_note(note: str | None) -> tuple[bool, str]:
@@ -284,6 +327,6 @@ def validate_short_note(note: str | None) -> tuple[bool, str]:
         return True, ""
     if len(note) > _MAX_NOTE_LEN:
         return False, f"short_note exceeds {_MAX_NOTE_LEN} chars ({len(note)})"
-    if len(_SENTENCE_BOUNDARY.findall(note)) > 0:
+    if _has_multiple_sentences(note):
         return False, "short_note appears to contain multiple sentences"
     return True, ""

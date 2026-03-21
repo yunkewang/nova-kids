@@ -184,6 +184,23 @@ _BOILERPLATE_RE = re.compile(
     r"Get\s+Directions?|Store\s+Hours?|Phone\s+Number|Connect\s+With\s+Us",
     re.IGNORECASE,
 )
+# Sub-venue suffixes that should be stripped when geocoding a location name so that
+# Photon only sees the primary building name.  Examples:
+#   "Reston Regional Library, Reston Meeting Room 1" → "Reston Regional Library"
+#   "Central Library, Barbara M. Donnellan Auditorium" → "Central Library"
+_ROOM_SUFFIX_RE = re.compile(
+    r",\s*(?:[A-Za-z\s.]+\s+)?(?:Meeting\s+Room|Conference\s+Room|Auditorium|"
+    r"Children['']?s?\s+Area|Reading\s+Room|Community\s+Room|Program\s+Room|"
+    r"ELL\s+and\s+Citizenship|Citizenship\s+Center|Leisure\s+Pool|"
+    r"Gallery|Studio|Suite|Floor\s+\d+)\b.*$",
+    re.IGNORECASE,
+)
+
+
+def _strip_room_suffix(name: str) -> str:
+    """Remove trailing sub-venue room/area suffixes from a location name."""
+    cleaned = _ROOM_SUFFIX_RE.sub("", name).strip().strip(",")
+    return cleaned or name
 _DUP_WORD_RE = re.compile(r"\b(\w+)\s+\1\b", re.IGNORECASE)
 
 
@@ -211,40 +228,145 @@ def _normalize_geo_query(text: str) -> str:
 # These are injected as the highest-priority geocoding query when matched,
 # preventing Photon from returning a same-named place elsewhere.
 _KNOWN_VENUE_HINTS: dict[str, str] = {
-    "alden theatre":                "McLean, VA",
-    "alden theater":                "McLean, VA",
-    "ashburn ice house":            "Ashburn, VA",
-    "barnes & noble ashburn":       "Ashburn, VA",
-    "barnes and noble ashburn":     "Ashburn, VA",
-    "birchmere":                    "Alexandria, VA",
-    "bull run regional park":       "Centreville, VA",
-    "bush tabernacle":              "Purcellville, VA",
-    "cascades library":             "Sterling, VA",
-    "cascades branch":              "Sterling, VA",
-    "claude moore colonial farm":   "McLean, VA",
-    "cox farms":                    "Centreville, VA",
-    "dulles town center":           "Dulles, VA",
-    "fair oaks mall":               "Fairfax, VA",
-    "fairfax corner":               "Fairfax, VA",
-    "frying pan farm":              "Herndon, VA",
-    "herndon community center":     "Herndon, VA",
-    "kincaid farmstead":            "Sterling, VA",
-    "leesburg animal park":         "Leesburg, VA",
-    "luray caverns":                "Luray, VA",
-    "manassas museum":              "Manassas, VA",
-    "mclean community center":      "McLean, VA",
-    "national aquarium":            "Baltimore, MD",
-    "national children's museum":   "Washington, DC",
-    "national children's museum":   "Washington, DC",
-    "one loudoun":                  "Ashburn, VA",
-    "port discovery":               "Baltimore, MD",
-    "reston community center":      "Reston, VA",
-    "sky meadows":                  "Delaplane, VA",
-    "sterling community center":    "Sterling, VA",
-    "tysons corner center":         "Tysons, VA",
-    "wolf trap":                    "Vienna, VA",
-    "wolftrap":                     "Vienna, VA",
-    "workhouse arts":               "Lorton, VA",
+    # ── Performing Arts ──────────────────────────────────────────────────────
+    "alden theatre":                  "McLean, VA",
+    "alden theater":                  "McLean, VA",
+    "birchmere":                      "Alexandria, VA",
+    "capital one hall":               "Tysons, VA",
+    "signature theatre":              "Arlington, VA",
+    "wolf trap":                      "Vienna, VA",
+    "wolftrap":                       "Vienna, VA",
+    "workhouse arts":                 "Lorton, VA",
+    # ── Museums & Science Centers ────────────────────────────────────────────
+    "children's science center":      "Fairfax, VA",
+    "national aquarium":              "Baltimore, MD",
+    "national children's museum":     "Washington, DC",
+    "port discovery":                 "Baltimore, MD",
+    "udvar-hazy":                     "Chantilly, VA",
+    "udvar hazy":                     "Chantilly, VA",
+    # ── Malls ────────────────────────────────────────────────────────────────
+    "dulles town center":             "Dulles, VA",
+    "fair oaks mall":                 "Fairfax, VA",
+    "fairfax corner":                 "Fairfax, VA",
+    "one loudoun":                    "Ashburn, VA",
+    "tysons corner center":           "Tysons, VA",
+    "tysons corner":                  "Tysons, VA",
+    # ── Ice ──────────────────────────────────────────────────────────────────
+    "ashburn ice house":              "Ashburn, VA",
+    "ashburn ice":                    "Ashburn, VA",
+    "bush tabernacle":                "Purcellville, VA",
+    # ── Bookstores ───────────────────────────────────────────────────────────
+    "barnes & noble ashburn":         "Ashburn, VA",
+    "barnes and noble ashburn":       "Ashburn, VA",
+    "scrawl books":                   "Reston, VA",
+    # ── Farms / Outdoor Venues ───────────────────────────────────────────────
+    "claude moore colonial farm":     "McLean, VA",
+    "cox farms":                      "Centreville, VA",
+    "frying pan farm park":           "Herndon, VA",
+    "frying pan farm":                "Herndon, VA",
+    "great country farms":            "Bluemont, VA",
+    "kincaid farmstead":              "Sterling, VA",
+    "leesburg animal park":           "Leesburg, VA",
+    "luray caverns":                  "Luray, VA",
+    "sky meadows":                    "Delaplane, VA",
+    # ── NOVA Parks (NVRPA) ───────────────────────────────────────────────────
+    "algonkian regional park":        "Sterling, VA",
+    "bull run regional park":         "Centreville, VA",
+    "bull run park":                  "Centreville, VA",
+    "fountainhead regional park":     "Fairfax, VA",
+    "hemlock overlook":               "Clifton, VA",
+    "lake fairfax park":              "Reston, VA",
+    "lake fairfax":                   "Reston, VA",
+    "meadowlark botanical gardens":   "Vienna, VA",
+    "meadowlark gardens":             "Vienna, VA",
+    "occoquan regional park":         "Lorton, VA",
+    "red rock wilderness":            "Leesburg, VA",
+    "upton hill regional park":       "Arlington, VA",
+    # ── Fairfax County Library Branches ──────────────────────────────────────
+    "annandale community library":    "Annandale, VA",
+    "burke centre library":           "Burke, VA",
+    "centreville regional library":   "Centreville, VA",
+    "chantilly regional library":     "Chantilly, VA",
+    "dan branch library":             "Reston, VA",
+    "dolley madison library":         "McLean, VA",
+    "fairfax city regional library":  "Fairfax, VA",
+    "george mason regional library":  "Annandale, VA",
+    "great falls library":            "Great Falls, VA",
+    "herndon fortnightly library":    "Herndon, VA",
+    "john marshall library":          "Falls Church, VA",
+    "kings park library":             "Springfield, VA",
+    "kingstowne branch library":      "Alexandria, VA",
+    "lorton library":                 "Lorton, VA",
+    "mclean hamlet library":          "McLean, VA",
+    "mount vernon library":           "Alexandria, VA",
+    "oak marr branch library":        "Oakton, VA",
+    "patrick henry library":          "Vienna, VA",
+    "pohick regional library":        "Lorton, VA",
+    "providence district library":    "Falls Church, VA",
+    "reston regional library":        "Reston, VA",
+    "richard byrd library":           "Springfield, VA",
+    "sherwood regional library":      "Alexandria, VA",
+    "skyline branch library":         "Falls Church, VA",
+    "thomas jefferson library":       "Falls Church, VA",
+    "tysons-pimmit regional library": "Falls Church, VA",
+    "woodrow wilson library":         "Falls Church, VA",
+    # ── Arlington County Library Branches ────────────────────────────────────
+    "aurora hills branch":            "Arlington, VA",
+    "cherrydale branch":              "Arlington, VA",
+    "columbia pike branch":           "Arlington, VA",
+    "glencarlyn branch":              "Arlington, VA",
+    "westover branch":                "Arlington, VA",
+    "arlington central library":      "Arlington, VA",
+    # ── Loudoun County Library Branches ──────────────────────────────────────
+    "ashburn library":                "Ashburn, VA",
+    "blue ridge library":             "Purcellville, VA",
+    "brambleton library":             "Ashburn, VA",
+    "cascades library":               "Sterling, VA",
+    "cascades branch":                "Sterling, VA",
+    "gum spring library":             "Aldie, VA",
+    "lovettsville library":           "Lovettsville, VA",
+    "middleburg library":             "Middleburg, VA",
+    "rust library":                   "Leesburg, VA",
+    "sterling library":               "Sterling, VA",
+    # ── Prince William County Library Branches ───────────────────────────────
+    "bull run regional library":      "Manassas, VA",
+    "chinn park regional library":    "Woodbridge, VA",
+    "dale city library":              "Dale City, VA",
+    "dumfries library":               "Dumfries, VA",
+    "haymarket library":              "Haymarket, VA",
+    "independent hill library":       "Manassas, VA",
+    "montclair library":              "Woodbridge, VA",
+    "nokesville library":             "Nokesville, VA",
+    # ── Fairfax County Recreation Centers ────────────────────────────────────
+    "audrey moore rec center":        "Annandale, VA",
+    "audrey moore recreation center": "Annandale, VA",
+    "cub run recreation center":      "Chantilly, VA",
+    "cub run rec center":             "Chantilly, VA",
+    "franconia rec center":           "Alexandria, VA",
+    "herndon community center":       "Herndon, VA",
+    "lee district rec center":        "Alexandria, VA",
+    "manassas museum":                "Manassas, VA",
+    "mclean community center":        "McLean, VA",
+    "oak marr rec center":            "Oakton, VA",
+    "rcc hunters woods":              "Reston, VA",
+    "reston community center":        "Reston, VA",
+    "south run rec center":           "Springfield, VA",
+    "south run recreation center":    "Springfield, VA",
+    "spring hill rec center":          "McLean, VA",
+    "spring hill recreation center":   "McLean, VA",
+    "spring hill recreation":          "McLean, VA",
+    "sully community center":         "Chantilly, VA",
+    "sterling community center":      "Sterling, VA",
+    # ── Misc ─────────────────────────────────────────────────────────────────
+    "ellanor c. lawrence park":       "Chantilly, VA",
+    "hidden oaks nature center":      "Annandale, VA",
+    "lake accotink park":             "Springfield, VA",
+    "madison community center":       "Annandale, VA",
+    "manassas national battlefield":  "Manassas, VA",
+    "mount vernon":                   "Alexandria, VA",
+    "potomac overlook":               "Arlington, VA",
+    "sully historic site":            "Chantilly, VA",
+    "toy nest":                       "Falls Church, VA",
 }
 
 # Mapping from normalized county name → full regional qualifier
@@ -281,7 +403,8 @@ def _build_geo_queries(
     candidates: list[str] = []
 
     addr = _normalize_geo_query(location_address or "")
-    name = _normalize_geo_query(location_name or "")
+    # Strip sub-venue room/area suffixes before geocoding (e.g. "Library, Meeting Room 1")
+    name = _normalize_geo_query(_strip_room_suffix(location_name or ""))
 
     county_lower = (county or "").lower().strip()
     county_region = _COUNTY_TO_REGION.get(county_lower, "")

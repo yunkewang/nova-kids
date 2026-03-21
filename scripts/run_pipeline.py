@@ -649,10 +649,35 @@ def main(argv: list[str] | None = None) -> int:
     if args.use_dullesmoms or args.reprocess:
         print(f"    Manual review:      {n_manual_review}")
     print(f"    Duplicates removed: {n_duplicates_removed}")
+
+    # Address & map quality stats
+    n_with_address = sum(1 for e in events if e.location_address)
+    n_with_city    = sum(1 for e in events if e.city)
+    n_with_coords  = sum(1 for e in events if e.latitude is not None)
+    n_mappable     = sum(1 for e in events if e.is_mappable)
+    n_virtual      = sum(1 for e in events if "virtual" in (e.tags or []))
+    print(f"\n  Address & map quality:")
+    print(f"    Events with address:    {n_with_address}/{len(events)}")
+    print(f"    Events with city:       {n_with_city}/{len(events)}")
+    print(f"    Events with coords:     {n_with_coords}/{len(events)}")
+    print(f"    Mappable events:        {n_mappable}/{len(events)}")
+    print(f"    Virtual (non-map):      {n_virtual}")
+
     if geo_stats is not None:
-        pct = geo_stats.total_with_coords / geo_stats.total * 100 if geo_stats.total else 0
-        print(f"    With coordinates:   {geo_stats.total_with_coords}/{geo_stats.total} ({pct:.0f}% mappable)")
-    print(f"    Sources:            {', '.join(s['name'] for s in sources)}\n")
+        pct = geo_stats.total_mappable / geo_stats.total * 100 if geo_stats.total else 0
+        print(f"    Newly geocoded:        {geo_stats.newly_geocoded}")
+        print(f"    Cache hits:            {geo_stats.cache_hits}")
+        print(f"    Failed geocodes:       {geo_stats.failed}")
+        print(f"    Map coverage:          {geo_stats.total_mappable}/{geo_stats.total} ({pct:.0f}%)")
+
+    # Source breakdown
+    source_counts: dict[str, int] = {}
+    for e in events:
+        source_counts[e.source_name] = source_counts.get(e.source_name, 0) + 1
+    print(f"\n  Events by source:")
+    for name, count in sorted(source_counts.items(), key=lambda x: -x[1]):
+        print(f"    {count:4d}  {name}")
+    print()
     return 0
 
 

@@ -852,5 +852,439 @@
     "longitude": -77.059018,
     "confidence": 0.9,
     "resolved_at": "2026-03-20T10:29:15.401196+00:00"
+  },
+  "Herndon Fortnightly Library, Herndon, VA": {
+    "query": "Herndon Fortnightly Library, Herndon, VA",
+    "latitude": 38.971831,
+    "longitude": -77.387103,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:39:56.670745+00:00"
+  },
+  "John Marshall Library, Falls Church, VA": {
+    "query": "John Marshall Library, Falls Church, VA",
+    "latitude": 38.892128,
+    "longitude": -77.148143,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:39:57.927874+00:00"
+  },
+  "Purcellville Library, Purcellville, Loudoun County, VA": {
+    "query": "Purcellville Library, Purcellville, Loudoun County, VA",
+    "latitude": 39.136262,
+    "longitude": -77.712443,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:39:58.893418+00:00"
+  },
+  "Kings Park Library, Kings Park Conference Room, Springfield, VA": {
+    "query": "Kings Park Library, Kings Park Conference Room, Springfield, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T01:39:59.942035+00:00"
+  },
+  "Kings Park Library, Kings Park Conference Room, Springfield, Fairfax County, VA": {
+    "query": "Kings Park Library, Kings Park Conference Room, Springfield, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T01:40:01.146896+00:00"
+  },
+  "Kings Park Library, Kings Park Conference Room, Fairfax County, VA": {
+    "query": "Kings Park Library, Kings Park Conference Room, Fairfax County, VA",
+    "latitude": 38.807458,
+    "longitude": -77.256624,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:02.282943+00:00"
+  },
+  "Columbia Pike Library, Drew Room, Arlington, Arlington County, VA": {
+    "query": "Columbia Pike Library, Drew Room, Arlington, Arlington County, VA",
+    "latitude": 38.864693,
+    "longitude": -77.087937,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:03.520389+00:00"
+  },
+  "Burke Centre Library, Burke, VA": {
+    "query": "Burke Centre Library, Burke, VA",
+    "latitude": 38.787004,
+    "longitude": -77.317037,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:04.516805+00:00"
+  },
+  "Reston Regional Library, Reston, VA": {
+    "query": "Reston Regional Library, Reston, VA",
+    "latitude": 38.961469,
+    "longitude": -77.358505,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:05.491615+00:00"
+  },
+  "Herndon Fortnightly Library, Herndon Fortnightly Maker Lab, Herndon, VA": {
+    "query": "Herndon Fortnightly Library, Herndon Fortnightly Maker Lab, Herndon, VA",
+    "latitude": 38.971831,
+    "longitude": -77.387103,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:06.604999+00:00"
+  },
+  "Centreville Regional Library, Centreville, VA": {
+    "query": "Centreville Regional Library, Centreville, VA",
+    "latitude": 38.83746,
+    "longitude": -77.440858,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:07.604926+00:00"
+  },
+  "Thomas Jefferson Library, Thomas Jefferson Meeting Room 1, Thomas Jefferson Meeting Room 2, Falls Church, VA": {
+    "query": "Thomas Jefferson Library, Thomas Jefferson Meeting Room 1, Thomas Jefferson Meeting Room 2, Falls Church, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T01:40:08.762255+00:00"
+  },
+  "Thomas Jefferson Library, Thomas Jefferson Meeting Room 1, Thomas Jefferson Meeting Room 2, Falls Church, Fairfax County, VA": {
+    "query": "Thomas Jefferson Library, Thomas Jefferson Meeting Room 1, Thomas Jefferson Meeting Room 2, Falls Church, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T01:40:10.088161+00:00"
+  },
+  "Thomas Jefferson Library, Thomas Jefferson Meeting Room 1, Thomas Jefferson Meeting Room 2, Fairfax County, VA": {
+    "query": "Thomas Jefferson Library, Thomas Jefferson Meeting Room 1, Thomas Jefferson Meeting Room 2, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T01:40:11.257462+00:00"
+  },
+  "Centreville Regional Library, Centreville Conference Room, Centreville, VA": {
+    "query": "Centreville Regional Library, Centreville Conference Room, Centreville, VA",
+    "latitude": 38.83746,
+    "longitude": -77.440858,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:12.520680+00:00"
+  },
+  "City of Fairfax Regional Library, Fairfax, Fairfax County, VA": {
+    "query": "City of Fairfax Regional Library, Fairfax, Fairfax County, VA",
+    "latitude": 38.846964,
+    "longitude": -77.303717,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:13.627401+00:00"
+  },
+  "Aurora Hills Library, Eads Room, Arlington, Arlington County, VA": {
+    "query": "Aurora Hills Library, Eads Room, Arlington, Arlington County, VA",
+    "latitude": 38.85749,
+    "longitude": -77.059018,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:14.730577+00:00"
+  },
+  "Oakton Library, Oakton Conference Room, Oakton, Fairfax County, VA": {
+    "query": "Oakton Library, Oakton Conference Room, Oakton, Fairfax County, VA",
+    "latitude": 38.883948,
+    "longitude": -77.302518,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:15.900920+00:00"
+  },
+  "Lorton Library, Lorton Meeting Room, Lorton, VA": {
+    "query": "Lorton Library, Lorton Meeting Room, Lorton, VA",
+    "latitude": 38.698706,
+    "longitude": -77.21364,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:17.074991+00:00"
+  },
+  "Herndon Fortnightly Library, Herndon Fortnightly Conference Room, Herndon, VA": {
+    "query": "Herndon Fortnightly Library, Herndon Fortnightly Conference Room, Herndon, VA",
+    "latitude": 38.971831,
+    "longitude": -77.387103,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:18.286062+00:00"
+  },
+  "Westover Library, Arlington, Arlington County, VA": {
+    "query": "Westover Library, Arlington, Arlington County, VA",
+    "latitude": 38.88642,
+    "longitude": -77.142146,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:19.260942+00:00"
+  },
+  "Oakton Library, Oakton Meeting Room 1, Oakton Meeting Room 2, Oakton, Fairfax County, VA": {
+    "query": "Oakton Library, Oakton Meeting Room 1, Oakton Meeting Room 2, Oakton, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T01:40:20.454627+00:00"
+  },
+  "Oakton Library, Oakton Meeting Room 1, Oakton Meeting Room 2, Oakton, VA": {
+    "query": "Oakton Library, Oakton Meeting Room 1, Oakton Meeting Room 2, Oakton, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T01:40:21.643758+00:00"
+  },
+  "Oakton Library, Oakton Meeting Room 1, Oakton Meeting Room 2, Fairfax County, VA": {
+    "query": "Oakton Library, Oakton Meeting Room 1, Oakton Meeting Room 2, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T01:40:22.737938+00:00"
+  },
+  "Great Falls Library, Great Falls Meeting Room, Great Falls, VA": {
+    "query": "Great Falls Library, Great Falls Meeting Room, Great Falls, VA",
+    "latitude": 38.998321,
+    "longitude": -77.286956,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:23.905629+00:00"
+  },
+  "Westover Library, Longfellow Room, Arlington, Arlington County, VA": {
+    "query": "Westover Library, Longfellow Room, Arlington, Arlington County, VA",
+    "latitude": 38.88642,
+    "longitude": -77.142146,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:25.082582+00:00"
+  },
+  "Glencarlyn Library, Arlington, Arlington County, VA": {
+    "query": "Glencarlyn Library, Arlington, Arlington County, VA",
+    "latitude": 38.863589,
+    "longitude": -77.125889,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:26.106855+00:00"
+  },
+  "Ellen Coolidge Burke Branch Library, Burke, Fairfax County, VA": {
+    "query": "Ellen Coolidge Burke Branch Library, Burke, Fairfax County, VA",
+    "latitude": 38.827778,
+    "longitude": -77.109847,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:27.371863+00:00"
+  },
+  "Cascades Library, Sterling, VA": {
+    "query": "Cascades Library, Sterling, VA",
+    "latitude": 39.033231,
+    "longitude": -77.394802,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:28.377398+00:00"
+  },
+  "Charles E. Beatley Jr. Central Library": {
+    "query": "Charles E. Beatley Jr. Central Library",
+    "latitude": 38.812399,
+    "longitude": -77.117499,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:29.357812+00:00"
+  },
+  "Rust Library, Leesburg, VA": {
+    "query": "Rust Library, Leesburg, VA",
+    "latitude": 39.123555,
+    "longitude": -77.567719,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:30.366775+00:00"
+  },
+  "Ashburn Library, Ashburn, VA": {
+    "query": "Ashburn Library, Ashburn, VA",
+    "latitude": 39.045355,
+    "longitude": -77.502981,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:31.333132+00:00"
+  },
+  "Brambleton Library, Ashburn, VA": {
+    "query": "Brambleton Library, Ashburn, VA",
+    "latitude": 38.984875,
+    "longitude": -77.536346,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:32.490244+00:00"
+  },
+  "Gum Spring Library, Aldie, VA": {
+    "query": "Gum Spring Library, Aldie, VA",
+    "latitude": 38.937744,
+    "longitude": -77.545799,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:33.513805+00:00"
+  },
+  "Kate Waller Barrett Branch Library": {
+    "query": "Kate Waller Barrett Branch Library",
+    "latitude": 38.80782,
+    "longitude": -77.047153,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:34.491358+00:00"
+  },
+  "Lovettsville Library, Lovettsville, VA": {
+    "query": "Lovettsville Library, Lovettsville, VA",
+    "latitude": 39.274253,
+    "longitude": -77.635539,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:35.554040+00:00"
+  },
+  "Middleburg Library, Middleburg, VA": {
+    "query": "Middleburg Library, Middleburg, VA",
+    "latitude": 38.968423,
+    "longitude": -77.740615,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:36.533224+00:00"
+  },
+  "Sterling Library, Sterling, VA": {
+    "query": "Sterling Library, Sterling, VA",
+    "latitude": 38.997826,
+    "longitude": -77.406757,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:37.518685+00:00"
+  },
+  "New venue Rust Library, Leesburg, VA": {
+    "query": "New venue Rust Library, Leesburg, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T01:40:38.563462+00:00"
+  },
+  "New venue Rust Library, Leesburg, Loudoun County, VA": {
+    "query": "New venue Rust Library, Leesburg, Loudoun County, VA",
+    "latitude": 39.123555,
+    "longitude": -77.567719,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:39.686476+00:00"
+  },
+  "James M. Duncan Jr. Branch Library": {
+    "query": "James M. Duncan Jr. Branch Library",
+    "latitude": 38.82781,
+    "longitude": -77.060611,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:40:40.680802+00:00"
+  },
+  "Riverbend Park, Great Falls, VA, Great Falls, Fairfax County, VA": {
+    "query": "Riverbend Park, Great Falls, VA, Great Falls, Fairfax County, VA",
+    "latitude": 39.019381,
+    "longitude": -77.250295,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:10.654751+00:00"
+  },
+  "Turner Farm, Great Falls, VA, Great Falls, Fairfax County, VA": {
+    "query": "Turner Farm, Great Falls, VA, Great Falls, Fairfax County, VA",
+    "latitude": 38.996326,
+    "longitude": -77.312158,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:11.725595+00:00"
+  },
+  "Huntley Meadows Park, Alexandria, VA, Alexandria, Alexandria County, VA": {
+    "query": "Huntley Meadows Park, Alexandria, VA, Alexandria, Alexandria County, VA",
+    "latitude": 38.752583,
+    "longitude": -77.107518,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:12.779935+00:00"
+  },
+  "Burke Lake Park, Burke, VA, Burke, Fairfax County, VA": {
+    "query": "Burke Lake Park, Burke, VA, Burke, Fairfax County, VA",
+    "latitude": 38.762479,
+    "longitude": -77.291917,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:13.757199+00:00"
+  },
+  "Lake Accotink Park, Springfield, VA, Springfield, VA": {
+    "query": "Lake Accotink Park, Springfield, VA, Springfield, VA",
+    "latitude": 38.801697,
+    "longitude": -77.228921,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:14.722085+00:00"
+  },
+  "Hidden Oaks Nature Center, Annandale, VA, Annandale, VA": {
+    "query": "Hidden Oaks Nature Center, Annandale, VA, Annandale, VA",
+    "latitude": 38.839401,
+    "longitude": -77.212315,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:15.698355+00:00"
+  },
+  "Frying Pan Farm Park, Herndon, VA, Herndon, VA": {
+    "query": "Frying Pan Farm Park, Herndon, VA, Herndon, VA",
+    "latitude": 38.936855,
+    "longitude": -77.413934,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:16.764843+00:00"
+  },
+  "Colvin Run Mill, Great Falls, VA, Great Falls, Fairfax County, VA": {
+    "query": "Colvin Run Mill, Great Falls, VA, Great Falls, Fairfax County, VA",
+    "latitude": 38.969065,
+    "longitude": -77.293318,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:17.743823+00:00"
+  },
+  "Green Spring Gardens, Alexandria, VA, Alexandria, Alexandria County, VA": {
+    "query": "Green Spring Gardens, Alexandria, VA, Alexandria, Alexandria County, VA",
+    "latitude": 38.82456,
+    "longitude": -77.157423,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:18.726210+00:00"
+  },
+  "Ellanor C. Lawrence Park, Chantilly, VA, Chantilly, VA": {
+    "query": "Ellanor C. Lawrence Park, Chantilly, VA, Chantilly, VA",
+    "latitude": 38.858536,
+    "longitude": -77.424687,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:19.725291+00:00"
+  },
+  "Historic Huntley, Alexandria, VA, Alexandria, Alexandria County, VA": {
+    "query": "Historic Huntley, Alexandria, VA, Alexandria, Alexandria County, VA",
+    "latitude": 38.765927,
+    "longitude": -77.095006,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:20.740579+00:00"
+  },
+  "Sully Historic Site, Chantilly, VA, Chantilly, VA": {
+    "query": "Sully Historic Site, Chantilly, VA, Chantilly, VA",
+    "latitude": 38.908094,
+    "longitude": -77.429375,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:21.740359+00:00"
+  },
+  "Hidden Pond Nature Center, Springfield, VA, Springfield, Fairfax County, VA": {
+    "query": "Hidden Pond Nature Center, Springfield, VA, Springfield, Fairfax County, VA",
+    "latitude": 38.772286,
+    "longitude": -77.23874,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:45:22.751201+00:00"
+  },
+  "Kings Park Library, Springfield, VA": {
+    "query": "Kings Park Library, Springfield, VA",
+    "latitude": 38.763472,
+    "longitude": -77.155439,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:47:26.645393+00:00"
+  },
+  "Thomas Jefferson Library, Falls Church, VA": {
+    "query": "Thomas Jefferson Library, Falls Church, VA",
+    "latitude": 38.865428,
+    "longitude": -77.201712,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:47:27.650863+00:00"
+  },
+  "Courthouse Library": {
+    "query": "Courthouse Library",
+    "latitude": 38.890554,
+    "longitude": -77.085362,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:47:28.680168+00:00"
+  },
+  "Central Library": {
+    "query": "Central Library",
+    "latitude": 38.88385,
+    "longitude": -77.107078,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:47:29.793800+00:00"
+  },
+  "Martha Washington Library": {
+    "query": "Martha Washington Library",
+    "latitude": 38.773059,
+    "longitude": -77.062834,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:47:30.789248+00:00"
+  },
+  "Oakton Library, Oakton, Fairfax County, VA": {
+    "query": "Oakton Library, Oakton, Fairfax County, VA",
+    "latitude": 38.883948,
+    "longitude": -77.302518,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:47:31.767331+00:00"
+  },
+  "Lorton Library, Lorton, VA": {
+    "query": "Lorton Library, Lorton, VA",
+    "latitude": 38.698706,
+    "longitude": -77.21364,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:47:32.746435+00:00"
+  },
+  "Great Falls Library, Great Falls, VA": {
+    "query": "Great Falls Library, Great Falls, VA",
+    "latitude": 38.998321,
+    "longitude": -77.286956,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T01:47:33.746270+00:00"
   }
 }

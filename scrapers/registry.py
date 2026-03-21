@@ -10,21 +10,27 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from scrapers.alexandria_library import AlexandriaLibraryScraper
 from scrapers.arlington_library import ArlingtonLibraryScraper
 from scrapers.arlington_parks import ArlingtonParksRecScraper
 from scrapers.base import BaseScraper
 from scrapers.fairfax_library import FairfaxLibraryScraper
 from scrapers.fairfax_parks import FairfaxParksAuthorityScraper
+from scrapers.loudoun_library import LoudounLibraryScraper
+from scrapers.nova_parks import NoVAParksScraper
 
 if TYPE_CHECKING:
     pass
 
 # Maps source_id -> scraper class (not instance)
 SCRAPERS: dict[str, type[BaseScraper]] = {
-    "fairfax_park_authority": FairfaxParksAuthorityScraper,
-    "arlington_parks_rec": ArlingtonParksRecScraper,
-    "fairfax_county_library": FairfaxLibraryScraper,
+    "fairfax_park_authority":  FairfaxParksAuthorityScraper,
+    "arlington_parks_rec":     ArlingtonParksRecScraper,
+    "fairfax_county_library":  FairfaxLibraryScraper,
     "arlington_public_library": ArlingtonLibraryScraper,
+    "loudoun_county_library":  LoudounLibraryScraper,
+    "alexandria_library":      AlexandriaLibraryScraper,
+    "nova_parks":              NoVAParksScraper,
 }
 
 

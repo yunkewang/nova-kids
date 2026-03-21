@@ -11,6 +11,7 @@ Event cards: div.events-list.views-row
 from __future__ import annotations
 
 import logging
+import re
 from typing import Any
 from urllib.parse import urljoin
 
@@ -23,6 +24,43 @@ logger = logging.getLogger(__name__)
 BASE_URL = "https://www.fairfaxcounty.gov"
 EVENTS_URL = f"{BASE_URL}/parks/park-events-calendar"
 MAX_PAGES = 10  # safety cap
+
+# Map URL path slugs to canonical venue names used by geocode.py / known_venues.py
+_PARK_SLUG_TO_VENUE: dict[str, str] = {
+    "riverbend":          "Riverbend Park, Great Falls, VA",
+    "eclawrence":         "Ellanor C. Lawrence Park, Chantilly, VA",
+    "frying-pan-park":    "Frying Pan Farm Park, Herndon, VA",
+    "burke-lake":         "Burke Lake Park, Burke, VA",
+    "green-spring":       "Green Spring Gardens, Alexandria, VA",
+    "lake-accotink":      "Lake Accotink Park, Springfield, VA",
+    "huntley-meadows":    "Huntley Meadows Park, Alexandria, VA",
+    "hidden-oaks":        "Hidden Oaks Nature Center, Annandale, VA",
+    "hidden-pond":        "Hidden Pond Nature Center, Springfield, VA",
+    "colvin-run-mill":    "Colvin Run Mill, Great Falls, VA",
+    "turner-farm":        "Turner Farm, Great Falls, VA",
+    "historic-huntley":   "Historic Huntley, Alexandria, VA",
+    "sully-historic-site":"Sully Historic Site, Chantilly, VA",
+    "reston-nature-center":"Reston Nature Center, Reston, VA",
+    "meadowlark":         "Meadowlark Botanical Gardens, Vienna, VA",
+    "oak-marr":           "Oak Marr Recreation Center, Oakton, VA",
+    "spring-hill":        "Spring Hill Recreation Center, McLean, VA",
+    "south-run":          "South Run Recreation Center, Springfield, VA",
+    "cub-run":            "Cub Run Recreation Center, Chantilly, VA",
+    "lee-district":       "Lee District Recreation Center, Springfield, VA",
+    "audrey-moore":       "Audrey Moore Recreation Center, Annandale, VA",
+    "franconia":          "Franconia Recreation Center, Springfield, VA",
+}
+
+_PARK_SLUG_RE = re.compile(r"/parks/([^/]+)/")
+
+
+def _venue_from_url(url: str) -> str | None:
+    """Extract a venue name hint from the Fairfax Parks URL path slug."""
+    m = _PARK_SLUG_RE.search(url)
+    if not m:
+        return None
+    slug = m.group(1)
+    return _PARK_SLUG_TO_VENUE.get(slug)
 
 
 class FairfaxParksAuthorityScraper(BaseScraper):
@@ -81,12 +119,15 @@ class FairfaxParksAuthorityScraper(BaseScraper):
         desc_el = card.select_one("div.calendar-description")
         summary_text = desc_el.get_text(strip=True) if desc_el else None
 
+        # Derive venue from URL slug — the list view has no dedicated location element
+        location_text = _venue_from_url(event_url)
+
         return {
-            "source_id": self.source_id,
-            "source_name": self.source_name,
-            "source_url": event_url,
-            "title": title,
-            "date_text": date_text,
-            "location_text": None,   # not present in list view
-            "summary_text": summary_text,
+            "source_id":     self.source_id,
+            "source_name":   self.source_name,
+            "source_url":    event_url,
+            "title":         title,
+            "date_text":     date_text,
+            "location_text": location_text,
+            "summary_text":  summary_text,
         }

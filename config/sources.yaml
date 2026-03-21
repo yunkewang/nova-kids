@@ -8,6 +8,8 @@
 # -----------------------------------------------------------------------
 
 sources:
+  # ── Fairfax County ──────────────────────────────────────────────────────
+
   - id: fairfax_park_authority
     name: Fairfax County Park Authority
     source_type: html
@@ -16,16 +18,6 @@ sources:
     notes: >
       Drupal Views events calendar. Paginated via ?park-events-calendar=&page=N.
       Stops when no a[rel='next'] link is present.
-
-  - id: arlington_parks_rec
-    name: Arlington County Parks & Recreation
-    source_type: html
-    base_url: https://www.arlingtonva.us/Government/Departments/Parks-Recreation/Parks-Events
-    enabled: true
-    notes: >
-      Sitecore CMS. Only page 1 (~10 events) is accessible via GET.
-      Pagination uses encrypted __SEAMLESSVIEWSTATE — cannot be driven externally.
-      Akamai blocks browser UAs; pipeline UA (NoVAKidsPipeline/1.0) is allowed.
 
   - id: fairfax_county_library
     name: Fairfax County Public Library
@@ -37,6 +29,18 @@ sources:
       Audience IDs: 2185 (School Age), 2186 (Preschoolers), 2187 (Babies/Toddlers).
       Requires X-Requested-With: XMLHttpRequest header.
 
+  # ── Arlington County ─────────────────────────────────────────────────────
+
+  - id: arlington_parks_rec
+    name: Arlington County Parks & Recreation
+    source_type: html
+    base_url: https://www.arlingtonva.us/Government/Departments/Parks-Recreation/Parks-Events
+    enabled: true
+    notes: >
+      Sitecore CMS. Only page 1 (~10 events) is accessible via GET.
+      Pagination uses encrypted __SEAMLESSVIEWSTATE — cannot be driven externally.
+      Akamai blocks browser UAs; pipeline UA (NoVAKidsPipeline/1.0) is allowed.
+
   - id: arlington_public_library
     name: Arlington Public Library
     source_type: api
@@ -46,6 +50,54 @@ sources:
       LibCal (SpringShare) AJAX API. Calendar ID 12881.
       Audience IDs: 176 (Babies/Preschoolers), 177 (Elementary), 173 (Families).
       Requires X-Requested-With: XMLHttpRequest header.
+
+  # ── Loudoun County ───────────────────────────────────────────────────────
+
+  - id: loudoun_county_library
+    name: Loudoun County Public Library
+    source_type: html
+    base_url: https://loudoun.libnet.info/event-calendar
+    enabled: true
+    notes: >
+      Communico/LibNet platform at loudoun.libnet.info.
+      HTML scraper — the event-calendar page SSR-renders ~30 days of events
+      in .amev-event blocks without requiring JavaScript execution.
+      Client-side family keyword filter applied.
+      Branches: Ashburn, Blue Ridge, Brambleton, Cascades (Sterling),
+      Gum Spring (Aldie), Lovettsville, Middleburg, Rust (Leesburg), Sterling.
+
+  # ── City of Alexandria ──────────────────────────────────────────────────
+
+  - id: alexandria_library
+    name: Alexandria Library
+    source_type: html
+    base_url: https://alexandria.libnet.info/kids
+    enabled: true
+    notes: >
+      Communico/LibNet platform at alexandria.libnet.info.
+      HTML scraper targeting the /kids page which pre-selects family and
+      children's events — SSR'd in .amev-event blocks.
+      Branches: Beatley Central, Barrett, Ellen Coolidge Burke, Duncan.
+
+  # ── Regional (Multi-County) ──────────────────────────────────────────────
+
+  - id: nova_parks
+    name: NOVA Parks
+    source_type: html
+    base_url: https://www.novaparks.com/events
+    enabled: false
+    notes: >
+      Northern Virginia Regional Park Authority (NVRPA) public events listing.
+      DISABLED: The events calendar at novaparks.com is fully JavaScript-rendered
+      via Drupal Views AJAX. The SSR page contains only navigation links and
+      promoted festivals — no event rows are accessible without executing JS.
+      Re-enable only if a Playwright/headless-browser scraper is added, or if
+      a public JSON/RSS API becomes available.
+      Covers parks in Fairfax, Arlington, Loudoun, and Prince William counties:
+      Bull Run Regional Park, Lake Fairfax Park, Meadowlark Botanical Gardens,
+      Algonkian Regional Park, Occoquan Regional Park, Fountainhead Regional Park.
+
+  # ── Disabled / Requires API Key ──────────────────────────────────────────
 
   - id: eventbrite_nova_family
     name: Eventbrite — Northern Virginia Family Events

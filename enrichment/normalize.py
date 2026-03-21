@@ -36,12 +36,27 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 _COUNTY_KEYWORDS: dict[str, list[str]] = {
-    "Fairfax": ["fairfax", "reston", "herndon", "mclean", "annandale", "springfield",
-                "centreville", "chantilly", "vienna", "falls church"],
+    "Fairfax": [
+        "fairfax", "reston", "herndon", "mclean", "annandale", "springfield",
+        "centreville", "chantilly", "vienna", "falls church", "lorton",
+        "oakton", "burke", "great falls", "clifton", "tyson", "mclean",
+        "franconia", "hybla valley", "newington", "mount vernon",
+    ],
     "Arlington": ["arlington"],
-    "Loudoun": ["loudoun", "leesburg", "ashburn", "sterling", "lansdowne"],
-    "Prince William": ["prince william", "manassas", "woodbridge", "dale city"],
+    "Loudoun": [
+        "loudoun", "leesburg", "ashburn", "sterling", "lansdowne",
+        "purcellville", "aldie", "dulles", "brambleton", "south riding",
+        "lovettsville", "middleburg", "hamilton", "lucketts", "bluemont",
+        "broadlands", "belmont ridge",
+    ],
+    "Prince William": [
+        "prince william", "manassas", "woodbridge", "dale city",
+        "dumfries", "triangle", "montclair", "bristow", "haymarket",
+        "nokesville", "lake ridge", "independent hill",
+    ],
     "Alexandria": ["alexandria"],
+    # Note: DC venues are handled by known_venues.py / _KNOWN_VENUE_HINTS;
+    # not inferred here to avoid false city-name matches.
 }
 
 # ---------------------------------------------------------------------------
