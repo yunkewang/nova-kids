@@ -1286,5 +1286,103 @@
     "longitude": -77.286956,
     "confidence": 0.9,
     "resolved_at": "2026-03-21T01:47:33.746270+00:00"
+  },
+  "Pohick Regional Library, Lorton, VA": {
+    "query": "Pohick Regional Library, Lorton, VA",
+    "latitude": 38.678859,
+    "longitude": -77.190496,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T10:16:49.032889+00:00"
+  },
+  "Dolley Madison Library, McLean, VA": {
+    "query": "Dolley Madison Library, McLean, VA",
+    "latitude": 38.924531,
+    "longitude": -77.210104,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T10:16:49.996628+00:00"
+  },
+  "Richard Byrd Library, Springfield, VA": {
+    "query": "Richard Byrd Library, Springfield, VA",
+    "latitude": 38.77951,
+    "longitude": -77.192137,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T10:16:51.103249+00:00"
+  },
+  "Central Library, Lobby": {
+    "query": "Central Library, Lobby",
+    "latitude": 38.88385,
+    "longitude": -77.107078,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T10:16:52.187637+00:00"
+  },
+  "Pohick Regional Library, PO DIY, Lorton, VA": {
+    "query": "Pohick Regional Library, PO DIY, Lorton, VA",
+    "latitude": 38.678859,
+    "longitude": -77.190496,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T10:16:53.190250+00:00"
+  },
+  "Columbia Pike Library, Arlington, Arlington County, VA": {
+    "query": "Columbia Pike Library, Arlington, Arlington County, VA",
+    "latitude": 38.864693,
+    "longitude": -77.087937,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T10:16:54.268445+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Falls Church, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Falls Church, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T10:16:55.616342+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Tyson, Fairfax County, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Tyson, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T10:16:56.915821+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Tyson, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Tyson, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T10:16:57.985889+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Fairfax County, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T10:16:59.070447+00:00"
+  },
+  "Mason Exhibitions Arlington, 3601 Fairfax Drive, Arlington VA, Fairfax": {
+    "query": "Mason Exhibitions Arlington, 3601 Fairfax Drive, Arlington VA, Fairfax",
+    "latitude": 38.885088,
+    "longitude": -77.101027,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-21T10:17:00.119716+00:00"
+  },
+  "Central Library, Bluemont Room, Bluemont, Loudoun County, VA": {
+    "query": "Central Library, Bluemont Room, Bluemont, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T10:17:01.071967+00:00"
+  },
+  "Central Library, Bluemont Room, Bluemont, VA": {
+    "query": "Central Library, Bluemont Room, Bluemont, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T10:17:02.212439+00:00"
+  },
+  "Central Library, Bluemont Room, Loudoun County, VA": {
+    "query": "Central Library, Bluemont Room, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-21T10:17:03.298739+00:00"
   }
 }
