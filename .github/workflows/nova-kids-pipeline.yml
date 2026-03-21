@@ -90,9 +90,10 @@ jobs:
           print(f"Latest week  : {latest}")
           print(f"Event count  : {count}")
 
-          # Require at least 10 events before allowing a commit.
-          # This prevents a broken scraper run from overwriting good data.
-          MIN_EVENTS = 10
+          # Require at least 100 events before allowing a commit.
+          # Pipeline now scrapes 6 sources; 100 is a safe floor that catches
+          # total scraper failures while allowing for genuinely quiet weeks.
+          MIN_EVENTS = 100
           if count < MIN_EVENTS:
               print(f"FAIL: only {count} events published (minimum {MIN_EVENTS}).")
               print("Pipeline output will NOT be committed to protect existing data.")
