@@ -1384,5 +1384,33 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-03-21T10:17:03.298739+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Falls Church, VA": {
+    "query": "Tysons-Pimmit Regional Library, Falls Church, VA",
+    "latitude": 38.906937,
+    "longitude": -77.206436,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-22T10:17:29.393703+00:00"
+  },
+  "George Mason Regional Library, Annandale, VA": {
+    "query": "George Mason Regional Library, Annandale, VA",
+    "latitude": 38.827363,
+    "longitude": -77.186767,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-22T10:17:30.312753+00:00"
+  },
+  "Chantilly Regional Library, Chantilly, VA": {
+    "query": "Chantilly Regional Library, Chantilly, VA",
+    "latitude": 38.882637,
+    "longitude": -77.408189,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-22T10:17:31.467722+00:00"
+  },
+  "Sherwood Regional Library, Alexandria, VA": {
+    "query": "Sherwood Regional Library, Alexandria, VA",
+    "latitude": 38.74346,
+    "longitude": -77.074866,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-22T10:17:32.580720+00:00"
   }
 }
