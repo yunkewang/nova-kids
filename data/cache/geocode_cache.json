@@ -1412,5 +1412,12 @@
     "longitude": -77.074866,
     "confidence": 0.9,
     "resolved_at": "2026-03-22T10:17:32.580720+00:00"
+  },
+  "Cherrydale Library, Loft, Arlington, Arlington County, VA": {
+    "query": "Cherrydale Library, Loft, Arlington, Arlington County, VA",
+    "latitude": 38.898717,
+    "longitude": -77.109269,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-23T10:44:05.388400+00:00"
   }
 }
