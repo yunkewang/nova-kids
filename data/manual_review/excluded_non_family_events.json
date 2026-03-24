@@ -1,0 +1,37 @@
+[
+  {
+    "id": "b34c3bcc1247169c",
+    "title": "Free Tax Preparation Assistance at Central",
+    "source_name": "Arlington Public Library",
+    "source_url": "https://arlingtonva.libcal.com/event/16104574",
+    "start": "2026-03-24T10:00:00",
+    "summary": "For taxpayers of low and moderate income IRS-certified tax counselors will prepare your return for free. At Central Library: Feb. 3 through Apr. 14 Appointments recommended, walk-ins welcome To...",
+    "family_relevance_score": 0.15,
+    "family_relevance_label": "adult_service",
+    "tags": [
+      "free",
+      "hiking",
+      "indoor",
+      "morning",
+      "weekday"
+    ],
+    "location_name": "Central Library, Quincy Room"
+  },
+  {
+    "id": "c4e3aca7f8cce1fd",
+    "title": "Free Tax Preparation Assistance at Columbia Pike",
+    "source_name": "Arlington Public Library",
+    "source_url": "https://arlingtonva.libcal.com/event/14990205",
+    "start": "2026-03-24T12:00:00",
+    "summary": "For taxpayers of low and moderate income IRS-certified tax counselors will prepare your return for free. At Columbia Pike Branch Library, Jan. 30 through April 11: Tuesdays, 12:00 p.m. - 6:30...",
+    "family_relevance_score": 0.15,
+    "family_relevance_label": "adult_service",
+    "tags": [
+      "afternoon",
+      "free",
+      "indoor",
+      "weekday"
+    ],
+    "location_name": "Columbia Pike Library, Drew Room"
+  }
+]

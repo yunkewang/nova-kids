@@ -211,10 +211,107 @@ def _sync_public() -> None:
 
 
 # ---------------------------------------------------------------------------
+# Family relevance filter
+# ---------------------------------------------------------------------------
+
+def _filter_for_family_feed(
+    events: list[Event],
+    dry_run: bool = False,
+) -> tuple[list[Event], list[Event]]:
+    """
+    Split *events* into (publish_list, excluded_list) based on family relevance.
+
+    Events whose family_relevance_score is below the publish threshold are
+    moved to the excluded list and written to
+    data/manual_review/excluded_non_family_events.json for audit.
+
+    Safety: if filtering would remove >50% of events, the function logs a
+    warning and returns all events unfiltered (to prevent an aggressive
+    regex change from silently gutting the feed).
+
+    Returns (to_publish, excluded).
+    """
+    from enrichment.family_relevance import PUBLISH_THRESHOLD
+    from config.settings import MANUAL_REVIEW_DIR
+
+    to_publish: list[Event] = []
+    excluded: list[Event] = []
+
+    for ev in events:
+        if ev.family_relevance_score >= PUBLISH_THRESHOLD:
+            to_publish.append(ev)
+        else:
+            excluded.append(ev)
+
+    # Safety guard — bail out if filter is too aggressive
+    if excluded and len(excluded) / len(events) > 0.50:
+        print(
+            f"\n  [WARN] Family relevance filter would remove {len(excluded)}/{len(events)} "
+            f"events ({len(excluded)*100//len(events)}%).\n"
+            f"  This exceeds the 50% safety threshold — filtering ABORTED to protect feed.\n"
+            f"  Review family_relevance.py thresholds or run with --dry-run first."
+        )
+        return events, []
+
+    # Write excluded events to manual review dir
+    if excluded and not dry_run:
+        report_path = MANUAL_REVIEW_DIR / "excluded_non_family_events.json"
+        report_records = [
+            {
+                "id": ev.id,
+                "title": ev.title,
+                "source_name": ev.source_name,
+                "source_url": ev.source_url,
+                "start": ev.start.isoformat() if ev.start else None,
+                "summary": ev.summary,
+                "family_relevance_score": ev.family_relevance_score,
+                "family_relevance_label": ev.family_relevance_label,
+                "tags": ev.tags,
+                "location_name": ev.location_name,
+            }
+            for ev in sorted(excluded, key=lambda e: e.family_relevance_score)
+        ]
+        report_path.write_text(
+            json.dumps(report_records, indent=2, default=str),
+            encoding="utf-8",
+        )
+        print(f"  Exclusion report: {report_path.name} ({len(report_records)} events)")
+
+    return to_publish, excluded
+
+
+def _print_filter_summary(
+    events_before: list[Event],
+    excluded: list[Event],
+) -> None:
+    """Print a brief family-relevance filter report to stdout."""
+    from collections import Counter
+    from enrichment.family_relevance import PUBLISH_THRESHOLD
+
+    if not excluded:
+        print(f"  Family filter:    0 excluded (threshold={PUBLISH_THRESHOLD})")
+        return
+
+    print(f"\n  Family relevance filter (threshold={PUBLISH_THRESHOLD}):")
+    print(f"    Candidate events:   {len(events_before)}")
+    print(f"    Published events:   {len(events_before) - len(excluded)}")
+    print(f"    Excluded events:    {len(excluded)}")
+
+    # Top exclusion reasons (from family_relevance_label — stored on Event now)
+    label_counts: Counter = Counter(ev.family_relevance_label for ev in excluded)
+    print(f"    Exclusion labels:   {dict(label_counts)}")
+
+    # Show up to 8 examples
+    print(f"    Examples excluded:")
+    for ev in sorted(excluded, key=lambda e: e.family_relevance_score)[:8]:
+        print(f"      [{ev.family_relevance_score:.2f}] {ev.title[:60]!r}  ({ev.source_name})")
+
+
+# ---------------------------------------------------------------------------
 # Repair mode
 # ---------------------------------------------------------------------------
 
-def _repair_published_week(week_start: date, dry_run: bool) -> int:
+def _repair_published_week(week_start: date, dry_run: bool, filter_non_family: bool = False) -> int:
     """
     Re-enrich and re-publish a previously published week JSON.
 
@@ -270,6 +367,12 @@ def _repair_published_week(week_start: date, dry_run: bool) -> int:
 
     repaired = deduplicate(repaired)
     print(f"[repair] After dedupe: {len(repaired)}")
+
+    # Optional family-relevance filter
+    if filter_non_family:
+        before_filter = list(repaired)
+        repaired, excluded = _filter_for_family_feed(repaired, dry_run=dry_run)
+        _print_filter_summary(before_filter, excluded)
 
     report = validate_events(repaired)
     print(f"[repair] {report.summary()}")
@@ -455,6 +558,19 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--filter-non-family",
+        action="store_true",
+        dest="filter_non_family",
+        help=(
+            "Exclude events below the family relevance threshold from the "
+            "published feed. Adult-service events (tax prep, legal clinics, "
+            "resume workshops, board meetings, etc.) are written to "
+            "data/manual_review/excluded_non_family_events.json instead. "
+            "Safe: aborts filtering if >50%% of events would be removed. "
+            "Combine with --repair-published-week to clean an existing week."
+        ),
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Skip writing published files.",
@@ -495,7 +611,11 @@ def main(argv: list[str] | None = None) -> int:
             )
         else:
             print(f"\n=== NoVA Kids Repair Mode: {repair_date} ===\n")
-            return _repair_published_week(repair_date, dry_run=args.dry_run)
+            return _repair_published_week(
+                repair_date,
+                dry_run=args.dry_run,
+                filter_non_family=getattr(args, "filter_non_family", False),
+            )
 
     # Parse --week-start
     target_week: date | None = None
@@ -614,6 +734,15 @@ def main(argv: list[str] | None = None) -> int:
         events, geo_stats = geocode_events(events, cache)
         geo_stats.print_summary()
 
+    # 4.5 Family relevance filter (optional)
+    n_excluded_non_family = 0
+    if getattr(args, "filter_non_family", False):
+        print("\n[fam] Family relevance filtering...")
+        before_filter = list(events)
+        events, excluded_nf = _filter_for_family_feed(events, dry_run=args.dry_run)
+        n_excluded_non_family = len(excluded_nf)
+        _print_filter_summary(before_filter, excluded_nf)
+
     # 5. Validate
     print("\n[4/5] Validating...")
     report = validate_events(events)
@@ -646,6 +775,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"    Discovered:         {n_discovered}")
         print(f"    Resolved:           {n_resolved}")
     print(f"    Published:          {len(events)}")
+    if n_excluded_non_family:
+        print(f"    Excluded (non-family): {n_excluded_non_family}")
     if args.use_dullesmoms or args.reprocess:
         print(f"    Manual review:      {n_manual_review}")
     print(f"    Duplicates removed: {n_duplicates_removed}")

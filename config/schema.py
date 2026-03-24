@@ -155,6 +155,24 @@ class Event(BaseModel):
         le=1.0,
         description="0–1 score derived from tags, cost, and audience fields.",
     )
+    family_relevance_score: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "0–1 relevance score estimating how appropriate this event is for the "
+            "family/children's activities feed. Events below the publish threshold "
+            "(0.30) are excluded from the published weekly JSON. "
+            "0 = clearly adult-service, 0.5 = neutral/unknown, 1 = clearly family."
+        ),
+    )
+    family_relevance_label: Optional[str] = Field(
+        default=None,
+        description=(
+            "Human-readable relevance label derived from family_relevance_score. "
+            "One of: 'family' | 'parent_oriented' | 'neutral' | 'adult_service'."
+        ),
+    )
     rainy_day_friendly: bool = Field(
         default=False,
         description="True when the event is suitable regardless of weather (indoor/virtual).",

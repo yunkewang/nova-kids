@@ -15,6 +15,7 @@ from typing import Any
 
 from config.known_venues import lookup_venue_multi
 from config.schema import ALLOWED_TAGS, CostType
+from enrichment.family_relevance import classify_family_relevance
 
 # ---------------------------------------------------------------------------
 # Keyword → tag mapping
@@ -52,7 +53,9 @@ _TAG_RULES: list[tuple[str, list[str]]] = [
                     r"\bskating\b", r"\bice\s+skating\b", r"\broller\b",
                     r"\bcheerleading\b", r"\bvolleyball\b", r"\bhockey\b"]),
     ("swim",       [r"\bswim\b", r"\bpool\b", r"\baquatic\b", r"\bwater\s+play\b"]),
-    ("hiking",     [r"\bhike\b", r"\bhiking\b", r"\bwalk\b", r"\btrail\b",
+    ("hiking",     [r"\bhike\b", r"\bhiking\b",
+                    r"\bwalk(?!\s*-?\s*in)\b",   # avoid "walk-in(s)"
+                    r"\btrail\b",
                     r"\bnature\s+walk\b", r"\bwilderness\b"]),
     ("nature",     [r"\bnature\b", r"\bwildlife\b", r"\bbird\b", r"\bplant\b",
                     r"\bforest\b", r"\becology\b", r"\bbutterfly\b", r"\binsect\b",
@@ -68,9 +71,8 @@ _TAG_RULES: list[tuple[str, list[str]]] = [
                     r"\blocomotive\b", r"\btrain\s+ride\b"]),
     ("museum",     [r"\bmuseum\b", r"\bexhibit\b", r"\bexhibition\b",
                     r"\bhistoric\b", r"\bheritage\b"]),
-    ("workshop",   [r"\bworkshop\b", r"\bclass\b", r"\bprogram\b", r"\bsession\b",
-                    r"\bwebinar\b", r"\bseminar\b", r"\bdemonstration\b",
-                    r"\btutorial\b", r"\binstruction\b"]),
+    ("workshop",   [r"\bworkshop\b", r"\bclass\b", r"\bwebinar\b", r"\bseminar\b",
+                    r"\bdemonstration\b", r"\btutorial\b", r"\binstruction\b"]),
     ("camp",       [r"\bcamp\b", r"\bsummer camp\b", r"\bday camp\b",
                     r"\bspring\s+break\s+camp\b", r"\bwinter\s+camp\b"]),
     ("festival",   [r"\bfestival\b", r"\bfair\b", r"\bcelebration\b",
@@ -384,8 +386,15 @@ def enrich_event(event_data: dict[str, Any]) -> dict[str, Any]:
 
     score = compute_family_friendly_score(event_data, tags)
 
+    # Family relevance classification (for family-feed filtering)
+    relevance = classify_family_relevance(event_data, tags)
+
     event_data["tags"] = tags
     event_data["rainy_day_friendly"] = rainy_day
     event_data["family_friendly_score"] = score
+    event_data["family_relevance_score"] = relevance["score"]
+    event_data["family_relevance_label"] = relevance["label"]
+    # Store reasons for debug reporting (not persisted to Event model — dropped by Pydantic)
+    event_data["_relevance_reasons"] = relevance["reasons"]
 
     return event_data
