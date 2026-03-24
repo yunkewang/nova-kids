@@ -308,10 +308,139 @@ def _print_filter_summary(
 
 
 # ---------------------------------------------------------------------------
+# Cost inference reporting helpers
+# ---------------------------------------------------------------------------
+
+def _print_cost_summary(events: list[Event]) -> None:
+    """Print a one-line cost breakdown to stdout."""
+    from collections import Counter
+    counts: Counter = Counter(e.cost_type for e in events)
+    total = len(events)
+    free    = counts.get("free", 0)
+    paid    = counts.get("paid", 0)
+    donation = counts.get("suggested_donation", 0)
+    unknown = counts.get("unknown", 0)
+    print(f"\n  Cost breakdown ({total} events):")
+    print(f"    Free:     {free:4d}  ({free / total * 100:.0f}%)" if total else "    Free:        0")
+    print(f"    Paid:     {paid:4d}")
+    print(f"    Donation: {donation:4d}")
+    print(f"    Unknown:  {unknown:4d}")
+
+
+def _print_cost_inference_detail(events: list[Event]) -> None:
+    """Print per-reason cost inference breakdown."""
+    from collections import Counter
+    from enrichment.normalize import infer_cost
+
+    reason_counts: Counter = Counter()
+    for e in events:
+        _, _, reason = infer_cost(
+            e.price_text if e.cost_type not in ("free",) else None,
+            e.summary,
+            source_name=e.source_name,
+            source_url=e.source_url,
+            location_name=e.location_name,
+            title=e.title,
+        )
+        reason_counts[reason] += 1
+
+    print("\n  Cost inference reasons:")
+    for reason, count in reason_counts.most_common():
+        print(f"    {count:4d}  {reason}")
+
+
+def _write_cost_inference_report(
+    repaired: list[Event],
+    old_cost: dict[str, str],
+    week_start: date,
+) -> None:
+    """
+    Write a JSON cost inference report to data/manual_review/cost_inference_report.json.
+
+    Includes before/after comparison, per-reason counts, and examples of
+    events that changed from unknown → free.
+    """
+    import json as _json
+    from collections import Counter
+    from enrichment.normalize import infer_cost
+    from config.settings import MANUAL_REVIEW_DIR
+
+    reason_counts: Counter = Counter()
+    changed_to_free: list[dict] = []
+    changed_to_paid: list[dict] = []
+
+    for e in repaired:
+        prev = old_cost.get(e.id, "unknown")
+        curr = e.cost_type if isinstance(e.cost_type, str) else e.cost_type.value
+
+        _, _, reason = infer_cost(
+            None if curr == "free" else e.price_text,
+            e.summary,
+            source_name=e.source_name,
+            source_url=e.source_url,
+            location_name=e.location_name,
+            title=e.title,
+        )
+        reason_counts[reason] += 1
+
+        if prev != curr:
+            entry = {
+                "id": e.id,
+                "title": e.title,
+                "source_name": e.source_name,
+                "location_name": e.location_name,
+                "cost_before": prev,
+                "cost_after": curr,
+                "price_text": e.price_text,
+                "reason": reason,
+            }
+            if prev != "free" and curr == "free":
+                changed_to_free.append(entry)
+            elif curr == "paid":
+                changed_to_paid.append(entry)
+
+    from collections import Counter as _Counter
+    new_cost_counts: _Counter = _Counter(
+        (e.cost_type if isinstance(e.cost_type, str) else e.cost_type.value)
+        for e in repaired
+    )
+
+    report = {
+        "week_start": week_start.isoformat(),
+        "total_events": len(repaired),
+        "cost_counts": dict(new_cost_counts),
+        "newly_inferred_free": len(changed_to_free),
+        "newly_inferred_paid": len(changed_to_paid),
+        "top_inference_reasons": reason_counts.most_common(),
+        "examples_changed_to_free": changed_to_free[:20],
+        "examples_changed_to_paid": changed_to_paid[:10],
+    }
+
+    report_path = MANUAL_REVIEW_DIR / "cost_inference_report.json"
+    report_path.write_text(_json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    print(f"\n[cost] Inference report written → {report_path}")
+    print(f"[cost] Newly inferred free: {len(changed_to_free)}")
+    print(f"[cost] Newly inferred paid: {len(changed_to_paid)}")
+    print(f"[cost] Top inference reasons:")
+    for reason, count in reason_counts.most_common(6):
+        print(f"         {count:4d}  {reason}")
+    if changed_to_free:
+        print(f"\n[cost] Example events newly classified as free:")
+        for ex in changed_to_free[:5]:
+            print(f"         [{ex['reason']}] {ex['title']!r}  ({ex['source_name']})")
+
+
+# ---------------------------------------------------------------------------
 # Repair mode
 # ---------------------------------------------------------------------------
 
-def _repair_published_week(week_start: date, dry_run: bool, filter_non_family: bool = False) -> int:
+def _repair_published_week(
+    week_start: date,
+    dry_run: bool,
+    filter_non_family: bool = False,
+    improve_cost: bool = False,
+) -> int:
     """
     Re-enrich and re-publish a previously published week JSON.
 
@@ -335,11 +464,23 @@ def _repair_published_week(week_start: date, dry_run: bool, filter_non_family: b
 
     print(f"[repair] Loaded {len(existing_events)} events from {filename}")
 
+    # Snapshot old cost_type per event id (for before/after comparison)
+    old_cost: dict[str, str] = {
+        ev.get("id", ""): ev.get("cost_type", "unknown")
+        for ev in existing_events
+    }
+
     # Re-normalize each event (re-runs enrichment pipeline on the stored raw data)
     repaired: list[Event] = []
     failed = 0
     for ev in existing_events:
-        # Convert stored event dict back to a raw scraper-style dict
+        # Convert stored event dict back to a raw scraper-style dict.
+        # Pass original price_text (before any "Free" inference override)
+        # so that infer_cost() can re-examine it with the new logic.
+        original_price = ev.get("price_text")
+        if original_price == "Free" and ev.get("cost_type") in ("free",):
+            # If previously inferred free, clear so new logic re-evaluates cleanly
+            original_price = None
         raw: dict = {
             "title": ev.get("title", ""),
             "start_text": ev.get("start", ""),
@@ -347,7 +488,7 @@ def _repair_published_week(week_start: date, dry_run: bool, filter_non_family: b
             "location_text": " ".join(filter(None, [
                 ev.get("location_name"), ev.get("location_address"),
             ])),
-            "price_text": ev.get("price_text"),
+            "price_text": original_price,
             "summary_text": ev.get("summary"),
             "source_name": ev.get("source_name", ""),
             "source_url": ev.get("source_url", ""),
@@ -388,6 +529,13 @@ def _repair_published_week(week_start: date, dry_run: bool, filter_non_family: b
         result = publish_events(repaired, week_start=week_start)
         print(f"[repair] Republished {result.event_count} events → {result.output_path.name}")
         _sync_public()
+
+    # Cost summary always shown after repair
+    _print_cost_summary(repaired)
+
+    # Detailed cost inference report (--improve-cost-inference)
+    if improve_cost:
+        _write_cost_inference_report(repaired, old_cost, week_start)
 
     return 0
 
@@ -571,6 +719,16 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--improve-cost-inference",
+        action="store_true",
+        dest="improve_cost",
+        help=(
+            "Print a detailed cost inference breakdown after the pipeline run. "
+            "With --repair-published-week: also shows before/after cost changes "
+            "and writes data/manual_review/cost_inference_report.json."
+        ),
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Skip writing published files.",
@@ -615,6 +773,7 @@ def main(argv: list[str] | None = None) -> int:
                 repair_date,
                 dry_run=args.dry_run,
                 filter_non_family=getattr(args, "filter_non_family", False),
+                improve_cost=getattr(args, "improve_cost", False),
             )
 
     # Parse --week-start
@@ -801,6 +960,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"    Failed geocodes:       {geo_stats.failed}")
         print(f"    Map coverage:          {geo_stats.total_mappable}/{geo_stats.total} ({pct:.0f}%)")
 
+    # Cost breakdown
+    _print_cost_summary(events)
+
     # Source breakdown
     source_counts: dict[str, int] = {}
     for e in events:
@@ -809,6 +971,10 @@ def main(argv: list[str] | None = None) -> int:
     for name, count in sorted(source_counts.items(), key=lambda x: -x[1]):
         print(f"    {count:4d}  {name}")
     print()
+
+    if getattr(args, "improve_cost", False):
+        _print_cost_inference_detail(events)
+
     return 0
 
 

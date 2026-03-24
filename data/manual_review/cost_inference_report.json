@@ -1,0 +1,226 @@
+{
+  "week_start": "2026-03-23",
+  "total_events": 505,
+  "cost_counts": {
+    "free": 505
+  },
+  "newly_inferred_free": 503,
+  "newly_inferred_paid": 0,
+  "top_inference_reasons": [
+    [
+      "library_default_free",
+      370
+    ],
+    [
+      "public_source_default_free",
+      132
+    ],
+    [
+      "explicit_free_text",
+      3
+    ]
+  ],
+  "examples_changed_to_free": [
+    {
+      "id": "c95eeb913e8fe826",
+      "title": "Spot the Flag Scavenger Hunt",
+      "source_name": "Fairfax County Public Library",
+      "location_name": "Herndon Fortnightly Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "338c56cfa87c00de",
+      "title": "55+ \"tour De Friends\" Bike Club",
+      "source_name": "Arlington County Parks & Recreation",
+      "location_name": null,
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "public_source_default_free"
+    },
+    {
+      "id": "1776ec73d86f5482",
+      "title": "Deep Dive: a Long History",
+      "source_name": "Arlington County Parks & Recreation",
+      "location_name": null,
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "public_source_default_free"
+    },
+    {
+      "id": "187a09154d1e0a5c",
+      "title": "Ebook Clinic",
+      "source_name": "Fairfax County Public Library",
+      "location_name": "John Marshall Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "d2ca7148e49c40ea",
+      "title": "Everyday Uses for Phone Cameras",
+      "source_name": "Arlington County Parks & Recreation",
+      "location_name": null,
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "public_source_default_free"
+    },
+    {
+      "id": "b14147a45e6065ab",
+      "title": "Financial Elder Abuse Awareness",
+      "source_name": "Arlington County Parks & Recreation",
+      "location_name": null,
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "public_source_default_free"
+    },
+    {
+      "id": "750c7e89e6818ef4",
+      "title": "Gulf Branch Nature Walk",
+      "source_name": "Arlington County Parks & Recreation",
+      "location_name": null,
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "public_source_default_free"
+    },
+    {
+      "id": "716c1bc6510e46d8",
+      "title": "Homeschool at the Lake – Nature Exploration",
+      "source_name": "Fairfax County Park Authority",
+      "location_name": "Burke Lake Park, Burke, VA",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "public_source_default_free"
+    },
+    {
+      "id": "ac685356dd870bbf",
+      "title": "John Marshall Seed Library",
+      "source_name": "Fairfax County Public Library",
+      "location_name": "John Marshall Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "343f588b6e05c1d3",
+      "title": "Mushroom Networks-the Internet Before the Internet",
+      "source_name": "Fairfax County Park Authority",
+      "location_name": "Lake Accotink Park, Springfield, VA",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "public_source_default_free"
+    },
+    {
+      "id": "80c0355641b0ac0e",
+      "title": "Preschool Play and Learn",
+      "source_name": "Loudoun County Public Library",
+      "location_name": "Purcellville Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "74a7d3c305decced",
+      "title": "Spring Cleaning: Finances",
+      "source_name": "Arlington County Parks & Recreation",
+      "location_name": null,
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "public_source_default_free"
+    },
+    {
+      "id": "34911df99d27f8ca",
+      "title": "Teen Poetry Exhibition: Fire in the Sunda Strait",
+      "source_name": "Loudoun County Public Library",
+      "location_name": "Brambleton Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "1d003143ca7dd35a",
+      "title": "Baby and Toddler Playdate",
+      "source_name": "Loudoun County Public Library",
+      "location_name": "Lovettsville Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "562b745891cc2303",
+      "title": "Cancelled - Polish Conversation Group",
+      "source_name": "Fairfax County Public Library",
+      "location_name": "Richard Byrd Library, Richard Byrd Conference Room",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "bdf6eb0f2be70f86",
+      "title": "One-on-one English Conversation",
+      "source_name": "Fairfax County Public Library",
+      "location_name": "Tysons-Pimmit Regional Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "6557fbe93d99321f",
+      "title": "Toddler Storytime",
+      "source_name": "Fairfax County Public Library",
+      "location_name": "Dolley Madison Library, Dolley Madison Meeting Room 1, Dolley Madison Meeting Room 2",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "61719c0363b9c9bb",
+      "title": "Toddler Storytime",
+      "source_name": "Loudoun County Public Library",
+      "location_name": "Rust Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "0d70b88e90c1dfaf",
+      "title": "Toddler Storytime",
+      "source_name": "Loudoun County Public Library",
+      "location_name": "Ashburn Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    },
+    {
+      "id": "09efc54541bcf870",
+      "title": "Toddler Storytime",
+      "source_name": "Loudoun County Public Library",
+      "location_name": "Brambleton Library",
+      "cost_before": "unknown",
+      "cost_after": "free",
+      "price_text": "Free",
+      "reason": "library_default_free"
+    }
+  ],
+  "examples_changed_to_paid": []
+}

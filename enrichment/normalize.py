@@ -564,17 +564,183 @@ def normalize_location(location_text: str | None) -> dict[str, str | None]:
 
 
 # ---------------------------------------------------------------------------
-# Cost normalization
+# Cost normalization — source-aware inference pipeline
 # ---------------------------------------------------------------------------
 
-_FREE_PATTERNS = re.compile(
-    r"\bfree\b|\bno charge\b|\bno cost\b|\bcomplimentary\b",
+# Explicit free text in any field → always free
+_FREE_EXPLICIT = re.compile(
+    r"\bfree\b"
+    r"|\bno charge\b"
+    r"|\bno cost\b"
+    r"|\bcomplimentary\b"
+    r"|\bat no cost\b"
+    r"|\bno fee\b"
+    r"|\bfree admission\b"
+    r"|\bfree to attend\b"
+    r"|\bfree event\b",
     re.IGNORECASE,
 )
-_PAID_PATTERNS = re.compile(
-    r"\$\s*\d|\bregister\b|\bticket\b|\bfee\b|\bpaid\b|\bcost[s:]?\b",
+
+# Strong paid signals — override even public/library default
+_STRONG_PAID_SIGNALS = re.compile(
+    r"\$\s*\d"                               # dollar amount: $8, $10.00
+    r"|\bper child\b"                        # per-child pricing
+    r"|\bper person\b"                       # per-person pricing
+    r"|\bregistration fee\b"                 # explicit registration fee
+    r"|\bcost:\s*\$"                         # cost: $X
+    r"|\bfee:\s*\$"                          # fee: $X
+    r"|\bpaid event\b"                       # explicitly labelled paid
+    r"|\bpurchase tickets?\b"                # purchase ticket/tickets
+    r"|\bbook now for\s*\$"                  # book now for $X
+    r"|\breserve your spot for\s*\$"         # reserve your spot for $X
+    r"|\bprices?\s+start\b"                  # prices start at
+    r"|\b\d+\s*(?:usd|dollars?)\b",         # 10 USD / 25 dollars
     re.IGNORECASE,
 )
+
+# Donation / sliding-scale language
+_DONATION_PATTERNS = re.compile(
+    r"\bsuggested donation\b"
+    r"|\bdonation.based\b"
+    r"|\bpay what you can\b"
+    r"|\bfree with optional donation\b"
+    r"|\bvoluntary donation\b",
+    re.IGNORECASE,
+)
+
+# General paid signals — only applied for non-public/non-library sources
+_GENERAL_PAID_SIGNALS = re.compile(
+    r"\btickets?\b"                          # ticket / tickets
+    r"|\badmission\b"                        # admission (without "free")
+    r"|\bfee\b"                              # generic fee
+    r"|\bpaid\b"                             # paid
+    r"|\bcost[s:]?\b",                       # cost / costs / cost:
+    re.IGNORECASE,
+)
+
+# Source name substrings that identify public library systems (lowercase)
+_LIBRARY_SOURCE_SUBSTRINGS: frozenset[str] = frozenset({
+    "public library",
+    "public libraries",
+    "libcal",
+    "libnet",
+})
+
+# Source name substrings for government/parks/community sources (lowercase)
+_PUBLIC_SOURCE_SUBSTRINGS: frozenset[str] = frozenset({
+    "park authority",
+    "parks & recreation",
+    "parks and recreation",
+    "parks recreation",
+    "county parks",
+    "city parks",
+    "community center",
+    "family resource center",
+    "nature center",
+    "recreation center",
+    "school district",
+    "public school",
+})
+
+
+def _source_is_library(source_name: str | None, source_url: str | None) -> bool:
+    """Return True if the source is a public library system."""
+    if source_name:
+        lower = source_name.lower()
+        if "library" in lower or "libraries" in lower:
+            return True
+        for sub in _LIBRARY_SOURCE_SUBSTRINGS:
+            if sub in lower:
+                return True
+    if source_url:
+        url_lower = source_url.lower()
+        if "libcal" in url_lower or "libnet" in url_lower or "library" in url_lower:
+            return True
+    return False
+
+
+def _source_is_public_community(source_name: str | None) -> bool:
+    """Return True if the source is a government/parks/community source."""
+    if not source_name:
+        return False
+    lower = source_name.lower()
+    for sub in _PUBLIC_SOURCE_SUBSTRINGS:
+        if sub in lower:
+            return True
+    return False
+
+
+def _venue_is_library(location_name: str | None) -> bool:
+    """Return True if the venue name indicates a public library."""
+    if not location_name:
+        return False
+    lower = location_name.lower()
+    return "library" in lower or "libraries" in lower
+
+
+def _venue_is_public_community(location_name: str | None) -> bool:
+    """Return True if the venue name indicates a public/community facility."""
+    if not location_name:
+        return False
+    lower = location_name.lower()
+    keywords = [
+        "recreation center", "rec center", "community center",
+        "nature center", "civic center", "family resource center",
+        "community room",
+    ]
+    return any(kw in lower for kw in keywords)
+
+
+def infer_cost(
+    price_text: str | None,
+    summary: str | None = None,
+    source_name: str | None = None,
+    source_url: str | None = None,
+    location_name: str | None = None,
+    title: str | None = None,
+) -> tuple[CostType, str | None, str]:
+    """
+    Infer CostType from all available context.
+
+    Returns (cost_type, cleaned_price_text, reason).
+
+    Inference priority:
+      1. Explicit free text in any field               → FREE
+      2. Strong paid signals ($ amounts, per-person)   → PAID
+      3. Donation / pay-what-you-can language           → SUGGESTED_DONATION
+      4. Source or venue is a public library            → FREE (library default)
+      5. Source or venue is public/community/govt       → FREE (public default)
+      6. General paid signals (non-public sources only) → PAID
+      7. Fallback                                       → UNKNOWN
+    """
+    combined = " ".join(filter(None, [price_text, summary, title]))
+
+    # Step 1: explicit free text → free regardless of source
+    if _FREE_EXPLICIT.search(combined):
+        return CostType.FREE, "Free", "explicit_free_text"
+
+    # Step 2: strong paid signals → paid regardless of source
+    if _STRONG_PAID_SIGNALS.search(combined):
+        return CostType.PAID, price_text, "strong_paid_signal"
+
+    # Step 3: donation language
+    if _DONATION_PATTERNS.search(combined):
+        return CostType.SUGGESTED_DONATION, price_text, "donation_language"
+
+    # Step 4: public library source or venue → default free
+    if _source_is_library(source_name, source_url) or _venue_is_library(location_name):
+        return CostType.FREE, "Free", "library_default_free"
+
+    # Step 5: public/community/government source or venue → default free
+    if _source_is_public_community(source_name) or _venue_is_public_community(location_name):
+        return CostType.FREE, "Free", "public_source_default_free"
+
+    # Step 6: general paid signals (commercial/unknown sources only)
+    if _GENERAL_PAID_SIGNALS.search(combined):
+        return CostType.PAID, price_text, "general_paid_signal"
+
+    # Step 7: unknown — no reliable signal
+    return CostType.UNKNOWN, price_text, "unknown_no_signals"
 
 
 def normalize_cost(
@@ -582,19 +748,12 @@ def normalize_cost(
     summary: str | None = None,
 ) -> tuple[CostType, str | None]:
     """
-    Infer CostType from price_text and/or summary.
+    Backward-compatible wrapper around infer_cost() without source context.
 
-    Returns (cost_type, cleaned_price_text).
+    Prefer calling infer_cost() directly when source/venue context is available.
     """
-    combined = " ".join(filter(None, [price_text, summary]))
-    if not combined:
-        return CostType.UNKNOWN, None
-
-    if _FREE_PATTERNS.search(combined):
-        return CostType.FREE, price_text
-    if _PAID_PATTERNS.search(combined):
-        return CostType.PAID, price_text
-    return CostType.UNKNOWN, price_text
+    cost_type, clean_price, _ = infer_cost(price_text, summary)
+    return cost_type, clean_price
 
 
 # ---------------------------------------------------------------------------
@@ -696,8 +855,15 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
     # Summary — clean junk before cost/note generation
     summary_text = clean_summary(raw.get("summary_text"))
 
-    # Cost
-    cost_type, price_text = normalize_cost(raw.get("price_text"), summary_text)
+    # Cost — pass full context for source-aware inference
+    cost_type, price_text, _cost_reason = infer_cost(
+        raw.get("price_text"),
+        summary_text,
+        source_name=raw_source_name,
+        source_url=raw.get("source_url"),
+        location_name=loc["location_name"],
+        title=title,
+    )
 
     # Generate ID
     event_id = generate_event_id(title, start, loc["location_name"], source_url)
