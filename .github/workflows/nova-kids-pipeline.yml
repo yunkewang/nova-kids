@@ -1,5 +1,28 @@
 name: NoVA Kids Pipeline
 
+# ============================================================
+# PIPELINE ENTRYPOINT
+#
+#   python scripts/run_pipeline.py --enrich-geo --filter-non-family
+#
+# Both scheduled (cron) and manual (workflow_dispatch) runs use
+# the identical command — there are no separate code paths.
+#
+# Flags used:
+#   --enrich-geo          Geocode missing lat/lon via Photon (komoot)
+#   --filter-non-family   Exclude adult-service events (tax prep, legal
+#                         clinics, resume workshops, board meetings, etc.)
+#                         from the published weekly JSON.
+#                         Excluded events are written to
+#                         data/manual_review/excluded_non_family_events.json.
+#
+# Safety guards:
+#   - Minimum 100 events required before committing output
+#   - Family-relevance fields verified present (confirms new code ran)
+#   - Keyword leak check confirms adult-service events did not appear
+#   - If filter removes >50% of events the pipeline aborts (not committed)
+# ============================================================
+
 on:
   # Run daily at 10:00 UTC (6 AM ET)
   schedule:
@@ -9,19 +32,19 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry run — run pipeline but do not commit changes'
+        description: 'Dry run — run pipeline but do NOT commit changes'
         required: false
         default: 'false'
         type: boolean
 
-# Only one pipeline run at a time
+# Only one pipeline run at a time — queue, do not cancel
 concurrency:
   group: nova-kids-pipeline
   cancel-in-progress: false
 
 jobs:
   run-pipeline:
-    name: Scrape, enrich, and publish
+    name: Scrape, enrich, filter, and publish
     runs-on: ubuntu-latest
 
     permissions:
@@ -35,7 +58,7 @@ jobs:
         uses: actions/checkout@v4
 
       # -----------------------------------------------------------------------
-      # 2. Python
+      # 2. Python setup
       # -----------------------------------------------------------------------
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -47,63 +70,216 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # -----------------------------------------------------------------------
+      # 3. Confirm pipeline configuration
+      #
+      #    This step makes the exact command and filter status explicit in the
+      #    Actions log so future runs are unambiguous.
+      # -----------------------------------------------------------------------
       - name: Print environment
         run: |
-          echo "Trigger : ${{ github.event_name }}"
-          echo "Dry run : ${{ inputs.dry_run || 'false' }}"
+          echo "===== NoVA Kids Pipeline — CI Configuration ====="
+          echo ""
+          echo "Trigger       : ${{ github.event_name }}"
+          echo "Dry run       : ${{ inputs.dry_run || 'false' }}"
+          echo "Commit SHA    : ${{ github.sha }}"
+          echo ""
+          echo "Pipeline cmd  : python scripts/run_pipeline.py --enrich-geo --filter-non-family"
+          echo "Family filter : ENABLED  (--filter-non-family)"
+          echo "  → Adult-service events excluded from published feed"
+          echo "  → Excluded: tax prep, legal clinics, resume workshops, board meetings, etc."
+          echo "  → Excluded events written to data/manual_review/excluded_non_family_events.json"
+          echo "Geo enrichment: ENABLED  (--enrich-geo)"
+          echo "  → Missing coordinates resolved via Photon (OpenStreetMap)"
+          echo ""
           python --version
-          pip show requests pydantic beautifulsoup4 PyYAML | grep -E "^(Name|Version)"
+          pip show requests pydantic beautifulsoup4 PyYAML lxml python-dateutil \
+            | grep -E "^(Name|Version)"
 
       # -----------------------------------------------------------------------
-      # 3. Run the pipeline
+      # 4. Run the pipeline
+      #
+      # --enrich-geo geocodes missing coordinates.
+      # --filter-non-family excludes adult-oriented / public-service events that
+      #   do not belong in the family activities feed.
+      #
+      # When inputs.dry_run == 'true' the pipeline still runs and writes output
+      # files locally so the validation step can inspect them — but the commit
+      # step is skipped.  This is intentional: dry runs validate the full output
+      # without touching the git history.
       # -----------------------------------------------------------------------
       - name: Run pipeline
-        run: python scripts/run_pipeline.py --enrich-geo
+        run: |
+          echo "Running: python scripts/run_pipeline.py --enrich-geo --filter-non-family"
+          python scripts/run_pipeline.py --enrich-geo --filter-non-family
 
       # -----------------------------------------------------------------------
-      # 4. Validate output — fail fast if scrapers returned nothing
+      # 5. Validate published output
       #
-      #    publish_events() always writes a week file, even for 0 events.
-      #    Without this guard a broken scraper run would silently overwrite
-      #    good published data with an empty file.
+      # Checks (all required to pass before committing):
+      #   a) index.json and week file exist
+      #   b) event_count >= 100  (catches total scraper failure)
+      #   c) family_relevance_score field present  (proves new enrichment ran)
+      #   d) family_relevance_label field present  (proves new enrichment ran)
+      #   e) No adult-service events leaked into published feed
+      #   f) Writes pipeline_stats.json for downstream steps
       # -----------------------------------------------------------------------
       - name: Validate published output
         run: |
-          python3 - <<'EOF'
-          import json, sys
+          python3 - <<'PYEOF'
+          import json, sys, os
           from pathlib import Path
+          from collections import Counter
 
+          PASS = "\033[32mPASS\033[0m"
+          FAIL = "\033[31mFAIL\033[0m"
+          errors = []
+
+          # ── a) Locate latest published week ──────────────────────────────
           index_path = Path("data/published/events/index.json")
           if not index_path.exists():
-              print("ERROR: index.json not found — pipeline did not publish.")
+              print(f"{FAIL}  index.json not found — pipeline did not publish.")
               sys.exit(1)
 
           index = json.loads(index_path.read_text())
           latest = index.get("latest_week", "")
           week_path = Path(f"data/published/events/week-{latest}.json")
           if not week_path.exists():
-              print(f"ERROR: week file {week_path.name} not found.")
+              print(f"{FAIL}  week file {week_path.name} not found.")
               sys.exit(1)
 
-          data = json.loads(week_path.read_text())
-          count = data.get("event_count", 0)
-          print(f"Latest week  : {latest}")
-          print(f"Event count  : {count}")
+          data  = json.loads(week_path.read_text())
+          events = data.get("events", [])
+          count  = data.get("event_count", 0)
 
-          # Require at least 100 events before allowing a commit.
-          # Pipeline now scrapes 6 sources; 100 is a safe floor that catches
-          # total scraper failures while allowing for genuinely quiet weeks.
+          print(f"Latest week      : {latest}")
+          print(f"Event count      : {count}")
+
+          # ── b) Minimum count guard ────────────────────────────────────────
           MIN_EVENTS = 100
           if count < MIN_EVENTS:
-              print(f"FAIL: only {count} events published (minimum {MIN_EVENTS}).")
-              print("Pipeline output will NOT be committed to protect existing data.")
+              errors.append(f"Only {count} events published (minimum {MIN_EVENTS}) — scraper failure?")
+          else:
+              print(f"{PASS}  Event count {count} ≥ {MIN_EVENTS}")
+
+          # ── c/d) Family relevance fields present ──────────────────────────
+          # These are written by enrichment/family_relevance.py (new code).
+          # If absent, the --filter-non-family flag had no effect.
+          sample = events[0] if events else {}
+          for field in ("family_relevance_score", "family_relevance_label"):
+              if field not in sample:
+                  errors.append(
+                      f"Field '{field}' missing from events — "
+                      "family relevance enrichment may not have run."
+                  )
+              else:
+                  print(f"{PASS}  Field '{field}' present")
+
+          if errors:
+              # Don't continue further checks if fundamentals are broken
+              for e in errors:
+                  print(f"{FAIL}  {e}")
               sys.exit(1)
 
-          print(f"OK: {count} events — safe to commit.")
-          EOF
+          # ── Label + score distribution ────────────────────────────────────
+          labels = Counter(e.get("family_relevance_label") for e in events)
+          scores = [e.get("family_relevance_score", 0) for e in events]
+          print(f"Label distribution : {dict(labels)}")
+          print(f"Score range        : {min(scores):.2f} – {max(scores):.2f}"
+                f"  (avg {sum(scores)/len(scores):.2f})")
+
+          adult_service_count = labels.get("adult_service", 0)
+          if adult_service_count > 0:
+              # This should never happen if --filter-non-family is active
+              errors.append(
+                  f"{adult_service_count} event(s) with label='adult_service' "
+                  f"still in published feed — filter may not have run correctly."
+              )
+
+          # ── e) Adult-service keyword leak check ───────────────────────────
+          # These phrases should never appear in the published family feed.
+          # The list is intentionally conservative (specific phrases only) to
+          # avoid false positives from e.g. "family tax benefit" events.
+          ADULT_PHRASES = [
+              "tax preparation",
+              "free tax preparation",
+              "vita volunteer",
+              "legal clinic",
+              "legal aid clinic",
+              "resume writing workshop",
+              "resume workshop",
+              "job fair",
+              "board of supervisors meeting",
+              "public hearing",
+              "blood drive",
+              "homebuyer workshop",
+              "retirement planning seminar",
+              "medicare enrollment",
+              "credit counseling",
+          ]
+          leaked = []
+          for ev in events:
+              combined = (
+                  ev.get("title", "") + " " + (ev.get("summary", "") or "")
+              ).lower()
+              for phrase in ADULT_PHRASES:
+                  if phrase in combined:
+                      leaked.append((ev.get("title", "?"), phrase))
+                      break  # one hit per event is enough
+
+          if leaked:
+              errors.append(
+                  f"{len(leaked)} adult-service event(s) leaked into published feed:"
+              )
+              for title, phrase in leaked[:5]:
+                  errors.append(f"  • {title!r}  (matched: {phrase!r})")
+          else:
+              print(f"{PASS}  Adult-service leak check — no excluded events in published feed")
+
+          # ── Exclusion report ──────────────────────────────────────────────
+          excl_path = Path("data/manual_review/excluded_non_family_events.json")
+          excluded_count = 0
+          if excl_path.exists():
+              try:
+                  excl = json.loads(excl_path.read_text())
+                  excluded_count = len(excl)
+                  print(f"Excluded events    : {excluded_count}"
+                        f" (see excluded_non_family_events.json)")
+                  for ev in excl[:3]:
+                      score = ev.get('family_relevance_score', 0)
+                      print(f"  [{score:.2f}] {ev.get('title','?')!r}")
+              except Exception as exc:
+                  print(f"(Could not parse excluded events report: {exc})")
+          else:
+              print("Excluded events    : 0")
+
+          # ── Write machine-readable stats for downstream steps ─────────────
+          stats = {
+              "week":                latest,
+              "event_count":         count,
+              "excluded_count":      excluded_count,
+              "label_distribution":  dict(labels),
+              "score_avg":           round(sum(scores) / len(scores), 3),
+              "score_min":           round(min(scores), 3),
+              "score_max":           round(max(scores), 3),
+              "adult_service_leaked": len(leaked),
+          }
+          Path("pipeline_stats.json").write_text(json.dumps(stats, indent=2))
+
+          # ── Final verdict ─────────────────────────────────────────────────
+          if errors:
+              print()
+              for e in errors:
+                  print(f"{FAIL}  {e}")
+              print()
+              print("Validation FAILED — output will NOT be committed.")
+              sys.exit(1)
+
+          print(f"\n{PASS}  All checks passed — {count} events safe to commit.")
+          PYEOF
 
       # -----------------------------------------------------------------------
-      # 5. Detect whether tracked files actually changed
+      # 6. Detect whether tracked files actually changed
       # -----------------------------------------------------------------------
       - name: Check for changes
         id: changes
@@ -123,7 +299,7 @@ jobs:
           fi
 
       # -----------------------------------------------------------------------
-      # 6. Commit and push (skipped on dry run or when nothing changed)
+      # 7. Commit and push (skipped on dry run or when nothing changed)
       # -----------------------------------------------------------------------
       - name: Commit and push
         if: >
@@ -134,9 +310,20 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Build a descriptive commit body from pipeline stats
+          if [ -f pipeline_stats.json ]; then
+            WEEK=$(python3  -c "import json; print(json.load(open('pipeline_stats.json'))['week'])")
+            COUNT=$(python3 -c "import json; print(json.load(open('pipeline_stats.json'))['event_count'])")
+            EXCL=$(python3  -c "import json; print(json.load(open('pipeline_stats.json'))['excluded_count'])")
+            BODY="${COUNT} events published | ${EXCL} non-family excluded | week ${WEEK}"
+          else
+            BODY="see pipeline log"
+          fi
+
           N=$(git diff --cached --name-only | wc -l | tr -d ' ')
           git commit -m "chore: auto-update NoVA Kids event data [skip ci]
 
+          ${BODY}
           Triggered by: ${{ github.event_name }}
           Files changed: ${N}"
 
@@ -144,21 +331,88 @@ jobs:
           echo "Pushed ${N} changed file(s) to main."
 
       # -----------------------------------------------------------------------
-      # 7. Summary (always runs so we get output even on failure)
+      # 8. Write GitHub Actions step summary
+      #
+      #    Visible in the Actions UI under the job's "Summary" tab.
       # -----------------------------------------------------------------------
-      - name: Summary
+      - name: Job summary
         if: always()
         run: |
-          echo "Trigger  : ${{ github.event_name }}"
-          echo "Changed  : ${{ steps.changes.outputs.changed || 'n/a' }}"
-          if [ -d data/published/events ]; then
-            echo ""
-            echo "Published files:"
-            ls -lh data/published/events/
-          fi
+          python3 - <<'PYEOF'
+          import json, os
+          from pathlib import Path
+
+          gss_path = os.environ.get("GITHUB_STEP_SUMMARY", "")
+          trigger  = "${{ github.event_name }}"
+          sha      = "${{ github.sha }}"[:7]
+          changed  = "${{ steps.changes.outputs.changed }}" or "n/a"
+          dry_run  = "${{ inputs.dry_run || 'false' }}"
+
+          lines = [
+              "## NoVA Kids Pipeline — Run Summary\n",
+              "| Field | Value |",
+              "|---|---|",
+              f"| Trigger | `{trigger}` |",
+              f"| Commit | `{sha}` |",
+              f"| Dry run | `{dry_run}` |",
+              f"| Data changed | `{changed}` |",
+          ]
+
+          stats_path = Path("pipeline_stats.json")
+          if stats_path.exists():
+              s = json.loads(stats_path.read_text())
+              lines += [
+                  f"| Week | `{s['week']}` |",
+                  f"| **Events published** | **{s['event_count']}** |",
+                  f"| Excluded (non-family) | {s['excluded_count']} |",
+                  f"| Adult-service leaked | {'⚠️ ' + str(s['adult_service_leaked']) if s['adult_service_leaked'] else '✅ 0'} |",
+                  f"| Avg relevance score | {s['score_avg']} |",
+                  f"| Label distribution | `{s['label_distribution']}` |",
+              ]
+
+          lines += [
+              "",
+              "### Pipeline configuration",
+              "| Flag | Status |",
+              "|---|---|",
+              "| `--filter-non-family` | ✅ **enabled** — adult-service events excluded |",
+              "| `--enrich-geo` | ✅ **enabled** — missing coordinates geocoded |",
+              "| Publish threshold | `0.30` family relevance score |",
+              "| Min events guard | `100` events required to commit |",
+          ]
+
+          excl_path = Path("data/manual_review/excluded_non_family_events.json")
+          if excl_path.exists():
+              try:
+                  excl = json.loads(excl_path.read_text())
+                  if excl:
+                      lines += [
+                          "",
+                          "### Excluded events (non-family feed)",
+                          "| Score | Title | Source |",
+                          "|---|---|---|",
+                      ]
+                      for ev in sorted(excl, key=lambda e: e.get("family_relevance_score", 0))[:10]:
+                          score  = ev.get("family_relevance_score", 0)
+                          title  = ev.get("title", "?")[:60].replace("|", "\\|")
+                          source = ev.get("source_name", "?")
+                          lines.append(f"| {score:.2f} | {title} | {source} |")
+              except Exception:
+                  pass
+
+          output = "\n".join(lines) + "\n"
+          print(output)
+          if gss_path:
+              Path(gss_path).write_text(output)
+          PYEOF
 
       # -----------------------------------------------------------------------
-      # 8. Upload published JSON as a workflow artifact (7-day retention)
+      # 9. Upload artifacts (7-day retention)
+      #
+      #    Includes:
+      #      data/published/events/      — published weekly JSON + index
+      #      excluded_non_family_events.json — events excluded by family filter
+      #      suspicious_geocodes.json    — geocodes flagged for review
       # -----------------------------------------------------------------------
       - name: Upload artifacts
         if: always()
@@ -169,4 +423,5 @@ jobs:
           if-no-files-found: ignore
           path: |
             data/published/events/
+            data/manual_review/excluded_non_family_events.json
             data/manual_review/suspicious_geocodes.json
