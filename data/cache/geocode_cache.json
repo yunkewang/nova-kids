@@ -1419,5 +1419,19 @@
     "longitude": -77.109269,
     "confidence": 0.9,
     "resolved_at": "2026-03-23T10:44:05.388400+00:00"
+  },
+  "Columbia Pike Library, 2nd Floor, Arlington, Arlington County, VA": {
+    "query": "Columbia Pike Library, 2nd Floor, Arlington, Arlington County, VA",
+    "latitude": 38.864693,
+    "longitude": -77.087937,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-25T10:39:08.425061+00:00"
+  },
+  "42071 Nature Overlook Dr., Aldie, Aldie": {
+    "query": "42071 Nature Overlook Dr., Aldie, Aldie",
+    "latitude": 38.972522,
+    "longitude": -77.547363,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-25T10:39:09.552043+00:00"
   }
 }
