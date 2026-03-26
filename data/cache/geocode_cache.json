@@ -1433,5 +1433,33 @@
     "longitude": -77.547363,
     "confidence": 0.9,
     "resolved_at": "2026-03-25T10:39:09.552043+00:00"
+  },
+  "Thomas Jefferson Library, Thomas Jefferson Group Study Room, Falls Church, VA": {
+    "query": "Thomas Jefferson Library, Thomas Jefferson Group Study Room, Falls Church, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-26T10:43:04.724991+00:00"
+  },
+  "Thomas Jefferson Library, Thomas Jefferson Group Study Room, Falls Church, Fairfax County, VA": {
+    "query": "Thomas Jefferson Library, Thomas Jefferson Group Study Room, Falls Church, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-26T10:43:06.290112+00:00"
+  },
+  "Thomas Jefferson Library, Thomas Jefferson Group Study Room, Fairfax County, VA": {
+    "query": "Thomas Jefferson Library, Thomas Jefferson Group Study Room, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-26T10:43:07.516624+00:00"
+  },
+  "Courthouse Library, Arlington, Arlington County, VA": {
+    "query": "Courthouse Library, Arlington, Arlington County, VA",
+    "latitude": 38.890554,
+    "longitude": -77.085362,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-26T10:43:08.748015+00:00"
   }
 }
