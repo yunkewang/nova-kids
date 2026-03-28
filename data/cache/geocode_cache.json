@@ -1461,5 +1461,40 @@
     "longitude": -77.085362,
     "confidence": 0.9,
     "resolved_at": "2026-03-26T10:43:08.748015+00:00"
+  },
+  "Pohick Regional Library, Pohick Lobby, Lorton, VA": {
+    "query": "Pohick Regional Library, Pohick Lobby, Lorton, VA",
+    "latitude": 38.678859,
+    "longitude": -77.190496,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-28T10:22:33.658973+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Falls Church, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Falls Church, VA",
+    "latitude": 38.906937,
+    "longitude": -77.206436,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-28T10:22:34.948989+00:00"
+  },
+  "1001 Sycolin Rd. SE, Leesburg, Leesburg": {
+    "query": "1001 Sycolin Rd. SE, Leesburg, Leesburg",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-28T10:22:36.105902+00:00"
+  },
+  "1001 Sycolin Rd. SE, Leesburg": {
+    "query": "1001 Sycolin Rd. SE, Leesburg",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-03-28T10:22:37.315457+00:00"
+  },
+  "Leesburg Executive Airport, Leesburg, Loudoun County, VA": {
+    "query": "Leesburg Executive Airport, Leesburg, Loudoun County, VA",
+    "latitude": 39.076791,
+    "longitude": -77.556369,
+    "confidence": 0.9,
+    "resolved_at": "2026-03-28T10:22:38.479704+00:00"
   }
 }
