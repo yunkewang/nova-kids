@@ -1503,5 +1503,12 @@
     "longitude": -77.358505,
     "confidence": 0.9,
     "resolved_at": "2026-03-31T10:44:18.748104+00:00"
+  },
+  "Glencarlyn Library Community Garden, 300 S Kensington St, Arlington, VA 22204, Arlington": {
+    "query": "Glencarlyn Library Community Garden, 300 S Kensington St, Arlington, VA 22204, Arlington",
+    "latitude": 38.863589,
+    "longitude": -77.125889,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-01T10:45:50.981573+00:00"
   }
 }
