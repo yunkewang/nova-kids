@@ -1510,5 +1510,12 @@
     "longitude": -77.125889,
     "confidence": 0.9,
     "resolved_at": "2026-04-01T10:45:50.981573+00:00"
+  },
+  "Oakton Library, Oakton Lobby, Oakton, Fairfax County, VA": {
+    "query": "Oakton Library, Oakton Lobby, Oakton, Fairfax County, VA",
+    "latitude": 38.883948,
+    "longitude": -77.302518,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-02T10:42:33.784235+00:00"
   }
 }
