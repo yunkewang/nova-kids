@@ -1517,5 +1517,12 @@
     "longitude": -77.302518,
     "confidence": 0.9,
     "resolved_at": "2026-04-02T10:42:33.784235+00:00"
+  },
+  "Aurora Hills Library, Arlington, Arlington County, VA": {
+    "query": "Aurora Hills Library, Arlington, Arlington County, VA",
+    "latitude": 38.85749,
+    "longitude": -77.059018,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-07T10:46:38.486353+00:00"
   }
 }
