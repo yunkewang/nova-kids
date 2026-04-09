@@ -1524,5 +1524,12 @@
     "longitude": -77.059018,
     "confidence": 0.9,
     "resolved_at": "2026-04-07T10:46:38.486353+00:00"
+  },
+  "Central Library, Wilson Room": {
+    "query": "Central Library, Wilson Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-09T10:52:38.417445+00:00"
   }
 }
