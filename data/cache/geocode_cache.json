@@ -1531,5 +1531,26 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-04-09T10:52:38.417445+00:00"
+  },
+  "Richard Byrd Library, Richard Byrd Lobby, Springfield, VA": {
+    "query": "Richard Byrd Library, Richard Byrd Lobby, Springfield, VA",
+    "latitude": 38.77951,
+    "longitude": -77.192137,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-10T10:43:42.205839+00:00"
+  },
+  "Patrick Henry Library, Vienna, VA": {
+    "query": "Patrick Henry Library, Vienna, VA",
+    "latitude": 38.90156,
+    "longitude": -77.264636,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-10T10:43:43.298194+00:00"
+  },
+  "21660 Sterling Blvd., Sterling, Sterling": {
+    "query": "21660 Sterling Blvd., Sterling, Sterling",
+    "latitude": 38.996626,
+    "longitude": -77.408183,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-10T10:43:44.510701+00:00"
   }
 }
