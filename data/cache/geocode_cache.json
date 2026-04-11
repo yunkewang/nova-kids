@@ -1552,5 +1552,12 @@
     "longitude": -77.408183,
     "confidence": 0.9,
     "resolved_at": "2026-04-10T10:43:44.510701+00:00"
+  },
+  "Kingstowne Regional Library": {
+    "query": "Kingstowne Regional Library",
+    "latitude": 38.763472,
+    "longitude": -77.155439,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-11T10:24:00.420574+00:00"
   }
 }
