@@ -1559,5 +1559,33 @@
     "longitude": -77.155439,
     "confidence": 0.9,
     "resolved_at": "2026-04-11T10:24:00.420574+00:00"
+  },
+  "City of Fairfax Regional Library, City of Fairfax Group Study Room 214, Fairfax, Fairfax County, VA": {
+    "query": "City of Fairfax Regional Library, City of Fairfax Group Study Room 214, Fairfax, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-12T10:29:15.746525+00:00"
+  },
+  "City of Fairfax Regional Library, City of Fairfax Group Study Room 214, Fairfax, VA": {
+    "query": "City of Fairfax Regional Library, City of Fairfax Group Study Room 214, Fairfax, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-12T10:29:17.080187+00:00"
+  },
+  "City of Fairfax Regional Library, City of Fairfax Group Study Room 214, Fairfax County, VA": {
+    "query": "City of Fairfax Regional Library, City of Fairfax Group Study Room 214, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-12T10:29:18.391349+00:00"
+  },
+  "City of Fairfax Regional Library, City of Fairfax Group Study Room 214": {
+    "query": "City of Fairfax Regional Library, City of Fairfax Group Study Room 214",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-12T10:29:19.655926+00:00"
   }
 }
