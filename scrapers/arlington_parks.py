@@ -22,6 +22,7 @@ from typing import Any
 from bs4 import BeautifulSoup
 
 from scrapers.base import BaseScraper
+from scrapers.detail_price import fetch_detail_price
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +32,10 @@ EVENTS_URL = (
 )
 BASE_URL = "https://www.arlingtonva.us"
 
+# Arlington's Parks-Events page lists ~10 items, so fetching every detail
+# page is cheap.
+DETAIL_FETCH_LIMIT = 50
+
 
 class ArlingtonParksRecScraper(BaseScraper):
     """Scrapes public event listings from Arlington County Parks & Recreation (page 1 only)."""
@@ -38,7 +43,12 @@ class ArlingtonParksRecScraper(BaseScraper):
     source_id = "arlington_parks_rec"
     source_name = "Arlington County Parks & Recreation"
 
+    def __init__(self) -> None:
+        super().__init__()
+        self._detail_fetches = 0
+
     def fetch_raw(self) -> list[dict[str, Any]]:
+        self._detail_fetches = 0
         try:
             response = self.get(EVENTS_URL)
         except Exception as exc:
@@ -61,7 +71,10 @@ class ArlingtonParksRecScraper(BaseScraper):
             if raw:
                 records.append(raw)
 
-        logger.debug("Parsed %d cards from %s", len(records), EVENTS_URL)
+        logger.info(
+            "Arlington Parks: parsed %d events, fetched %d detail pages",
+            len(records), self._detail_fetches,
+        )
         return records
 
     def _parse_card(self, card: BeautifulSoup) -> dict[str, Any] | None:
@@ -94,6 +107,15 @@ class ArlingtonParksRecScraper(BaseScraper):
         desc_el = card.select_one("span.list-item-block-desc, .list-item-block-desc")
         summary_text = desc_el.get_text(strip=True) if desc_el else None
 
+        # The Arlington list card has no pricing field; the per-event page
+        # carries "$X" or "Free" in a body block. Always fetch the detail
+        # page so paid programs don't silently default to free.
+        price_text = fetch_detail_price(
+            self, event_url,
+            fetch_count_attr="_detail_fetches",
+            limit=DETAIL_FETCH_LIMIT,
+        )
+
         return {
             "source_id": self.source_id,
             "source_name": self.source_name,
@@ -102,4 +124,5 @@ class ArlingtonParksRecScraper(BaseScraper):
             "date_text": date_text,
             "location_text": None,
             "summary_text": summary_text,
+            "price_text": price_text,
         }

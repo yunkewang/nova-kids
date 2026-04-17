@@ -26,12 +26,14 @@ from urllib.parse import urljoin, urlparse, parse_qs, urlencode, urlunparse
 from bs4 import BeautifulSoup
 
 from scrapers.base import BaseScraper
+from scrapers.detail_price import fetch_detail_price
 
 logger = logging.getLogger(__name__)
 
 BASE_URL   = "https://www.novaparks.com"
 EVENTS_URL = f"{BASE_URL}/events"
 MAX_PAGES  = 8   # safety cap — NOVA Parks typically has <150 upcoming events
+DETAIL_FETCH_LIMIT = 500  # effectively "all events" with headroom
 
 # Family/children relevance filter (applied to title + category)
 _FAMILY_RE = re.compile(
@@ -86,9 +88,14 @@ class NoVAParksScraper(BaseScraper):
     source_id   = "nova_parks"
     source_name = "NOVA Parks"
 
+    def __init__(self) -> None:
+        super().__init__()
+        self._detail_fetches = 0
+
     def fetch_raw(self) -> list[dict[str, Any]]:
         records: list[dict[str, Any]] = []
         seen_urls: set[str] = set()
+        self._detail_fetches = 0
 
         for page in range(1, MAX_PAGES + 1):
             url = _make_page_url(page)
@@ -118,7 +125,25 @@ class NoVAParksScraper(BaseScraper):
             r.get("title", ""), r.get("summary_text") or ""
         )]
 
-        logger.debug("Fetched %d events from %s", len(records), self.source_name)
+        # Fetch detail-page pricing for every retained event. The listing
+        # cards carry no dollar amounts, so without this step paid NOVA Parks
+        # programs collapse into the parks "default free" fallback.
+        for r in records:
+            if r.get("price_text"):
+                continue
+            url = r.get("source_url")
+            if not url:
+                continue
+            r["price_text"] = fetch_detail_price(
+                self, url,
+                fetch_count_attr="_detail_fetches",
+                limit=DETAIL_FETCH_LIMIT,
+            )
+
+        logger.info(
+            "NOVA Parks: parsed %d events, fetched %d detail pages",
+            len(records), self._detail_fetches,
+        )
         return records
 
     def _parse_listing_page(
