@@ -66,24 +66,39 @@ def _is_shortener_url(url: str) -> bool:
 # Price text cleanup
 # ---------------------------------------------------------------------------
 
+# Price pattern used to salvage a short snippet from verbose extracted blocks.
+# Covers: "free", "$10", "$10 per child", "Registration fee: $20",
+# "Cost: $15", "members free", "suggested donation $5".
 _PRICE_PATTERN = re.compile(
-    r"(?:free(?:\s+with\s+\w+)?|\$\s*\d[\d,.]*(?:\s*(?:per\s+\w+|each|/\w+))?)",
+    r"(?:"
+    r"free(?:\s+for\s+\w+|\s+with\s+\w+|\s+admission)?"
+    r"|(?:registration|program|class|course|entry|admission|materials?|ticket)"
+    r"\s+fee[^.\n]{0,60}"
+    r"|suggested\s+donation[^.\n]{0,40}"
+    r"|members?\s+free[^.\n]{0,60}"
+    r"|(?:cost|price|fee|admission|tickets?)\s*[:\-]\s*[^.\n]{0,40}"
+    r"|\$\s*\d[\d,.]*(?:\s*(?:[-/]|to)\s*\$?\d[\d,.]*)?"
+    r"(?:\s*(?:per\s+\w+|each|/\w+))?"
+    r"|\bno\s+(?:charge|fee|cost)\b"
+    r")",
     re.IGNORECASE,
 )
 
 
 def _clean_price_text(text: str | None) -> str | None:
     """
-    Return a cleaned price string ≤ 80 chars.
+    Return a cleaned price string ≤ 200 chars.
 
-    1. ≤ 80 chars → return stripped.
-    2. > 80 chars → search for a $price or 'free' pattern; return first match.
+    1. ≤ 200 chars → return stripped.
+    2. > 200 chars → search for a pricing pattern; return first match.
     3. No match found → return None (noise discarded).
     """
     if not text:
         return None
     text = re.sub(r"\s+", " ", text).strip()
-    if len(text) <= 80:
+    if not text:
+        return None
+    if len(text) <= 200:
         return text
     match = _PRICE_PATTERN.search(text)
     if match:
@@ -235,6 +250,111 @@ def _extract_opengraph(soup: BeautifulSoup) -> dict[str, Any]:
     return facts
 
 
+# Pricing-related snippet we're willing to salvage from the page body
+_PRICING_BODY_RE = re.compile(
+    r"(?:"
+    r"(?:registration|program|class|course|entry|admission|materials?|ticket)"
+    r"\s+fee[^.\n]{0,80}"
+    r"|(?:cost|price|admission)\s*[:\-]\s*[^.\n]{0,80}"
+    r"|members?\s+free[^.\n]{0,60}\$\s*\d[\d,.]*"
+    r"|suggested\s+donation[^.\n]{0,60}"
+    r"|\$\s*\d[\d,.]*(?:\s*(?:per\s+\w+|each|/\w+))?"
+    r"|\bfree\s+(?:admission|event|for\s+\w+)\b"
+    r")",
+    re.IGNORECASE,
+)
+
+# Classes/IDs that typically wrap pricing/ticketing widgets on event pages
+_PRICING_CSS_SELECTORS = (
+    # Most common class/id conventions
+    ".event-cost", ".ticket-price", ".event-price", ".admission-price",
+    ".registration-fee", ".event-fee", ".fee",
+    "[class*='ticket-price']", "[class*='event-price']", "[class*='admission']",
+    "[class*='price']", "[class*='cost']", "[class*='fee']",
+    "[id*='price']", "[id*='cost']", "[id*='fee']",
+    # WordPress / Tribe Events Calendar
+    ".tribe-events-cost", ".tribe-events-event-cost",
+    # Eventbrite / Ticketleap-style widgets
+    "[class*='ticket']", "[class*='registration']",
+)
+
+# Text markers that introduce pricing info in unstructured body text
+_PRICING_LABEL_RE = re.compile(
+    r"(?:registration\s+fee|class\s+fee|course\s+fee|program\s+fee|"
+    r"materials?\s+fee|entry\s+fee|admission\s+fee|ticket\s+price|"
+    r"event\s+cost|cost:|price:|fee:|admission:)",
+    re.IGNORECASE,
+)
+
+# CTA words used to find register/ticket buttons for context scraping
+_CTA_PATTERN = re.compile(
+    r"\b(?:register|registration|sign\s*up|book|reserve|ticket|tickets|rsvp|purchase)\b",
+    re.IGNORECASE,
+)
+
+
+def _extract_cost_from_html(soup: BeautifulSoup) -> str | None:
+    """
+    Look for pricing text in event page markup.
+
+    Strategy (first hit wins):
+      1. Dedicated pricing containers via CSS selectors
+      2. Labels like "Registration fee:", "Cost:", "Price:" followed by text
+      3. Text around registration / ticket CTA buttons
+    """
+    # 1. Try dedicated pricing/ticketing containers
+    for selector in _PRICING_CSS_SELECTORS:
+        try:
+            el = soup.select_one(selector)
+        except Exception:
+            continue
+        if not el:
+            continue
+        text = el.get_text(" ", strip=True)
+        if text and len(text) >= 2:
+            return text
+
+    # 2. Scan the visible page text for labelled pricing blocks
+    body_text = soup.get_text(" ", strip=True)
+    body_text = re.sub(r"\s+", " ", body_text)
+    if body_text:
+        m = _PRICING_LABEL_RE.search(body_text)
+        if m:
+            # Grab the label + ~120 chars of trailing context so
+            # "Registration fee: $15 per child (members $10)" survives.
+            tail = body_text[m.start(): m.start() + 180]
+            # Trim at sentence boundary
+            cut = re.search(r"[.;\n]\s+[A-Z]", tail[10:])
+            if cut:
+                tail = tail[: cut.start() + 10]
+            return tail.strip()
+
+        # Fallback: any $-price or "Members free / Non-members $X" pattern
+        m2 = _PRICING_BODY_RE.search(body_text)
+        if m2:
+            return m2.group(0).strip()
+
+    # 3. Text around registration / ticket CTAs — look for nearby price
+    for anchor in soup.find_all("a"):
+        link_text = anchor.get_text(" ", strip=True) or ""
+        href = anchor.get("href", "") or ""
+        if not (_CTA_PATTERN.search(link_text) or _CTA_PATTERN.search(href)):
+            continue
+        # Inspect the immediate parent/section around the CTA
+        container = anchor.find_parent(["section", "div", "article", "p", "form"]) or anchor.parent
+        if not container:
+            continue
+        ctx = container.get_text(" ", strip=True)
+        if not ctx:
+            continue
+        ctx = re.sub(r"\s+", " ", ctx)[:600]
+        hit = _PRICING_BODY_RE.search(ctx)
+        if hit:
+            return hit.group(0).strip()
+
+    return None
+
+
 def _extract_html_patterns(soup: BeautifulSoup) -> dict[str, Any]:
     """
     Last-resort HTML pattern extraction.
@@ -271,12 +391,10 @@ def _extract_html_patterns(soup: BeautifulSoup) -> dict[str, Any]:
             facts["location_address"] = el.get_text(strip=True)
             break
 
-    # Cost
-    for selector in (".event-cost, .ticket-price, [class*='price'], [class*='cost']",):
-        el = soup.select_one(selector)
-        if el and not facts.get("cost_text"):
-            facts["cost_text"] = el.get_text(strip=True)
-            break
+    # Cost — structured containers, labelled text, and CTA-nearby pricing
+    cost = _extract_cost_from_html(soup)
+    if cost:
+        facts["cost_text"] = cost
 
     return facts
 

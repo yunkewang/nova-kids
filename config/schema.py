@@ -26,6 +26,23 @@ class CostType(str, Enum):
     UNKNOWN = "unknown"
 
 
+class PriceType(str, Enum):
+    """
+    Richer pricing classification used alongside CostType.
+
+    - FREE     : clearly free for everyone
+    - PAID     : a fee/ticket/registration cost applies for the general audience
+    - MIXED    : pricing depends on attendee (e.g. "Members free, non-members $X")
+    - DONATION : suggested donation / pay-what-you-can / sliding scale
+    - UNKNOWN  : no reliable signal — do NOT assume free
+    """
+    FREE = "free"
+    PAID = "paid"
+    MIXED = "mixed"
+    DONATION = "donation"
+    UNKNOWN = "unknown"
+
+
 # Allowed tag values for MVP.  Additional tags may be added here as the
 # taxonomy grows; the validator in Event enforces membership.
 ALLOWED_TAGS: frozenset[str] = frozenset(
@@ -143,6 +160,45 @@ class Event(BaseModel):
     # ---- Cost --------------------------------------------------------------
     cost_type: CostType = Field(default=CostType.UNKNOWN)
     price_text: Optional[str] = Field(default=None, description="Raw price string from source.")
+
+    # Richer pricing fields — populated by the pricing classifier. The legacy
+    # ``cost_type`` + ``price_text`` fields above remain the primary serialized
+    # values for backward compatibility, but these fields let clients reason
+    # about mixed/unknown/registration-required events without misreading
+    # UNKNOWN as free.
+    is_free: Optional[bool] = Field(
+        default=None,
+        description=(
+            "Tri-state: True only when clearly free, False when any fee applies, "
+            "None when pricing is unknown. Never defaults to True without evidence."
+        ),
+    )
+    price_type: PriceType = Field(
+        default=PriceType.UNKNOWN,
+        description="Richer pricing label: free | paid | mixed | donation | unknown.",
+    )
+    pricing_summary: Optional[str] = Field(
+        default=None,
+        description=(
+            "Short human-readable pricing summary (max 200 chars), e.g. "
+            "'Registration fee: $15 per child' or 'Free for members, $12 non-members'."
+        ),
+    )
+    registration_required: bool = Field(
+        default=False,
+        description=(
+            "True when the source page requires registration / advance booking. "
+            "Independent of whether the event is paid — do NOT infer free from this."
+        ),
+    )
+    registration_fee_text: Optional[str] = Field(
+        default=None,
+        description="Fee text specifically attached to registration, if extracted.",
+    )
+    extracted_price_text: Optional[str] = Field(
+        default=None,
+        description="Raw pricing-related snippet extracted from the source page, pre-cleanup.",
+    )
 
     # ---- Tags / Scores -----------------------------------------------------
     tags: list[str] = Field(

@@ -91,6 +91,18 @@ class FairfaxLibraryScraper(BaseScraper):
         location = event.get("location") or ""
         location_text = ", ".join(p for p in [campus, location] if p) or None
 
+        # LibCal occasionally populates a `cost` / `admission` / `fee` field on
+        # paid programs. Pass any of these through as price_text so the
+        # classifier sees an explicit signal instead of relying on the library
+        # default "free" fallback.
+        price_text: str | None = None
+        for key in ("cost", "price", "fee", "admission", "registration_fee"):
+            val = event.get(key)
+            if val and isinstance(val, (str, int, float)):
+                price_text = str(val).strip() or None
+                if price_text:
+                    break
+
         return {
             "source_id": self.source_id,
             "source_name": self.source_name,
@@ -100,6 +112,7 @@ class FairfaxLibraryScraper(BaseScraper):
             "end_text": event.get("enddt"),
             "location_text": location_text,
             "summary_text": event.get("shortdesc") or event.get("description"),
+            "price_text": price_text,
             "all_day": event.get("all_day", False),
             "online_event": event.get("online_event", False),
             "featured_image": event.get("featured_image"),

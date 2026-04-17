@@ -53,6 +53,22 @@ _PARK_SLUG_TO_VENUE: dict[str, str] = {
 
 _PARK_SLUG_RE = re.compile(r"/parks/([^/]+)/")
 
+# Pricing text we're willing to salvage from the Drupal card description.
+# Covers "Cost: $20", "Registration fee: $15", "$10 per child", "Members free",
+# "Free" / "Free event".
+_PRICING_SNIPPET_RE = re.compile(
+    r"(?:"
+    r"(?:registration|program|class|course|entry|admission|materials?|ticket)"
+    r"\s+fee[^.\n]{0,60}"
+    r"|(?:cost|price|fee|admission)\s*[:\-]\s*[^.\n]{0,40}"
+    r"|members?\s+free[^.\n]{0,40}"
+    r"|\$\s*\d[\d,.]*(?:\s*(?:per\s+\w+|each|/\w+))?"
+    r"|\bfree\s+(?:event|admission|for\s+\w+)\b"
+    r"|\bsuggested\s+donation[^.\n]{0,40}"
+    r")",
+    re.IGNORECASE,
+)
+
 
 def _venue_from_url(url: str) -> str | None:
     """Extract a venue name hint from the Fairfax Parks URL path slug."""
@@ -61,6 +77,24 @@ def _venue_from_url(url: str) -> str | None:
         return None
     slug = m.group(1)
     return _PARK_SLUG_TO_VENUE.get(slug)
+
+
+def _extract_price_text(summary_text: str | None) -> str | None:
+    """
+    Pull a pricing snippet out of a card description.
+
+    Many Fairfax Parks event cards bury pricing in the calendar description
+    rather than in a dedicated field, e.g. "5:30PM, (ages 5-10) Nature walk.
+    Registration fee: $12 per child." Without this extraction, the event would
+    reach normalize_record() with price_text=None and be mis-classified as
+    free by the source default.
+    """
+    if not summary_text:
+        return None
+    m = _PRICING_SNIPPET_RE.search(summary_text)
+    if not m:
+        return None
+    return m.group(0).strip().strip(",.;:")
 
 
 class FairfaxParksAuthorityScraper(BaseScraper):
@@ -122,6 +156,11 @@ class FairfaxParksAuthorityScraper(BaseScraper):
         # Derive venue from URL slug — the list view has no dedicated location element
         location_text = _venue_from_url(event_url)
 
+        # Scan the card description for any pricing text. Passing this through
+        # gives the classifier an explicit signal so paid parks programs aren't
+        # collapsed into the "public source → free" default.
+        price_text = _extract_price_text(summary_text)
+
         return {
             "source_id":     self.source_id,
             "source_name":   self.source_name,
@@ -130,4 +169,5 @@ class FairfaxParksAuthorityScraper(BaseScraper):
             "date_text":     date_text,
             "location_text": location_text,
             "summary_text":  summary_text,
+            "price_text":    price_text,
         }
