@@ -289,6 +289,105 @@ class TestUnknownFallback:
 
 
 # ---------------------------------------------------------------------------
+# Paid-program titles at parks/libraries — must NOT silently default to free
+# ---------------------------------------------------------------------------
+
+class TestPaidProgramTitleAtPublicSource:
+    """
+    Regression coverage for the user-reported bug:
+
+        "Colored Pencil and Acrylic Workshop" at Fairfax County Park Authority
+        was showing as Free even though the source page said
+        "PRICE REGISTRATION $115.00".
+
+    Even when the detail-page price fails to extract, a workshop / class /
+    camp / lesson title at a parks/library/community source must NOT silently
+    fall back to FREE — the right answer is UNKNOWN.
+    """
+
+    def test_parks_workshop_title_no_price_is_unknown(self):
+        r = classify_pricing(
+            source_name="Fairfax County Park Authority",
+            location_name="Riverbend Park, Great Falls, VA",
+            title="Colored Pencil and Acrylic Workshop",
+            summary="Join us for an afternoon of art instruction.",
+        )
+        assert r.price_type == PriceType.UNKNOWN
+        assert r.is_free is None
+        assert r.reason == "paid_program_format_no_price"
+
+    def test_parks_pottery_class_no_price_is_unknown(self):
+        r = classify_pricing(
+            source_name="Fairfax County Park Authority",
+            title="Pottery Class for Beginners",
+            summary="Learn the basics of pottery.",
+        )
+        assert r.price_type == PriceType.UNKNOWN
+        assert r.is_free is None
+
+    def test_parks_summer_camp_title_no_price_is_unknown(self):
+        r = classify_pricing(
+            source_name="Fairfax County Park Authority",
+            title="Summer Nature Camp",
+            summary="A week of outdoor exploration for kids.",
+        )
+        assert r.price_type == PriceType.UNKNOWN
+        assert r.is_free is None
+
+    def test_library_swim_lesson_no_price_is_unknown(self):
+        r = classify_pricing(
+            source_name="Loudoun County Public Library",
+            title="Swimming Lessons",
+            summary="Weekly lessons for ages 5-10.",
+        )
+        # Even at libraries — "lessons" is a paid-program format.
+        assert r.price_type == PriceType.UNKNOWN
+        assert r.is_free is None
+
+    def test_parks_ranger_walk_still_defaults_free(self):
+        """Sanity: non-paid-format parks events still default to free."""
+        r = classify_pricing(
+            source_name="Fairfax County Park Authority",
+            title="Ranger-Led Nature Walk",
+            summary="Join a park ranger for a walk in the woods.",
+        )
+        assert r.price_type == PriceType.FREE
+        assert r.is_free is True
+
+    def test_library_storytime_still_defaults_free(self):
+        """Sanity: storytime is not a paid-program keyword."""
+        r = classify_pricing(
+            source_name="Arlington County Public Library",
+            title="Toddler Storytime",
+            summary="Songs and stories.",
+        )
+        assert r.price_type == PriceType.FREE
+        assert r.is_free is True
+
+    def test_parks_workshop_with_explicit_free_stays_free(self):
+        """Explicit free signal beats the paid-program guard."""
+        r = classify_pricing(
+            source_name="Fairfax County Park Authority",
+            title="Free Family Workshop",
+            summary="Free admission. All materials provided.",
+        )
+        assert r.price_type == PriceType.FREE
+        assert r.is_free is True
+
+    def test_parks_workshop_with_extracted_price_is_paid(self):
+        """When detail-page extraction succeeds, classification reflects it."""
+        r = classify_pricing(
+            price_text="Registration fee: $115.00",
+            source_name="Fairfax County Park Authority",
+            title="Colored Pencil and Acrylic Workshop",
+            summary="An afternoon of art instruction.",
+        )
+        assert r.price_type == PriceType.PAID
+        assert r.is_free is False
+        assert r.pricing_summary and "$115" in r.pricing_summary
+
+
+# ---------------------------------------------------------------------------
 # Pricing details preserved
 # ---------------------------------------------------------------------------
 
