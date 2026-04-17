@@ -58,3 +58,10 @@ SEED_DISCOVERY_ENABLED: bool = False  # opt-in via --with-seed-discovery flag
 # ---------------------------------------------------------------------------
 
 WEEK_START_DAY: int = 0  # 0 = Monday (ISO week start)
+
+# Retention: how many recent weekly JSON files to keep under
+# data/published/events/ (and mirrored to public/events/). Older week files
+# are pruned at the end of each publish run. Git history still contains the
+# removed files; this only controls what the live feed ships to clients.
+# 5 weeks ≈ last full calendar month plus the current partial week.
+MAX_PUBLISHED_WEEKS: int = 5

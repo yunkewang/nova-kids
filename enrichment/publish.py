@@ -24,7 +24,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from config.schema import Event
-from config.settings import PUBLISHED_DIR
+from config.settings import MAX_PUBLISHED_WEEKS, PUBLISHED_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +82,41 @@ def _event_to_dict(event: Event) -> dict[str, Any]:
         if data.get(key) is not None:
             data[key] = data[key].isoformat()
     return data
+
+
+def _prune_old_weeks(
+    available_weeks: list[str],
+    *,
+    max_weeks: int,
+) -> tuple[list[str], list[str]]:
+    """
+    Trim `available_weeks` to the newest `max_weeks` entries and delete the
+    corresponding on-disk week files.
+
+    Returns (kept_weeks, removed_weeks). Both are ISO date strings sorted
+    ascending.
+
+    ``max_weeks <= 0`` disables pruning (retain everything).
+    """
+    if max_weeks <= 0:
+        return sorted(set(available_weeks)), []
+
+    sorted_weeks = sorted(set(available_weeks))
+    if len(sorted_weeks) <= max_weeks:
+        return sorted_weeks, []
+
+    kept = sorted_weeks[-max_weeks:]
+    removed = sorted_weeks[:-max_weeks]
+
+    for week_key in removed:
+        path = PUBLISHED_DIR / _week_filename(date.fromisoformat(week_key))
+        try:
+            path.unlink(missing_ok=True)
+            logger.info("Pruned old week file: %s", path.name)
+        except OSError as exc:
+            logger.warning("Failed to delete %s: %s", path, exc)
+
+    return kept, removed
 
 
 def _load_existing_index() -> IndexFile | None:
@@ -184,6 +219,18 @@ def publish_events(
         if stem not in available_weeks:
             available_weeks.append(stem)
     available_weeks = sorted(set(available_weeks))
+
+    # Prune: keep only the most recent MAX_PUBLISHED_WEEKS weeks. Older files
+    # are deleted from disk so the published feed never grows unbounded.
+    # The week we just wrote is always among the newest, so it is safe.
+    available_weeks, removed_weeks = _prune_old_weeks(
+        available_weeks, max_weeks=MAX_PUBLISHED_WEEKS,
+    )
+    if removed_weeks:
+        logger.info(
+            "Retention: kept %d weeks, removed %d older (oldest removed: %s)",
+            len(available_weeks), len(removed_weeks), removed_weeks[0],
+        )
 
     latest_week = available_weeks[-1] if available_weeks else week_key
 
