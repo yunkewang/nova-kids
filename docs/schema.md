@@ -25,6 +25,12 @@ All events in the NoVA Kids pipeline are represented as instances of the
 | `age_max` | `int \| null` | No | Maximum recommended age (0–99) |
 | `cost_type` | `CostType` | No | Enum: `free`, `paid`, `sliding_scale`, `suggested_donation`, `unknown` |
 | `price_text` | `str \| null` | No | Raw price string from source |
+| `is_free` | `bool \| null` | No | Tri-state: `true` only when clearly free, `false` on any fee, `null` when unknown |
+| `price_type` | `PriceType` | No | Richer label: `free`, `paid`, `mixed`, `donation`, `unknown` |
+| `pricing_summary` | `str \| null` | No | Short human-readable pricing summary (e.g. "Registration fee: $15 per child") |
+| `registration_required` | `bool` | No | True when advance registration is required. Independent of whether the event is paid |
+| `registration_fee_text` | `str \| null` | No | Fee text specifically attached to registration (if extracted) |
+| `extracted_price_text` | `str \| null` | No | Raw pricing snippet extracted from the source page, pre-cleanup |
 | `tags` | `list[str]` | No | Derived classification tags (see allowed set below) |
 | `family_friendly_score` | `float` | No | 0–1 derived score |
 | `rainy_day_friendly` | `bool` | No | True when suitable regardless of weather |

@@ -24,10 +24,11 @@ from typing import Any
 from dateutil import parser as dateutil_parser
 from pydantic import ValidationError
 
-from config.schema import CostType, Event
+from config.schema import CostType, Event, PriceType
 from config.source_names import normalize_source_name
 from enrichment.annotate import generate_short_note
 from enrichment.enrich import enrich_event
+from enrichment.pricing import PricingClassification, classify_pricing
 
 logger = logging.getLogger(__name__)
 
@@ -564,131 +565,17 @@ def normalize_location(location_text: str | None) -> dict[str, str | None]:
 
 
 # ---------------------------------------------------------------------------
-# Cost normalization — source-aware inference pipeline
+# Cost normalization — delegates to enrichment.pricing.classify_pricing()
 # ---------------------------------------------------------------------------
-
-# Explicit free text in any field → always free
-_FREE_EXPLICIT = re.compile(
-    r"\bfree\b"
-    r"|\bno charge\b"
-    r"|\bno cost\b"
-    r"|\bcomplimentary\b"
-    r"|\bat no cost\b"
-    r"|\bno fee\b"
-    r"|\bfree admission\b"
-    r"|\bfree to attend\b"
-    r"|\bfree event\b",
-    re.IGNORECASE,
-)
-
-# Strong paid signals — override even public/library default
-_STRONG_PAID_SIGNALS = re.compile(
-    r"\$\s*\d"                               # dollar amount: $8, $10.00
-    r"|\bper child\b"                        # per-child pricing
-    r"|\bper person\b"                       # per-person pricing
-    r"|\bregistration fee\b"                 # explicit registration fee
-    r"|\bcost:\s*\$"                         # cost: $X
-    r"|\bfee:\s*\$"                          # fee: $X
-    r"|\bpaid event\b"                       # explicitly labelled paid
-    r"|\bpurchase tickets?\b"                # purchase ticket/tickets
-    r"|\bbook now for\s*\$"                  # book now for $X
-    r"|\breserve your spot for\s*\$"         # reserve your spot for $X
-    r"|\bprices?\s+start\b"                  # prices start at
-    r"|\b\d+\s*(?:usd|dollars?)\b",         # 10 USD / 25 dollars
-    re.IGNORECASE,
-)
-
-# Donation / sliding-scale language
-_DONATION_PATTERNS = re.compile(
-    r"\bsuggested donation\b"
-    r"|\bdonation.based\b"
-    r"|\bpay what you can\b"
-    r"|\bfree with optional donation\b"
-    r"|\bvoluntary donation\b",
-    re.IGNORECASE,
-)
-
-# General paid signals — only applied for non-public/non-library sources
-_GENERAL_PAID_SIGNALS = re.compile(
-    r"\btickets?\b"                          # ticket / tickets
-    r"|\badmission\b"                        # admission (without "free")
-    r"|\bfee\b"                              # generic fee
-    r"|\bpaid\b"                             # paid
-    r"|\bcost[s:]?\b",                       # cost / costs / cost:
-    re.IGNORECASE,
-)
-
-# Source name substrings that identify public library systems (lowercase)
-_LIBRARY_SOURCE_SUBSTRINGS: frozenset[str] = frozenset({
-    "public library",
-    "public libraries",
-    "libcal",
-    "libnet",
-})
-
-# Source name substrings for government/parks/community sources (lowercase)
-_PUBLIC_SOURCE_SUBSTRINGS: frozenset[str] = frozenset({
-    "park authority",
-    "parks & recreation",
-    "parks and recreation",
-    "parks recreation",
-    "county parks",
-    "city parks",
-    "community center",
-    "family resource center",
-    "nature center",
-    "recreation center",
-    "school district",
-    "public school",
-})
-
-
-def _source_is_library(source_name: str | None, source_url: str | None) -> bool:
-    """Return True if the source is a public library system."""
-    if source_name:
-        lower = source_name.lower()
-        if "library" in lower or "libraries" in lower:
-            return True
-        for sub in _LIBRARY_SOURCE_SUBSTRINGS:
-            if sub in lower:
-                return True
-    if source_url:
-        url_lower = source_url.lower()
-        if "libcal" in url_lower or "libnet" in url_lower or "library" in url_lower:
-            return True
-    return False
-
-
-def _source_is_public_community(source_name: str | None) -> bool:
-    """Return True if the source is a government/parks/community source."""
-    if not source_name:
-        return False
-    lower = source_name.lower()
-    for sub in _PUBLIC_SOURCE_SUBSTRINGS:
-        if sub in lower:
-            return True
-    return False
-
-
-def _venue_is_library(location_name: str | None) -> bool:
-    """Return True if the venue name indicates a public library."""
-    if not location_name:
-        return False
-    lower = location_name.lower()
-    return "library" in lower or "libraries" in lower
-
-
-def _venue_is_public_community(location_name: str | None) -> bool:
-    """Return True if the venue name indicates a public/community facility."""
-    if not location_name:
-        return False
-    lower = location_name.lower()
-    keywords = [
-        "recreation center", "rec center", "community center",
-        "nature center", "civic center", "family resource center",
-        "community room",
-    ]
-    return any(kw in lower for kw in keywords)
+#
+# Historic note: this module used to host a regex-based inference ladder that
+# defaulted to FREE whenever the source looked like a library or parks/rec
+# venue, before checking generic paid signals ("fee", "admission", "tickets").
+# That caused paid library / parks programs with "registration fee" or
+# similar wording to be published as free. The classification has been moved
+# into ``enrichment.pricing`` and reordered so that any paid signal (strong
+# OR weak) overrides the library/parks default. The thin wrappers below keep
+# the old function signatures so existing callers continue to work.
 
 
 def infer_cost(
@@ -704,54 +591,30 @@ def infer_cost(
 
     Returns (cost_type, cleaned_price_text, reason).
 
-    Inference priority:
-      1. Explicit free text in any field               → FREE
-      2. Strong paid signals ($ amounts, per-person)   → PAID
-      3. Donation / pay-what-you-can language           → SUGGESTED_DONATION
-      4. Source or venue is a public library            → FREE (library default)
-      5. Source or venue is public/community/govt       → FREE (public default)
-      6. General paid signals (non-public sources only) → PAID
-      7. Fallback                                       → UNKNOWN
+    Thin wrapper around :func:`enrichment.pricing.classify_pricing`.
+    Kept for callers that only need the legacy triple; new code should
+    call :func:`classify_pricing` directly to get the full classification
+    including mixed/unknown handling and registration_required.
     """
-    combined = " ".join(filter(None, [price_text, summary, title]))
-
-    # Step 1: explicit free text → free regardless of source
-    if _FREE_EXPLICIT.search(combined):
-        return CostType.FREE, "Free", "explicit_free_text"
-
-    # Step 2: strong paid signals → paid regardless of source
-    if _STRONG_PAID_SIGNALS.search(combined):
-        return CostType.PAID, price_text, "strong_paid_signal"
-
-    # Step 3: donation language
-    if _DONATION_PATTERNS.search(combined):
-        return CostType.SUGGESTED_DONATION, price_text, "donation_language"
-
-    # Step 4: public library source or venue → default free
-    if _source_is_library(source_name, source_url) or _venue_is_library(location_name):
-        return CostType.FREE, "Free", "library_default_free"
-
-    # Step 5: public/community/government source or venue → default free
-    if _source_is_public_community(source_name) or _venue_is_public_community(location_name):
-        return CostType.FREE, "Free", "public_source_default_free"
-
-    # Step 6: general paid signals (commercial/unknown sources only)
-    if _GENERAL_PAID_SIGNALS.search(combined):
-        return CostType.PAID, price_text, "general_paid_signal"
-
-    # Step 7: unknown — no reliable signal
-    return CostType.UNKNOWN, price_text, "unknown_no_signals"
+    result = classify_pricing(
+        price_text=price_text,
+        summary=summary,
+        title=title,
+        source_name=source_name,
+        source_url=source_url,
+        location_name=location_name,
+    )
+    clean = result.price_text
+    if result.cost_type == CostType.FREE and not clean:
+        clean = "Free"
+    return result.cost_type, clean, result.reason
 
 
 def normalize_cost(
     price_text: str | None,
     summary: str | None = None,
 ) -> tuple[CostType, str | None]:
-    """
-    Backward-compatible wrapper around infer_cost() without source context.
-
-    Prefer calling infer_cost() directly when source/venue context is available.
-    """
+    """Backward-compatible wrapper without source context."""
     cost_type, clean_price, _ = infer_cost(price_text, summary)
     return cost_type, clean_price
 
@@ -855,14 +718,31 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
     # Summary — clean junk before cost/note generation
     summary_text = clean_summary(raw.get("summary_text"))
 
-    # Cost — pass full context for source-aware inference
-    cost_type, price_text, _cost_reason = infer_cost(
-        raw.get("price_text"),
-        summary_text,
+    # Cost — pass full context for source-aware classification. The classifier
+    # returns a richer structured result so we can populate is_free,
+    # price_type, pricing_summary, registration_required, etc.
+    pricing: PricingClassification = classify_pricing(
+        price_text=raw.get("price_text"),
+        summary=summary_text,
+        title=title,
         source_name=raw_source_name,
         source_url=raw.get("source_url"),
         location_name=loc["location_name"],
-        title=title,
+        registration_url=raw.get("registration_url"),
+    )
+    cost_type = pricing.cost_type
+    price_text = pricing.price_text
+    logger.debug(
+        "Pricing classified for '%s': price_type=%s is_free=%s reason=%s matched=%s "
+        "summary=%r extracted=%r registration_required=%s",
+        title,
+        pricing.price_type.value,
+        pricing.is_free,
+        pricing.reason,
+        pricing.matched_patterns,
+        pricing.pricing_summary,
+        pricing.extracted_price_text,
+        pricing.registration_required,
     )
 
     # Generate ID
@@ -882,6 +762,12 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
         "county": loc["county"],
         "cost_type": cost_type,
         "price_text": price_text,
+        "is_free": pricing.is_free,
+        "price_type": pricing.price_type,
+        "pricing_summary": pricing.pricing_summary,
+        "registration_required": pricing.registration_required,
+        "registration_fee_text": pricing.registration_fee_text,
+        "extracted_price_text": pricing.extracted_price_text,
         "source_name": source_name,
         "source_url": source_url,
         "registration_url": normalize_url(raw.get("registration_url")),
