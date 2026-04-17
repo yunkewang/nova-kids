@@ -1587,5 +1587,33 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-04-12T10:29:19.655926+00:00"
+  },
+  "Sherwood Regional Library, Sherwood Group Study Room, Alexandria, VA": {
+    "query": "Sherwood Regional Library, Sherwood Group Study Room, Alexandria, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-17T10:46:57.802496+00:00"
+  },
+  "Sherwood Regional Library, Sherwood Group Study Room, Alexandria, Fairfax County, VA": {
+    "query": "Sherwood Regional Library, Sherwood Group Study Room, Alexandria, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-17T10:46:59.083774+00:00"
+  },
+  "Sherwood Regional Library, Sherwood Group Study Room, Fairfax County, VA": {
+    "query": "Sherwood Regional Library, Sherwood Group Study Room, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-17T10:47:00.462949+00:00"
+  },
+  "Sherwood Regional Library, Sherwood Group Study Room": {
+    "query": "Sherwood Regional Library, Sherwood Group Study Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-17T10:47:01.768094+00:00"
   }
 }
