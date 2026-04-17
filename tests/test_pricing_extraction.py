@@ -10,7 +10,10 @@ from __future__ import annotations
 
 from bs4 import BeautifulSoup
 
-from scrapers.fairfax_parks import _extract_price_text
+from scrapers.fairfax_parks import (
+    _extract_price_from_detail_html,
+    _extract_price_text,
+)
 from seed_discovery.resolver import _clean_price_text, _extract_cost_from_html
 
 
@@ -105,6 +108,108 @@ class TestResolverHtmlExtraction:
 # ---------------------------------------------------------------------------
 # Resolver price-text cleanup
 # ---------------------------------------------------------------------------
+
+class TestFairfaxParksDetailPriceExtraction:
+    """
+    Detail-page extraction tests for Fairfax Parks.
+
+    The list calendar rarely carries pricing; the actual "PRICE REGISTRATION
+    $115.00" block lives on the per-event detail page. _extract_price_from_detail_html
+    must salvage that signal so paid workshops don't fall back to the
+    parks "default free" rule.
+    """
+
+    def test_price_registration_label_dollar(self):
+        # Mirrors the Fairfax Parks "PRICE / REGISTRATION $115.00" layout.
+        html = """
+        <html><body>
+          <h1>Colored Pencil and Acrylic Workshop</h1>
+          <div class="event-info">
+            <div class="label">PRICE</div>
+            <div class="value">REGISTRATION $115.00</div>
+          </div>
+        </body></html>
+        """
+        out = _extract_price_from_detail_html(html)
+        assert out is not None
+        assert "$115.00" in out
+
+    def test_cost_label_with_dollar(self):
+        html = """
+        <html><body>
+          <h1>Pottery Class</h1>
+          <p>Cost: $45 per session.</p>
+        </body></html>
+        """
+        out = _extract_price_from_detail_html(html)
+        assert out is not None
+        assert "$45" in out
+
+    def test_registration_fee_label(self):
+        html = """
+        <html><body>
+          <p>Registration fee: $80 per child.</p>
+        </body></html>
+        """
+        out = _extract_price_from_detail_html(html)
+        assert out is not None
+        assert "$80" in out
+        assert "egistration" in out.lower() or "$80" in out
+
+    def test_free_admission_text(self):
+        html = """
+        <html><body>
+          <h1>Family Nature Walk</h1>
+          <p>Free admission. All ages welcome.</p>
+        </body></html>
+        """
+        out = _extract_price_from_detail_html(html)
+        assert out is not None
+        assert "free" in out.lower()
+
+    def test_no_pricing_returns_none(self):
+        html = """
+        <html><body>
+          <h1>Park Ranger Talk</h1>
+          <p>Join us at the visitor center.</p>
+        </body></html>
+        """
+        out = _extract_price_from_detail_html(html)
+        assert out is None
+
+    def test_empty_html_returns_none(self):
+        assert _extract_price_from_detail_html("") is None
+        assert _extract_price_from_detail_html(None) is None  # type: ignore[arg-type]
+
+    def test_script_content_ignored(self):
+        # Dollar amounts inside <script>/<style> shouldn't leak through
+        html = """
+        <html><body>
+          <script>var price = "$999";</script>
+          <h1>Free Concert in the Park</h1>
+          <p>Bring a blanket.</p>
+        </body></html>
+        """
+        out = _extract_price_from_detail_html(html)
+        # Either matches "Free" copy or returns None — must NOT return $999.
+        assert out is None or "$999" not in out
+
+    def test_price_registration_split_lines(self):
+        # Some Fairfax pages render PRICE on one row and the dollar amount on
+        # the next. After flattening, the "registration $115" pattern still wins.
+        html = """
+        <html><body>
+          <table>
+            <tr><th>Date</th><td>April 18, 2026</td></tr>
+            <tr><th>Time</th><td>10am - 12pm</td></tr>
+            <tr><th>Price</th><td>Registration $115.00</td></tr>
+          </table>
+        </body></html>
+        """
+        out = _extract_price_from_detail_html(html)
+        assert out is not None
+        assert "$115" in out
+
 
 class TestCleanPriceText:
     def test_short_text_preserved(self):

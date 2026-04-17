@@ -25,6 +25,10 @@ BASE_URL = "https://www.fairfaxcounty.gov"
 EVENTS_URL = f"{BASE_URL}/parks/park-events-calendar"
 MAX_PAGES = 10  # safety cap
 
+# How many event detail pages to fetch per scraper run. Detail-page lookups
+# add network cost, so cap them. The list page is still always parsed.
+DETAIL_FETCH_LIMIT = 200
+
 # Map URL path slugs to canonical venue names used by geocode.py / known_venues.py
 _PARK_SLUG_TO_VENUE: dict[str, str] = {
     "riverbend":          "Riverbend Park, Great Falls, VA",
@@ -69,6 +73,37 @@ _PRICING_SNIPPET_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Detail-page pricing label. Fairfax Parks renders a labelled block like:
+#   PRICE
+#   REGISTRATION  $115.00
+# We grab the price token directly so the raw "$115.00" survives even when the
+# label uses unusual whitespace or all-caps.
+_DETAIL_PRICE_LABEL_RE = re.compile(
+    r"\b(?:price|cost|fee|registration\s+fee|program\s+fee)\b[^\$\n\r]{0,80}"
+    r"(\$\s*\d[\d,]*(?:\.\d+)?(?:\s*[-/]\s*\$?\d[\d,]*(?:\.\d+)?)?)",
+    re.IGNORECASE,
+)
+_DETAIL_REGISTRATION_PRICE_RE = re.compile(
+    r"\bregistration\b[^\$\n\r]{0,40}(\$\s*\d[\d,]*(?:\.\d+)?)",
+    re.IGNORECASE,
+)
+# Stand-alone dollar amount as a fallback
+_DETAIL_DOLLAR_RE = re.compile(r"\$\s*\d[\d,]*(?:\.\d+)?")
+
+# Words in a title or summary that strongly suggest paid programming. Used to
+# decide whether a detail-page fetch is worth the network round-trip.
+_PAID_PROGRAM_TITLE_RE = re.compile(
+    r"\b("
+    r"workshop|class|classes|camp|camps|course|courses|lesson|lessons|series|"
+    r"academy|clinic|clinics|training|certification|instruction|instructor|"
+    r"intensive|seminar|tour|tours|excursion|trip|outing|"
+    r"painting|drawing|pottery|ceramics|knitting|sewing|crochet|"
+    r"yoga|pilates|dance|cooking|baking|swim(?:ming)?|tennis|golf|riding|"
+    r"birthday|party|registration\s+required"
+    r")\b",
+    re.IGNORECASE,
+)
+
 
 def _venue_from_url(url: str) -> str | None:
     """Extract a venue name hint from the Fairfax Parks URL path slug."""
@@ -97,14 +132,86 @@ def _extract_price_text(summary_text: str | None) -> str | None:
     return m.group(0).strip().strip(",.;:")
 
 
+def _extract_price_from_detail_html(html: str) -> str | None:
+    """
+    Pull a pricing snippet from a Fairfax Parks event detail page.
+
+    The detail pages (e.g. an art class) render a structured block:
+
+        PRICE
+        REGISTRATION  $115.00
+
+    The list calendar never carries that field, so without fetching the detail
+    page these events arrive at the classifier with no signals and fall back
+    to the parks "default free" rule. This helper salvages the labelled price
+    directly from the page text.
+
+    Strategy (first hit wins):
+      1. Parse the page with BeautifulSoup, look for a labelled price block
+      2. Look for "REGISTRATION $X.XX" pattern even without "PRICE" label
+      3. Fall back to the first dollar amount in the visible body text
+      4. Return None if nothing pricing-shaped was found
+    """
+    if not html:
+        return None
+
+    try:
+        soup = BeautifulSoup(html, "lxml")
+    except Exception:
+        return None
+
+    # Strip script/style noise so we don't grab CSS or analytics tokens
+    for el in soup(["script", "style", "noscript"]):
+        el.decompose()
+
+    body_text = soup.get_text(" ", strip=True)
+    body_text = re.sub(r"\s+", " ", body_text)
+    if not body_text:
+        return None
+
+    # 1. Labelled price (PRICE / COST / FEE / REGISTRATION FEE) → "$X"
+    m = _DETAIL_PRICE_LABEL_RE.search(body_text)
+    if m:
+        amount = m.group(1).strip()
+        return f"Registration fee: {amount}" if "registration" in m.group(0).lower() \
+            else f"Cost: {amount}"
+
+    # 2. "REGISTRATION  $115.00" — common Fairfax Parks layout where the
+    #    "PRICE" header appears on a sibling row that BeautifulSoup may
+    #    flatten into a different sentence.
+    m2 = _DETAIL_REGISTRATION_PRICE_RE.search(body_text)
+    if m2:
+        return f"Registration fee: {m2.group(1).strip()}"
+
+    # 3. Free admission language is sometimes present
+    if re.search(r"\bfree\s+(?:event|admission|to\s+attend|of\s+charge)\b",
+                 body_text, re.IGNORECASE):
+        return "Free admission"
+
+    # 4. Last resort: any dollar amount on the page
+    m3 = _DETAIL_DOLLAR_RE.search(body_text)
+    if m3:
+        return m3.group(0).strip()
+
+    return None
+
+
 class FairfaxParksAuthorityScraper(BaseScraper):
     """Scrapes public event listings from the Fairfax County Park Authority."""
 
     source_id = "fairfax_park_authority"
     source_name = "Fairfax County Park Authority"
 
+    def __init__(self) -> None:
+        super().__init__()
+        # Track detail fetches across the run so we don't blow past the cap
+        # if the calendar grows. Cleared automatically when the scraper is
+        # re-instantiated for the next run.
+        self._detail_fetches = 0
+
     def fetch_raw(self) -> list[dict[str, Any]]:
         records: list[dict[str, Any]] = []
+        self._detail_fetches = 0
 
         for page in range(MAX_PAGES):
             url = EVENTS_URL if page == 0 else f"{EVENTS_URL}?park-events-calendar=&page={page}"
@@ -161,6 +268,13 @@ class FairfaxParksAuthorityScraper(BaseScraper):
         # collapsed into the "public source → free" default.
         price_text = _extract_price_text(summary_text)
 
+        # The list card almost never carries pricing for paid programs (the
+        # actual "PRICE REGISTRATION $X" block lives on the detail page).
+        # Fetch the detail page when we still have no price and the title or
+        # description hints at a paid-program format.
+        if not price_text and self._should_fetch_detail(title, summary_text):
+            price_text = self._fetch_detail_price(event_url)
+
         return {
             "source_id":     self.source_id,
             "source_name":   self.source_name,
@@ -171,3 +285,41 @@ class FairfaxParksAuthorityScraper(BaseScraper):
             "summary_text":  summary_text,
             "price_text":    price_text,
         }
+
+    # ------------------------------------------------------------------
+    # Detail-page helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _should_fetch_detail(title: str | None, summary: str | None) -> bool:
+        """
+        True when the event looks like it could be a paid program.
+
+        We only fetch the detail page in cases where guessing wrong would be
+        costly — i.e. titles/descriptions matching workshop/class/camp/course
+        and similar paid-program keywords. Generic ranger walks and free
+        nature talks don't trigger a detail fetch, so the network cost stays
+        proportional to the number of paid-looking events.
+        """
+        haystack = " ".join(filter(None, (title, summary))).lower()
+        if not haystack:
+            return False
+        return bool(_PAID_PROGRAM_TITLE_RE.search(haystack))
+
+    def _fetch_detail_price(self, event_url: str) -> str | None:
+        """Fetch a single event detail page and salvage pricing from it."""
+        if self._detail_fetches >= DETAIL_FETCH_LIMIT:
+            logger.debug(
+                "Skipping detail fetch for %s — limit %d reached",
+                event_url, DETAIL_FETCH_LIMIT,
+            )
+            return None
+        self._detail_fetches += 1
+
+        try:
+            response = self.get(event_url)
+        except Exception as exc:
+            logger.debug("Detail fetch failed for %s: %s", event_url, exc)
+            return None
+
+        return _extract_price_from_detail_html(response.text)

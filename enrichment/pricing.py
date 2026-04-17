@@ -203,6 +203,36 @@ _PUBLIC_SOURCE_SUBSTRINGS: frozenset[str] = frozenset({
     "public school",
 })
 
+# Title/summary keywords that almost always indicate a paid program even at
+# parks, libraries, and rec centers. When one of these appears and we have no
+# other pricing signal, we fall back to UNKNOWN instead of the public-source
+# default of FREE — so e.g. a Fairfax Parks "Pottery Workshop" stops silently
+# appearing as free just because the detail-page price didn't extract.
+_PAID_PROGRAM_KEYWORDS_RE = re.compile(
+    r"\b("
+    r"workshop|workshops|"
+    r"class|classes|"
+    r"camp|camps|"
+    r"course|courses|"
+    r"lesson|lessons|"
+    r"series|"
+    r"academy|"
+    r"clinic|clinics|"
+    r"training|"
+    r"certification|"
+    r"instruction|instructor|"
+    r"intensive|"
+    r"seminar|seminars|"
+    r"painting|drawing|sketching|pottery|ceramics|knitting|sewing|crochet|"
+    r"yoga|pilates|cooking\s+class|baking\s+class|"
+    r"swim(?:ming)?\s+(?:lesson|class|clinic)|"
+    r"tennis\s+(?:lesson|clinic)|golf\s+(?:lesson|clinic)|"
+    r"riding\s+(?:lesson|clinic)|horse\s+riding|"
+    r"birthday\s+party|paint\s+night|paint\s+and\s+sip"
+    r")\b",
+    re.IGNORECASE,
+)
+
 
 def _source_is_library(source_name: str | None, source_url: str | None) -> bool:
     if source_name:
@@ -496,13 +526,27 @@ def classify_pricing(
         )
 
     # --- Step 7: public / library / community defaults ----------------------
-    if _source_is_library(source_name, source_url) or _venue_is_library(location_name):
-        matched.append("library_default")
-        return _finalize(
-            PriceType.FREE, CostType.FREE, True,
-            reason="library_default_free",
-        )
-    if _source_is_public_community(source_name) or _venue_is_public_community(location_name):
+    # Tightened: even at libraries / parks / rec centers, if the title looks
+    # like a paid-program format (workshop, class, camp, lesson, ...) and we
+    # have NO explicit free signal, fall back to UNKNOWN. Silently flagging
+    # a Fairfax Parks "Pottery Workshop" as free would be the same bug we're
+    # trying to fix — better to surface uncertainty than to mislead users.
+    is_library = _source_is_library(source_name, source_url) or _venue_is_library(location_name)
+    is_public = _source_is_public_community(source_name) or _venue_is_public_community(location_name)
+    if is_library or is_public:
+        paid_program_match = _PAID_PROGRAM_KEYWORDS_RE.search(combined)
+        if paid_program_match:
+            matched.append(f"paid_program_keyword:{paid_program_match.group(0)!r}")
+            return _finalize(
+                PriceType.UNKNOWN, CostType.UNKNOWN, None,
+                reason="paid_program_format_no_price",
+            )
+        if is_library:
+            matched.append("library_default")
+            return _finalize(
+                PriceType.FREE, CostType.FREE, True,
+                reason="library_default_free",
+            )
         matched.append("public_default")
         return _finalize(
             PriceType.FREE, CostType.FREE, True,
