@@ -1615,5 +1615,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-04-17T10:47:01.768094+00:00"
+  },
+  "Glencarlyn Library, Outside, Arlington, Arlington County, VA": {
+    "query": "Glencarlyn Library, Outside, Arlington, Arlington County, VA",
+    "latitude": 38.863589,
+    "longitude": -77.125889,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-18T10:41:09.178944+00:00"
   }
 }
