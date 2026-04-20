@@ -1622,5 +1622,12 @@
     "longitude": -77.125889,
     "confidence": 0.9,
     "resolved_at": "2026-04-18T10:41:09.178944+00:00"
+  },
+  "Samuel Beckett's Irish Pub, 2800 South Randolph Street, Arlington VA 22206, Arlington": {
+    "query": "Samuel Beckett's Irish Pub, 2800 South Randolph Street, Arlington VA 22206, Arlington",
+    "latitude": 38.840713,
+    "longitude": -77.08927,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-20T11:20:40.316247+00:00"
   }
 }
