@@ -1629,5 +1629,33 @@
     "longitude": -77.08927,
     "confidence": 0.9,
     "resolved_at": "2026-04-20T11:20:40.316247+00:00"
+  },
+  "Oakton Conference Room, Oakton, Fairfax County, VA": {
+    "query": "Oakton Conference Room, Oakton, Fairfax County, VA",
+    "latitude": 38.876312,
+    "longitude": -77.308739,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-21T11:06:09.264720+00:00"
+  },
+  "Central Library, Quincy Park": {
+    "query": "Central Library, Quincy Park",
+    "latitude": 38.883787,
+    "longitude": -77.107184,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-21T11:06:10.541700+00:00"
+  },
+  "Westover Library, McKinley Room, Arlington, Arlington County, VA": {
+    "query": "Westover Library, McKinley Room, Arlington, Arlington County, VA",
+    "latitude": 38.886021,
+    "longitude": -77.142258,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-21T11:06:11.808425+00:00"
+  },
+  "Dorothy Hamm Middle School, 4100 Vacation Lane, Arlington, VA 22207, Arlington": {
+    "query": "Dorothy Hamm Middle School, 4100 Vacation Lane, Arlington, VA 22207, Arlington",
+    "latitude": 38.900005,
+    "longitude": -77.112346,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-21T11:06:12.945598+00:00"
   }
 }
