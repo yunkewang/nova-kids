@@ -1657,5 +1657,19 @@
     "longitude": -77.112346,
     "confidence": 0.9,
     "resolved_at": "2026-04-21T11:06:12.945598+00:00"
+  },
+  "*Off-Site, Lee Heights Shops (4500 Cherry Hill Road, Arlington, VA 22207), Arlington, Arlington County, VA": {
+    "query": "*Off-Site, Lee Heights Shops (4500 Cherry Hill Road, Arlington, VA 22207), Arlington, Arlington County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-26T10:47:20.547985+00:00"
+  },
+  "*Off-Site, Lee Heights Shops (4500 Cherry Hill Road, Arlington, VA 22207), Arlington, VA": {
+    "query": "*Off-Site, Lee Heights Shops (4500 Cherry Hill Road, Arlington, VA 22207), Arlington, VA",
+    "latitude": 38.898262,
+    "longitude": -77.11873,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-26T10:47:21.691166+00:00"
   }
 }
