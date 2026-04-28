@@ -1671,5 +1671,12 @@
     "longitude": -77.11873,
     "confidence": 0.9,
     "resolved_at": "2026-04-26T10:47:21.691166+00:00"
+  },
+  "Ellen M. Bozman Government Center / 2100 Clarendon Blvd, Arlington, VA 22201, Arlington": {
+    "query": "Ellen M. Bozman Government Center / 2100 Clarendon Blvd, Arlington, VA 22201, Arlington",
+    "latitude": 38.890459,
+    "longitude": -77.085397,
+    "confidence": 0.9,
+    "resolved_at": "2026-04-28T11:44:17.352723+00:00"
   }
 }
