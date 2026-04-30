@@ -1678,5 +1678,12 @@
     "longitude": -77.085397,
     "confidence": 0.9,
     "resolved_at": "2026-04-28T11:44:17.352723+00:00"
+  },
+  "Events at Other Locations": {
+    "query": "Events at Other Locations",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-04-30T11:33:40.907936+00:00"
   }
 }
