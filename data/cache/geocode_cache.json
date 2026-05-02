@@ -1685,5 +1685,33 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-04-30T11:33:40.907936+00:00"
+  },
+  "Herndon Fortnightly Library, Herndon Fortnightly Lobby, Herndon, VA": {
+    "query": "Herndon Fortnightly Library, Herndon Fortnightly Lobby, Herndon, VA",
+    "latitude": 38.971831,
+    "longitude": -77.387103,
+    "confidence": 0.9,
+    "resolved_at": "2026-05-02T10:51:51.072334+00:00"
+  },
+  "NOW Pop-Up Park / 1401 Wilson Blvd / Arlington 22209, Arlington": {
+    "query": "NOW Pop-Up Park / 1401 Wilson Blvd / Arlington 22209, Arlington",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-05-02T10:51:52.162607+00:00"
+  },
+  "NOW Pop-Up Park / 1401 Wilson Blvd / Arlington 22209": {
+    "query": "NOW Pop-Up Park / 1401 Wilson Blvd / Arlington 22209",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-05-02T10:51:53.154279+00:00"
+  },
+  "*Off-Site, Arlington, Arlington County, VA": {
+    "query": "*Off-Site, Arlington, Arlington County, VA",
+    "latitude": 38.884926,
+    "longitude": -77.095853,
+    "confidence": 0.9,
+    "resolved_at": "2026-05-02T10:51:54.196541+00:00"
   }
 }
