@@ -1713,5 +1713,12 @@
     "longitude": -77.095853,
     "confidence": 0.9,
     "resolved_at": "2026-05-02T10:51:54.196541+00:00"
+  },
+  "Chantilly Regional Library, Chantilly Lobby, Chantilly, VA": {
+    "query": "Chantilly Regional Library, Chantilly Lobby, Chantilly, VA",
+    "latitude": 38.882637,
+    "longitude": -77.408189,
+    "confidence": 0.9,
+    "resolved_at": "2026-05-09T10:55:31.449064+00:00"
   }
 }
