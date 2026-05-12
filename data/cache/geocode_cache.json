@@ -1720,5 +1720,12 @@
     "longitude": -77.408189,
     "confidence": 0.9,
     "resolved_at": "2026-05-09T10:55:31.449064+00:00"
+  },
+  "Courthouse Library, Fir Room": {
+    "query": "Courthouse Library, Fir Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-05-12T11:58:19.555902+00:00"
   }
 }
