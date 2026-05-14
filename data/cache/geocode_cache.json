@@ -1727,5 +1727,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-05-12T11:58:19.555902+00:00"
+  },
+  "Shirlington Library": {
+    "query": "Shirlington Library",
+    "latitude": 38.840939,
+    "longitude": -77.090316,
+    "confidence": 0.9,
+    "resolved_at": "2026-05-14T11:52:10.095051+00:00"
   }
 }
