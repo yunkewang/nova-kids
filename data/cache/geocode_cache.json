@@ -1748,5 +1748,47 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-05-19T12:43:22.047722+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Falls Church, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Falls Church, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-05-28T13:10:50.238101+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Tyson, Fairfax County, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Tyson, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-05-28T13:10:51.805888+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Tyson, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Tyson, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-05-28T13:10:53.031956+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Fairfax County, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-05-28T13:10:54.285002+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Conference Room, Tysons-Pimmit Meeting Room 1, Tysons-Pimmit Meeting Room 2",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-05-28T13:10:55.574742+00:00"
+  },
+  "Kingstowne Regional Library, Vienna, Fairfax County, VA": {
+    "query": "Kingstowne Regional Library, Vienna, Fairfax County, VA",
+    "latitude": 38.763472,
+    "longitude": -77.155439,
+    "confidence": 0.9,
+    "resolved_at": "2026-05-28T13:10:56.844419+00:00"
   }
 }
