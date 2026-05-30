@@ -1790,5 +1790,19 @@
     "longitude": -77.155439,
     "confidence": 0.9,
     "resolved_at": "2026-05-28T13:10:56.844419+00:00"
+  },
+  "Courthouse Library, Outside": {
+    "query": "Courthouse Library, Outside",
+    "latitude": 38.890554,
+    "longitude": -77.085362,
+    "confidence": 0.9,
+    "resolved_at": "2026-05-30T11:21:26.797634+00:00"
+  },
+  "Ms. Moxie's Moon Shop": {
+    "query": "Ms. Moxie's Moon Shop",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-05-30T11:21:27.784488+00:00"
   }
 }
