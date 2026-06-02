@@ -1804,5 +1804,33 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-05-30T11:21:27.784488+00:00"
+  },
+  "Reston Regional Library, Reston Large Print Area, Reston, VA": {
+    "query": "Reston Regional Library, Reston Large Print Area, Reston, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-02T13:58:05.657739+00:00"
+  },
+  "Reston Regional Library, Reston Large Print Area, Reston, Fairfax County, VA": {
+    "query": "Reston Regional Library, Reston Large Print Area, Reston, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-02T13:58:07.358101+00:00"
+  },
+  "Reston Regional Library, Reston Large Print Area, Fairfax County, VA": {
+    "query": "Reston Regional Library, Reston Large Print Area, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-02T13:58:08.955456+00:00"
+  },
+  "Reston Regional Library, Reston Large Print Area": {
+    "query": "Reston Regional Library, Reston Large Print Area",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-02T13:58:10.376072+00:00"
   }
 }
