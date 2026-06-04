@@ -1832,5 +1832,19 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-06-02T13:58:10.376072+00:00"
+  },
+  "Reston Regional Library, Reston Teen Space, Reston, VA": {
+    "query": "Reston Regional Library, Reston Teen Space, Reston, VA",
+    "latitude": 38.961469,
+    "longitude": -77.358505,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-04T12:47:11.459365+00:00"
+  },
+  "Glencarlyn Library, 300 S Kensington St, Arlington, VA 22204, Arlington": {
+    "query": "Glencarlyn Library, 300 S Kensington St, Arlington, VA 22204, Arlington",
+    "latitude": 38.863589,
+    "longitude": -77.125889,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-04T12:47:12.417084+00:00"
   }
 }
