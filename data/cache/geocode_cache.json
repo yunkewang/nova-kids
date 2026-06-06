@@ -1846,5 +1846,19 @@
     "longitude": -77.125889,
     "confidence": 0.9,
     "resolved_at": "2026-06-04T12:47:12.417084+00:00"
+  },
+  "Kingstowne Regional Library, Alexandria, Fairfax County, VA": {
+    "query": "Kingstowne Regional Library, Alexandria, Fairfax County, VA",
+    "latitude": 38.763472,
+    "longitude": -77.155439,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-06T11:26:55.813413+00:00"
+  },
+  "Central Library Plaza, 1015 N Quincy St, Arlington, VA 22201, Arlington": {
+    "query": "Central Library Plaza, 1015 N Quincy St, Arlington, VA 22201, Arlington",
+    "latitude": 38.883787,
+    "longitude": -77.107184,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-06T11:26:57.042674+00:00"
   }
 }
