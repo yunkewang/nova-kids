@@ -1860,5 +1860,40 @@
     "longitude": -77.107184,
     "confidence": 0.9,
     "resolved_at": "2026-06-06T11:26:57.042674+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Falls Church, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Falls Church, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-09T12:41:19.028638+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tyson, Fairfax County, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tyson, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-09T12:41:20.256350+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tyson, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Tyson, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-09T12:41:21.562155+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Fairfax County, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-09T12:41:22.900194+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 1",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-09T12:41:24.044716+00:00"
   }
 }
