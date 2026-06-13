@@ -1895,5 +1895,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-06-09T12:41:24.044716+00:00"
+  },
+  "Courthouse Library / Bozman Govt Center / 2100 Clarendon Blvd Arlington VA 22201, Arlington": {
+    "query": "Courthouse Library / Bozman Govt Center / 2100 Clarendon Blvd Arlington VA 22201, Arlington",
+    "latitude": 38.890459,
+    "longitude": -77.085397,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-13T11:55:10.002064+00:00"
   }
 }
