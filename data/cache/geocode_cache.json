@@ -1902,5 +1902,33 @@
     "longitude": -77.085397,
     "confidence": 0.9,
     "resolved_at": "2026-06-13T11:55:10.002064+00:00"
+  },
+  "City of Fairfax Meeting Room 101A, Fairfax, Fairfax County, VA": {
+    "query": "City of Fairfax Meeting Room 101A, Fairfax, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-14T11:57:18.279826+00:00"
+  },
+  "City of Fairfax Meeting Room 101A, Fairfax, VA": {
+    "query": "City of Fairfax Meeting Room 101A, Fairfax, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-14T11:57:19.438919+00:00"
+  },
+  "City of Fairfax Meeting Room 101A, Fairfax County, VA": {
+    "query": "City of Fairfax Meeting Room 101A, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-14T11:57:20.616902+00:00"
+  },
+  "City of Fairfax Meeting Room 101A": {
+    "query": "City of Fairfax Meeting Room 101A",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-14T11:57:21.799456+00:00"
   }
 }
