@@ -1930,5 +1930,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-06-14T11:57:21.799456+00:00"
+  },
+  "Leonard \"Chick\" Armstrong Recreation Center": {
+    "query": "Leonard \"Chick\" Armstrong Recreation Center",
+    "latitude": 38.837234,
+    "longitude": -77.058074,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-16T14:59:20.426829+00:00"
   }
 }
