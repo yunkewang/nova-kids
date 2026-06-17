@@ -1937,5 +1937,40 @@
     "longitude": -77.058074,
     "confidence": 0.9,
     "resolved_at": "2026-06-16T14:59:20.426829+00:00"
+  },
+  "Glencarlyn Library, Community Garden, Arlington, Arlington County, VA": {
+    "query": "Glencarlyn Library, Community Garden, Arlington, Arlington County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-17T13:46:44.728401+00:00"
+  },
+  "Glencarlyn Library, Community Garden, Arlington, VA": {
+    "query": "Glencarlyn Library, Community Garden, Arlington, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-17T13:46:45.783111+00:00"
+  },
+  "Glencarlyn Library, Community Garden": {
+    "query": "Glencarlyn Library, Community Garden",
+    "latitude": 39.287354,
+    "longitude": -76.55819,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-17T13:46:46.796288+00:00"
+  },
+  "Charles Houston Recreation Center": {
+    "query": "Charles Houston Recreation Center",
+    "latitude": 38.812717,
+    "longitude": -77.048382,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-17T13:46:47.746381+00:00"
+  },
+  "Ben Brenman Park": {
+    "query": "Ben Brenman Park",
+    "latitude": 38.808844,
+    "longitude": -77.114347,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-17T13:46:48.719106+00:00"
   }
 }
