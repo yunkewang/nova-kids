@@ -1979,5 +1979,19 @@
     "longitude": -76.632282,
     "confidence": 0.9,
     "resolved_at": "2026-06-19T13:36:07.139424+00:00"
+  },
+  "Mount Vernon Recreation Center, Alexandria, VA": {
+    "query": "Mount Vernon Recreation Center, Alexandria, VA",
+    "latitude": 38.828664,
+    "longitude": -77.059889,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-20T12:00:33.996411+00:00"
+  },
+  "John Carlyle Square Park": {
+    "query": "John Carlyle Square Park",
+    "latitude": 38.803654,
+    "longitude": -77.061599,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-20T12:00:35.077884+00:00"
   }
 }
