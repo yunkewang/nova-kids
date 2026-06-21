@@ -1993,5 +1993,12 @@
     "longitude": -77.061599,
     "confidence": 0.9,
     "resolved_at": "2026-06-20T12:00:35.077884+00:00"
+  },
+  "*Off-Site": {
+    "query": "*Off-Site",
+    "latitude": 38.831056,
+    "longitude": -76.513483,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-21T12:14:10.092367+00:00"
   }
 }
