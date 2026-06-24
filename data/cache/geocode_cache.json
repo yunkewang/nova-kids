@@ -2000,5 +2000,19 @@
     "longitude": -76.513483,
     "confidence": 0.9,
     "resolved_at": "2026-06-21T12:14:10.092367+00:00"
+  },
+  "*Off-Site, Mason Square (3351 Fairfax Dr, Arlington, VA 22201), Fairfax, Fairfax County, VA": {
+    "query": "*Off-Site, Mason Square (3351 Fairfax Dr, Arlington, VA 22201), Fairfax, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-06-24T12:22:51.949938+00:00"
+  },
+  "*Off-Site, Mason Square (3351 Fairfax Dr, Arlington, VA 22201), Fairfax, VA": {
+    "query": "*Off-Site, Mason Square (3351 Fairfax Dr, Arlington, VA 22201), Fairfax, VA",
+    "latitude": 38.885088,
+    "longitude": -77.101027,
+    "confidence": 0.9,
+    "resolved_at": "2026-06-24T12:22:53.084564+00:00"
   }
 }
