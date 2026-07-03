@@ -2014,5 +2014,12 @@
     "longitude": -77.101027,
     "confidence": 0.9,
     "resolved_at": "2026-06-24T12:22:53.084564+00:00"
+  },
+  "Charles Barrett Recreation Center": {
+    "query": "Charles Barrett Recreation Center",
+    "latitude": 38.84218,
+    "longitude": -77.076267,
+    "confidence": 0.9,
+    "resolved_at": "2026-07-03T12:08:18.088844+00:00"
   }
 }
