@@ -2028,5 +2028,12 @@
     "longitude": -77.298254,
     "confidence": 0.9,
     "resolved_at": "2026-07-10T12:26:39.844586+00:00"
+  },
+  "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 2, Falls Church, VA": {
+    "query": "Tysons-Pimmit Regional Library, Tysons-Pimmit Meeting Room 2, Falls Church, VA",
+    "latitude": 38.906937,
+    "longitude": -77.206436,
+    "confidence": 0.9,
+    "resolved_at": "2026-07-13T12:31:11.588610+00:00"
   }
 }
