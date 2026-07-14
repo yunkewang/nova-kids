@@ -2035,5 +2035,19 @@
     "longitude": -77.206436,
     "confidence": 0.9,
     "resolved_at": "2026-07-13T12:31:11.588610+00:00"
+  },
+  "OUTR - COLUMBIA PIKE PLAZA | 5001 COLUMBIA PIKE ARLINGTON VA 22204, Arlington": {
+    "query": "OUTR - COLUMBIA PIKE PLAZA | 5001 COLUMBIA PIKE ARLINGTON VA 22204, Arlington",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-14T11:23:26.215597+00:00"
+  },
+  "OUTR - COLUMBIA PIKE PLAZA | 5001 COLUMBIA PIKE ARLINGTON VA 22204": {
+    "query": "OUTR - COLUMBIA PIKE PLAZA | 5001 COLUMBIA PIKE ARLINGTON VA 22204",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-14T11:23:27.323647+00:00"
   }
 }
