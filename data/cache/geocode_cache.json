@@ -2049,5 +2049,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-07-14T11:23:27.323647+00:00"
+  },
+  "Nannie J. Lee Memorial Recreation Center": {
+    "query": "Nannie J. Lee Memorial Recreation Center",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-15T11:27:34.959730+00:00"
   }
 }
