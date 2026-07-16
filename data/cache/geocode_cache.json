@@ -2056,5 +2056,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-07-15T11:27:34.959730+00:00"
+  },
+  "New venue Charles E. Beatley Jr. Central Library": {
+    "query": "New venue Charles E. Beatley Jr. Central Library",
+    "latitude": 38.812399,
+    "longitude": -77.117499,
+    "confidence": 0.9,
+    "resolved_at": "2026-07-16T11:32:51.642552+00:00"
   }
 }
