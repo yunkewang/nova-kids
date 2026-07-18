@@ -2063,5 +2063,19 @@
     "longitude": -77.117499,
     "confidence": 0.9,
     "resolved_at": "2026-07-16T11:32:51.642552+00:00"
+  },
+  "Central Library, Lobby, Outside": {
+    "query": "Central Library, Lobby, Outside",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-18T11:00:53.483659+00:00"
+  },
+  "Central Library, Little Falls Room": {
+    "query": "Central Library, Little Falls Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-18T11:00:54.585360+00:00"
   }
 }
