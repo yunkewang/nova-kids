@@ -2077,5 +2077,26 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-07-18T11:00:54.585360+00:00"
+  },
+  "*Off-Site, Lubber Run Amphitheater 200 N Columbus St, Arlington, VA 22203, Arlington, Arlington County, VA": {
+    "query": "*Off-Site, Lubber Run Amphitheater 200 N Columbus St, Arlington, VA 22203, Arlington, Arlington County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-19T11:09:07.748070+00:00"
+  },
+  "*Off-Site, Lubber Run Amphitheater 200 N Columbus St, Arlington, VA 22203, Arlington, VA": {
+    "query": "*Off-Site, Lubber Run Amphitheater 200 N Columbus St, Arlington, VA 22203, Arlington, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-19T11:09:08.758821+00:00"
+  },
+  "*Off-Site, Lubber Run Amphitheater 200 N Columbus St, Arlington, VA 22203": {
+    "query": "*Off-Site, Lubber Run Amphitheater 200 N Columbus St, Arlington, VA 22203",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-19T11:09:09.797610+00:00"
   }
 }
