@@ -2098,5 +2098,19 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-07-19T11:09:09.797610+00:00"
+  },
+  "OUTR - PENROSE SQUARE PARKING LOT | 2599 COLUMBIA PIKE ARLINGTON VA 22204, Arlington": {
+    "query": "OUTR - PENROSE SQUARE PARKING LOT | 2599 COLUMBIA PIKE ARLINGTON VA 22204, Arlington",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-20T12:13:52.868429+00:00"
+  },
+  "OUTR - PENROSE SQUARE PARKING LOT | 2599 COLUMBIA PIKE ARLINGTON VA 22204": {
+    "query": "OUTR - PENROSE SQUARE PARKING LOT | 2599 COLUMBIA PIKE ARLINGTON VA 22204",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-07-20T12:13:54.252454+00:00"
   }
 }
