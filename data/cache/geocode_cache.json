@@ -2112,5 +2112,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-07-20T12:13:54.252454+00:00"
+  },
+  "Centreville Regional Library, Centreville Lobby, Centreville, VA": {
+    "query": "Centreville Regional Library, Centreville Lobby, Centreville, VA",
+    "latitude": 38.83746,
+    "longitude": -77.440858,
+    "confidence": 0.9,
+    "resolved_at": "2026-07-28T11:57:18.937144+00:00"
   }
 }
