@@ -2119,5 +2119,12 @@
     "longitude": -77.440858,
     "confidence": 0.9,
     "resolved_at": "2026-07-28T11:57:18.937144+00:00"
+  },
+  "Charlie Clark Center for Local History": {
+    "query": "Charlie Clark Center for Local History",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-01T11:16:24.346804+00:00"
   }
 }
