@@ -2126,5 +2126,40 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-08-01T11:16:24.346804+00:00"
+  },
+  "Jr. Town Square, 2406 Shirlington Rd, Arlington, VA 22206, Arlington": {
+    "query": "Jr. Town Square, 2406 Shirlington Rd, Arlington, VA 22206, Arlington",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-04T12:04:33.014034+00:00"
+  },
+  "Jr. Town Square, 2406 Shirlington Rd, Arlington, VA 22206": {
+    "query": "Jr. Town Square, 2406 Shirlington Rd, Arlington, VA 22206",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-04T12:04:34.208908+00:00"
+  },
+  "*Off-Site, John Robinson, Arlington, Arlington County, VA": {
+    "query": "*Off-Site, John Robinson, Arlington, Arlington County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-04T12:04:35.415078+00:00"
+  },
+  "*Off-Site, John Robinson, Arlington, VA": {
+    "query": "*Off-Site, John Robinson, Arlington, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-04T12:04:36.657498+00:00"
+  },
+  "*Off-Site, John Robinson": {
+    "query": "*Off-Site, John Robinson",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-04T12:04:37.841280+00:00"
   }
 }
