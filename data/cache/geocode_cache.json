@@ -2161,5 +2161,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-08-04T12:04:37.841280+00:00"
+  },
+  "42225 Adoption Drive, Leesburg, Loudoun": {
+    "query": "42225 Adoption Drive, Leesburg, Loudoun",
+    "latitude": 39.07843,
+    "longitude": -77.540846,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-06T12:07:46.299721+00:00"
   }
 }
