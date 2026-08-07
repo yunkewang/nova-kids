@@ -97,6 +97,27 @@ sources:
       Bull Run Regional Park, Lake Fairfax Park, Meadowlark Botanical Gardens,
       Algonkian Regional Park, Occoquan Regional Park, Fountainhead Regional Park.
 
+  # ── Curated (human-verified, no HTTP) ────────────────────────────────────
+
+  - id: curated_marquee_events
+    name: NoVA Kids Curated Events
+    source_type: curated
+    base_url: file://config/curated_events.yaml
+    enabled: true
+    notes: >
+      Human-verified annual and seasonal family outings that no scrapeable
+      calendar carries: county and state fairs, touring circuses, farm fall
+      festivals, holiday light trails. Entries are transcribed by a maintainer
+      from each event's OFFICIAL page, and source_url always points there —
+      never to an aggregator or ticket reseller.
+      Performs no HTTP; reads config/curated_events.yaml and expands each
+      entry's run into one occurrence per open day.
+      Self-limiting: past occurrences and anything beyond a 120-day horizon
+      are dropped at scrape time, so a stale file goes quiet rather than
+      publishing wrong dates. Entries not re-verified within 180 days log a
+      staleness warning.
+      See docs/source_rules.md § Curated Marquee Events.
+
   # ── Disabled / Requires API Key ──────────────────────────────────────────
 
   - id: eventbrite_nova_family

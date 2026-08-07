@@ -14,6 +14,7 @@ from scrapers.alexandria_library import AlexandriaLibraryScraper
 from scrapers.arlington_library import ArlingtonLibraryScraper
 from scrapers.arlington_parks import ArlingtonParksRecScraper
 from scrapers.base import BaseScraper
+from scrapers.curated_events import CuratedEventsScraper
 from scrapers.fairfax_library import FairfaxLibraryScraper
 from scrapers.fairfax_parks import FairfaxParksAuthorityScraper
 from scrapers.loudoun_library import LoudounLibraryScraper
@@ -31,6 +32,7 @@ SCRAPERS: dict[str, type[BaseScraper]] = {
     "loudoun_county_library":  LoudounLibraryScraper,
     "alexandria_library":      AlexandriaLibraryScraper,
     "nova_parks":              NoVAParksScraper,
+    "curated_marquee_events":  CuratedEventsScraper,
 }
 
 

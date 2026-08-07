@@ -36,8 +36,11 @@ def _cost_phrase(event_data: dict[str, Any]) -> str | None:
     if cost_str == "paid":
         price_text = event_data.get("price_text")
         if price_text:
-            # Keep it short
-            return price_text[:40].strip() if len(price_text) > 40 else price_text
+            # Keep it short, and cut on a word boundary so the note never ends
+            # up with a half-word ("Registration fee: $15 per part").
+            if len(price_text) > 40:
+                return price_text[:40].rsplit(" ", 1)[0].strip(" ,;:-—") or "Paid"
+            return price_text
         return "Paid"
     if cost_str == "suggested_donation":
         return "Suggested donation"
@@ -106,8 +109,20 @@ def _activity_phrase(tags: list[str], title: str = "") -> str | None:
         if "swim" in tags or any(kw in title_lower for kw in ("swim", "pool", "aquatic")):
             return "swim session"
 
-    # Priority-ordered activity descriptors
+    # Priority-ordered activity descriptors. Destination outings come first:
+    # a county fair also carries arts/crafts/animals tags from its exhibit
+    # list, and "arts program" would be a poor description of a fair.
     activity_map = [
+        ("circus", "circus show"),
+        ("fair", "fair"),
+        ("carnival", "carnival"),
+        ("parade", "parade"),
+        ("lights", "light display"),
+        ("farm", "farm visit"),
+        ("live_show", "live show"),
+        ("movie", "movie screening"),
+        ("water_play", "water play"),
+        ("rides", "rides and midway"),
         ("storytime", "storytime"),
         ("stem", "STEM activity"),
         ("arts", "arts program"),

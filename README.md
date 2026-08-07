@@ -17,10 +17,11 @@ activities iOS app.
 7. [Running Seed Discovery Locally](#running-seed-discovery-locally)
 8. [CLI Scripts](#cli-scripts)
 9. [Adding a New Source](#adding-a-new-source)
-10. [Weekly Publish Format](#weekly-publish-format)
-11. [Vercel Deployment](#vercel-deployment)
-12. [Git Workflow](#git-workflow)
-13. [Using Claude Code to Maintain This Repo](#using-claude-code-to-maintain-this-repo)
+10. [Adding a Curated Marquee Event](#adding-a-curated-marquee-event)
+11. [Weekly Publish Format](#weekly-publish-format)
+12. [Vercel Deployment](#vercel-deployment)
+13. [Git Workflow](#git-workflow)
+14. [Using Claude Code to Maintain This Repo](#using-claude-code-to-maintain-this-repo)
 
 ---
 
@@ -85,8 +86,11 @@ The pipeline:
 Scrapers → raw JSON → Normalize → Enrich → Dedupe → Validate → Publish
 ```
 
-- **Sources**: county parks & rec, public libraries, Eventbrite (optional).
-  See [docs/source_rules.md](docs/source_rules.md) for the full source policy.
+- **Sources**: county parks & rec, public libraries, a curated file of annual
+  and seasonal marquee events (fairs, circuses, farm festivals), and Eventbrite
+  (optional). See [docs/source_rules.md](docs/source_rules.md) for the full
+  source policy, and [docs/source_candidates.md](docs/source_candidates.md) for
+  the backlog of sources worth adding next.
 - **Schema**: all events are validated against a single Pydantic model.
   See [docs/schema.md](docs/schema.md).
 - **Output**: `data/published/events/week-YYYY-MM-DD.json` + `index.json`.
@@ -136,11 +140,14 @@ nova-kids/
 │   ├── __init__.py
 │   ├── schema.py          # Pydantic Event model + ALLOWED_TAGS
 │   ├── settings.py        # paths, HTTP settings, env vars
-│   └── sources.yaml       # approved data sources
+│   ├── known_venues.py    # venue → tag/city/county hints
+│   ├── sources.yaml       # approved data sources
+│   └── curated_events.yaml # human-verified marquee events (fairs, circuses…)
 ├── scrapers/
 │   ├── __init__.py
 │   ├── base.py            # BaseScraper abstract class
 │   ├── registry.py        # source_id → scraper class map
+│   ├── curated_events.py  # expands curated_events.yaml (no HTTP)
 │   ├── fairfax_parks.py
 │   ├── arlington_parks.py
 │   ├── fairfax_library.py
@@ -166,7 +173,8 @@ nova-kids/
 │       └── events/        # published weekly JSON + index.json
 ├── docs/
 │   ├── schema.md
-│   └── source_rules.md
+│   ├── source_rules.md
+│   └── source_candidates.md   # backlog: sources worth adding next
 ├── requirements.txt
 └── README.md
 ```
@@ -350,12 +358,64 @@ so manual annotations are preserved across runs.
 
 ## Adding a New Source
 
-1. Add an entry to `config/sources.yaml` with a unique `id`.
+1. Add an entry to `config/sources.yaml` with a unique `id`, `enabled: false`.
 2. Create `scrapers/<source_id>.py` with a class subclassing `BaseScraper`.
    - Set `source_id` and `source_name` class attributes.
    - Implement `fetch_raw() -> list[dict]`.
 3. Register it in `scrapers/registry.py`.
 4. Test with `python scripts/run_pipeline.py --source <source_id> --dry-run`.
+5. Flip `enabled: true` once the dry-run output looks right.
+
+See [docs/source_candidates.md](docs/source_candidates.md) for a researched
+backlog of sources worth adding, ranked by value and effort.
+
+---
+
+## Adding a Curated Marquee Event
+
+County fairs, touring circuses, and farm fall festivals rarely publish anything
+scrapeable — a single promotional page that changes once a year, often
+JavaScript-rendered, with no per-occurrence markup. Those go in
+`config/curated_events.yaml`, which `scrapers/curated_events.py` expands into
+one event per open day. **It performs no HTTP.**
+
+```yaml
+events:
+  - slug: some-county-fair-2026
+    title: "Some County Fair"
+    organizer: "Some County Fair"        # becomes source_name
+    source_url: "https://somecountyfair.org/"   # MUST be the official page
+    venue: "County Fairgrounds"
+    address: "123 Main Street, Somewhere, VA 20120"
+    city: "Somewhere"
+    county: "Fairfax"
+    summary: "Rides, exhibits, and live entertainment."
+    price_text: "Free admission"         # or "Ticketed"
+    tags: [fair, festival, rides, all_ages, outdoor]
+    run:                                 # …or `dates:` for per-day hours
+      start_date: 2026-07-21
+      end_date: 2026-07-25
+      start_time: "16:00"
+      end_time: "22:00"
+    verified_on: 2026-08-07              # when a human last read the page
+```
+
+Rules that matter, in full at
+[docs/source_rules.md](docs/source_rules.md#curated-marquee-events):
+
+- `source_url` is the **event's own official page** — never an aggregator,
+  reseller, or news article. Those may be used to find an event, not to cite it.
+- Transcribe from that page. Omit a field rather than guess — if the per-day
+  schedule can't be verified, leave the times off and say so in the summary.
+- `verified_on` drives a staleness warning after 180 days.
+- Past occurrences and anything beyond 120 days are dropped automatically, so a
+  neglected file goes quiet instead of publishing last year's dates.
+
+Test it the same way as any source:
+
+```bash
+python scripts/run_pipeline.py --source curated_marquee_events --dry-run
+```
 
 ---
 

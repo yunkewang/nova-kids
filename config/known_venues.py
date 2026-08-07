@@ -24,6 +24,20 @@ KNOWN_VENUES: list[tuple[str, VenueHint]] = [
     ("aquarium",                  {"tags": ["indoor", "museum", "animals"], "rainy_day_friendly": True}),
     ("leesburg animal park",      {"tags": ["outdoor", "animals"],          "rainy_day_friendly": False, "county": "Loudoun"}),
     ("zoo",                       {"tags": ["outdoor", "animals"],          "rainy_day_friendly": False}),
+    # ── Fairgrounds & marquee outing venues ─────────────────────────────────
+    # NOTE: a big-top tent is roofed, so it is arguably a fine rainy-day outing,
+    # but rainy_day_friendly is defined in config/schema.py as indoor-or-virtual
+    # and validate.py flags outdoor events that claim it. Rather than assert a
+    # "covered outdoor" state the schema has no room for, these stay plain
+    # outdoor. Introducing that state is a schema change, not a venue override.
+    ("under the big top",         {"tags": ["outdoor", "circus", "live_show"], "city": "Tysons",     "county": "Fairfax"}),
+    ("lerner town square",        {"tags": ["outdoor"],                        "city": "Tysons",     "county": "Fairfax"}),
+    ("meadow event park",         {"tags": ["outdoor", "fair"],                "rainy_day_friendly": False, "city": "Doswell"}),
+    ("prince william county fairgrounds", {"tags": ["outdoor", "fair"],        "rainy_day_friendly": False, "city": "Manassas",   "county": "Prince William"}),
+    ("loudoun county fairgrounds",{"tags": ["outdoor", "fair"],                "rainy_day_friendly": False, "city": "Leesburg",   "county": "Loudoun"}),
+    ("cox farms",                 {"tags": ["outdoor", "farm", "animals"],     "rainy_day_friendly": False, "city": "Centreville", "county": "Fairfax"}),
+    ("great country farms",       {"tags": ["outdoor", "farm", "animals"],     "rainy_day_friendly": False, "city": "Bluemont",   "county": "Loudoun"}),
+    ("thomas jefferson community center", {"tags": ["indoor"],                 "city": "Arlington",  "county": "Arlington"}),
     # ── Museums ─────────────────────────────────────────────────────────────
     ("national children's museum",    {"tags": ["indoor", "museum"],            "rainy_day_friendly": True}),
     ("port discovery",                {"tags": ["indoor", "museum"],            "rainy_day_friendly": True}),
