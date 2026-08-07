@@ -2168,5 +2168,61 @@
     "longitude": -77.540846,
     "confidence": 0.9,
     "resolved_at": "2026-08-06T12:07:46.299721+00:00"
+  },
+  "8025 Galleria Drive, Tysons, VA 22102, Tysons": {
+    "query": "8025 Galleria Drive, Tysons, VA 22102, Tysons",
+    "latitude": 38.924013,
+    "longitude": -77.224384,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-07T14:25:39.418083+00:00"
+  },
+  "3501 2nd Street South, Arlington, VA 22204, Arlington": {
+    "query": "3501 2nd Street South, Arlington, VA 22204, Arlington",
+    "latitude": 38.856297,
+    "longitude": -77.089577,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-07T14:25:40.815563+00:00"
+  },
+  "Cox Farms, Centreville, VA": {
+    "query": "Cox Farms, Centreville, VA",
+    "latitude": 38.881713,
+    "longitude": -77.491594,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-07T14:25:41.988791+00:00"
+  },
+  "13191 Dawn Boulevard, Doswell, VA 23047, Doswell": {
+    "query": "13191 Dawn Boulevard, Doswell, VA 23047, Doswell",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-07T14:25:43.139957+00:00"
+  },
+  "13191 Dawn Boulevard, Doswell, VA 23047": {
+    "query": "13191 Dawn Boulevard, Doswell, VA 23047",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-07T14:25:44.340737+00:00"
+  },
+  "The Meadow Event Park, Doswell, Hanover County, VA": {
+    "query": "The Meadow Event Park, Doswell, Hanover County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-07T14:25:45.666027+00:00"
+  },
+  "The Meadow Event Park, Doswell, VA": {
+    "query": "The Meadow Event Park, Doswell, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-07T14:25:46.804206+00:00"
+  },
+  "The Meadow Event Park": {
+    "query": "The Meadow Event Park",
+    "latitude": 38.672184,
+    "longitude": -77.19806,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-07T14:25:48.008343+00:00"
   }
 }
