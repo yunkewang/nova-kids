@@ -30,7 +30,15 @@ _TAG_RULES: list[tuple[str, list[str]]] = [
     ("outdoor",    [r"\boutdoor\b", r"\boutside\b", r"\bpark\b", r"\btrail\b",
                     r"\bnature center\b", r"\bgarden\b", r"\bplayground\b",
                     r"\bnature walk\b", r"\bfarm\b"]),
-    ("virtual",    [r"\bvirtual\b", r"\bonline\b", r"\bzoom\b", r"\bwebinar\b"]),
+    # "online" only counts as virtual with event context. A bare \bonline\b
+    # matched routine logistics text — "tickets are sold online", "register
+    # online" — which then made real, physical destinations non-mappable,
+    # because geocode.py clears coordinates for anything tagged virtual.
+    ("virtual",    [r"\bvirtual\b", r"\bzoom\b", r"\bwebinar\b",
+                    r"\bonline\s+(?:event|program|class|workshop|session|"
+                    r"meeting|storytime|story\s*time|presentation|series)\b",
+                    r"\b(?:held|hosted|meets?|meeting|join\s+us)\s+online\b",
+                    r"\blive\s*stream(?:ed|ing)?\b"]),
     # Activity types
     ("storytime",  [r"\bstory\s*time\b", r"\bread\s*aloud\b", r"\bstories\b",
                     r"\bbaby\s*lap\b", r"\blap\s*sit\b"]),
@@ -63,8 +71,13 @@ _TAG_RULES: list[tuple[str, list[str]]] = [
     ("animals",    [r"\banimal\b", r"\bzoo\b", r"\baquarium\b", r"\bfarm\s+animal\b",
                     r"\bpetting\s+zoo\b", r"\bwildlife\b", r"\breptile\b",
                     r"\bbird\s+watch\b"]),
-    ("cooking",    [r"\bcook\b", r"\bcooking\b", r"\bculinary\b", r"\bbaking\b",
-                    r"\bfood\b", r"\bchef\b", r"\bcake\b", r"\bbread\b"]),
+    # A bare \bfood\b matched "fair food", "food trucks", "food drive" and
+    # tagged them as cooking, which then surfaced as "cooking class" in
+    # short_note. Cooking now needs an actual preparation signal.
+    ("cooking",    [r"\bcook(?:ing|s|ed)?\b", r"\bculinary\b", r"\bbaking\b",
+                    r"\bbake\b", r"\bchef\b", r"\bcake\s+decorat", r"\brecipes?\b",
+                    r"\bbread\s+making\b", r"\bpastry\b", r"\bkitchen\b",
+                    r"\bfood\s+(?:prep(?:aration)?|science|craft)\b"]),
     ("fitness",    [r"\bfitness\b", r"\bexercise\b", r"\byoga\b", r"\bmovement\b",
                     r"\bdance\b", r"\bzumba\b", r"\bkarate\b", r"\bmartial\s+arts\b"]),
     ("train",      [r"\btrain\b", r"\brailroad\b", r"\bchoo\s*choo\b",
@@ -75,8 +88,43 @@ _TAG_RULES: list[tuple[str, list[str]]] = [
                     r"\bdemonstration\b", r"\btutorial\b", r"\binstruction\b"]),
     ("camp",       [r"\bcamp\b", r"\bsummer camp\b", r"\bday camp\b",
                     r"\bspring\s+break\s+camp\b", r"\bwinter\s+camp\b"]),
-    ("festival",   [r"\bfestival\b", r"\bfair\b", r"\bcelebration\b",
-                    r"\bfun\s+run\b", r"\bparade\b", r"\bcarnival\b"]),
+    # "festival" stays the umbrella tag for fairs/parades/carnivals so existing
+    # clients keep working, but the bare \bfair\b alternative is qualified to
+    # avoid matching NoVA place names ("Fair Oaks Mall", "Fair Lakes Center").
+    ("festival",   [r"\bfestival\b", r"\bcelebration\b",
+                    r"\bfun\s+run\b", r"\bparade\b", r"\bcarnival\b",
+                    r"\bfair\b(?!\s*(?:oaks|lakes|view|field|fax|ground))",
+                    r"\bfairgrounds?\b"]),
+    # ── Outings & attractions ───────────────────────────────────────────────
+    ("circus",     [r"\bcircus\b", r"\bacrobat", r"\btrapeze\b",
+                    r"\bbig\s+top\b", r"\bcirque\b"]),
+    ("fair",       [r"\b(?:county|state|agricultural|4-?h|renaissance|street|"
+                    r"harvest|fall|spring|summer|winter)\s+fair\b",
+                    r"\bfairgrounds?\b"]),
+    ("carnival",   [r"\bcarnival\b", r"\bmidway\b", r"\bfunnel\s+cake\b"]),
+    ("parade",     [r"\bparade\b"]),
+    ("farm",       [r"\bfarm\b", r"\borchard\b", r"\bpick[-\s]?your[-\s]?own\b",
+                    r"\bu-?pick\b", r"\bhayride\b", r"\bcorn\s+maze\b",
+                    r"\bpumpkin\s+patch\b", r"\bapple\s+picking\b",
+                    r"\bpetting\s+zoo\b"]),
+    ("rides",      [r"\bamusement\s+(?:ride|park)\b", r"\bmidway\s+ride\b",
+                    r"\bferris\s+wheel\b", r"\bcarousel\b",
+                    r"\bwristband\b", r"\broller\s+coaster\b",
+                    r"\bunlimited\s+rides?\b"]),
+    ("live_show",  [r"\bcircus\b", r"\bcirque\b", r"\bice\s+show\b",
+                    r"\blive\s+show\b", r"\btouring\s+show\b",
+                    r"\bmagic\s+show\b", r"\bmatin[ée]e\b",
+                    r"\bon\s+ice\b", r"\bvariety\s+show\b"]),
+    ("movie",      [r"\bmovies?\b", r"\bfilm\s+(?:screening|festival|series)\b",
+                    r"\bmovie\s+night\b", r"\bscreening\b", r"\bcinema\b",
+                    r"\bdive[-\s]in\s+movie\b"]),
+    ("lights",     [r"\bfestival\s+of\s+lights\b", r"\bwalk\s+of\s+lights\b",
+                    r"\blight\s+(?:show|display|trail)\b",
+                    r"\bholiday\s+lights\b", r"\bzoolights\b",
+                    r"\billuminat"]),
+    ("water_play", [r"\bsplash\s*(?:pad|ground|park)\b", r"\bspray\s*ground\b",
+                    r"\bwater\s*park\b", r"\bwater\s+play\b",
+                    r"\bwaterslide\b", r"\blazy\s+river\b"]),
     ("holiday",    [r"\bholiday\b", r"\bhalloween\b", r"\bthanksgiving\b",
                     r"\bchristmas\b", r"\bhanukkah\b", r"\beaster\b",
                     r"\bvalentine\b", r"\bpresidents\b", r"\bkwanzaa\b",
@@ -131,6 +179,15 @@ def derive_tags(event_data: dict[str, Any]) -> list[str]:
     for tag, patterns in _TAG_RULES:
         if _search_text(patterns, search_text):
             tags.add(tag)
+
+    # Source-supplied tags. Scrapers that know something the text does not say
+    # (e.g. the curated marquee-events source, where a human has verified the
+    # activity type) can pass "extra_tags" through the raw record. They are
+    # unioned here — before scoring — so relevance and family score account
+    # for them rather than seeing a thinner tag set.
+    for tag in event_data.get("extra_tags") or []:
+        if isinstance(tag, str):
+            tags.add(tag.strip().lower())
 
     # Cost-based tag
     if event_data.get("cost_type") == CostType.FREE or event_data.get("cost_type") == "free":
@@ -201,8 +258,12 @@ def compute_family_friendly_score(event_data: dict[str, Any], tags: list[str]) -
     elif "teen" in tag_set:
         score -= 0.10  # teen-only is less broadly family-friendly
 
-    # Kid-centric venue type bonus (museums, aquariums, animal parks, science centers)
-    kid_venue_tags = {"museum", "animals"}
+    # Kid-centric venue type bonus (museums, aquariums, animal parks, science
+    # centers) and destination outings (fairs, circuses, farms, light displays)
+    kid_venue_tags = {
+        "museum", "animals", "circus", "fair", "carnival", "farm",
+        "rides", "lights", "water_play",
+    }
     if tag_set & kid_venue_tags:
         score += 0.20
 
@@ -219,6 +280,8 @@ def compute_family_friendly_score(event_data: dict[str, Any], tags: list[str]) -
         "storytime", "arts", "crafts", "stem", "nature", "music",
         "theater", "cooking", "workshop", "animals", "museum", "sports",
         "train", "festival", "hiking",
+        "circus", "fair", "carnival", "parade", "farm", "rides",
+        "live_show", "movie", "lights", "water_play",
     }
     if tag_set & enriching_tags:
         score += 0.10
@@ -297,6 +360,7 @@ def _resolve_indoor_outdoor_conflict(
     Remove the weaker of indoor/outdoor when both are tagged on the same event.
 
     Resolution priority:
+      0. A setting the source asserted explicitly via extra_tags
       1. Known-venue hint rainy_day_friendly value (authoritative)
       2. Venue name keywords (location_name)
       3. Title + summary keywords
@@ -305,6 +369,20 @@ def _resolve_indoor_outdoor_conflict(
     tag_set = set(tags)
     if "indoor" not in tag_set or "outdoor" not in tag_set:
         return tags  # no conflict
+
+    # 0. An explicit source assertion beats keyword inference. A county fair
+    #    held on the grounds of a community center is outdoors, but both the
+    #    venue name ("...Community Center") and its description ("exhibits")
+    #    read as indoor to the keyword rules.
+    asserted = {
+        str(t).strip().lower() for t in (event_data.get("extra_tags") or [])
+    }
+    if "outdoor" in asserted and "indoor" not in asserted:
+        tag_set.discard("indoor")
+        return sorted(tag_set)
+    if "indoor" in asserted and "outdoor" not in asserted:
+        tag_set.discard("outdoor")
+        return sorted(tag_set)
 
     # 1. Venue hint is authoritative
     if venue_hint_rainy is True:

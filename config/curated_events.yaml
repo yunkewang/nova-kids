@@ -1,0 +1,179 @@
+# NoVA Kids — curated marquee events
+# =============================================================================
+# Human-verified annual and seasonal family outings that no scrapeable calendar
+# carries: county and state fairs, touring circuses, farm fall festivals,
+# holiday light trails.
+#
+# This file is the ONLY place in the pipeline where event facts are entered by
+# hand. That makes accuracy a maintenance duty, not an automated guarantee.
+#
+# RULES (see docs/source_rules.md § Curated Marquee Events)
+#   1. source_url MUST be the event's own official page — never an aggregator,
+#      a ticket reseller, a news article, or a listing site. Those may be used
+#      to FIND an event; they may not be cited as its source.
+#   2. Every field must be transcribed from the official page. Do not infer
+#      hours, pricing, or age ranges. Leave a field out rather than guess.
+#   3. Set verified_on to the date a human last read the official page. Entries
+#      older than 180 days log a staleness warning on every pipeline run.
+#   4. Past occurrences and anything beyond a 120-day horizon are dropped
+#      automatically by scrapers/curated_events.py — an out-of-date entry
+#      goes quiet on its own rather than publishing wrong dates.
+#   5. Delete entries once their run is over and will not repeat.
+#
+# SCHEDULE — set exactly one of `run:` or `dates:`
+#
+#   run:                          # a continuous run with one set of hours
+#     start_date: 2026-09-19
+#     end_date: 2026-11-08
+#     days_of_week: [thu, fri, sat, sun, mon]   # optional; default = every day
+#     start_time: "10:00"         # optional; omit for an all-day entry
+#     end_time: "18:00"           # optional
+#
+#   dates:                        # explicit per-day hours (fairs need this)
+#     - date: 2026-08-15
+#       start_time: "10:00"
+#       end_time: "22:30"
+#       note: "Sensory-friendly hours 10 a.m.–1 p.m."   # appended to summary
+#
+# Set `enabled: false` on an entry to keep it on file without publishing it.
+# =============================================================================
+
+events:
+
+  # ── Circus ──────────────────────────────────────────────────────────────
+  - slug: circus-vazquez-tysons-2026
+    title: "Circus Vazquez"
+    organizer: "Circus Vazquez"
+    source_url: "https://www.circusvazquez.com/"
+    venue: "Under the Big Top — Lerner Town Square at Tysons II"
+    address: "8025 Galleria Drive, Tysons, VA 22102"
+    city: "Tysons"
+    county: "Fairfax"
+    summary: >-
+      Circus Vazquez pitches its big top at Tysons II for a summer run of
+      international circus acts, including clown Chistirrin, the Triple Breath
+      tightrope act, diabolo jugglers Lorenzo & Sascha, and the Bingo Troupe
+      acrobats. Showtimes vary by day — check the official site for the
+      schedule and to book seats.
+    price_text: "Ticketed"
+    tags: [circus, live_show, all_ages, outdoor]
+    run:
+      start_date: 2026-08-07
+      end_date: 2026-08-31
+    verified_on: 2026-08-07
+
+  # ── County fairs ────────────────────────────────────────────────────────
+  - slug: arlington-county-fair-2026
+    title: "Arlington County Fair"
+    organizer: "Arlington County Fair"
+    source_url: "https://arlingtoncountyfair.us/"
+    venue: "Thomas Jefferson Community Center"
+    address: "3501 2nd Street South, Arlington, VA 22204"
+    city: "Arlington"
+    county: "Arlington"
+    summary: >-
+      The Arlington County Fair marks its 50th year with free admission,
+      competitions and exhibits, a midway, live entertainment, and fair food.
+      Midway rides are sold separately.
+    price_text: "Free admission"
+    tags: [fair, festival, carnival, rides, all_ages, outdoor]
+    dates:
+      - date: 2026-08-12
+        start_time: "17:00"
+        end_time: "22:30"
+      - date: 2026-08-13
+        start_time: "17:00"
+        end_time: "22:30"
+      - date: 2026-08-14
+        start_time: "14:00"
+        end_time: "22:30"
+        note: "Exhibit hall open 4–10 p.m."
+      - date: 2026-08-15
+        start_time: "10:00"
+        end_time: "22:30"
+        note: "Exhibit hall open 11 a.m.–9 p.m. Sensory-friendly hours 10 a.m.–1 p.m."
+      - date: 2026-08-16
+        start_time: "11:00"
+        end_time: "22:00"
+        note: "Exhibit hall open 11 a.m.–7 p.m. Sensory-friendly hours 11 a.m.–1 p.m."
+    verified_on: 2026-08-07
+
+  # ── State fair ──────────────────────────────────────────────────────────
+  # NOTE: Doswell sits roughly 90 minutes south of Northern Virginia and falls
+  # OUTSIDE the pipeline's service-area bounding box (config: lat 38.3–39.6).
+  # It will therefore publish with is_mappable = false and
+  # geo_within_service_region = false, and will be listed in
+  # data/manual_review/suspicious_geocodes.json under --strict-region. That is
+  # expected: it is carried deliberately as a day-trip destination, not a local
+  # outing. iOS clients that filter on is_mappable will not show a pin for it.
+  - slug: state-fair-of-virginia-2026
+    title: "State Fair of Virginia"
+    organizer: "State Fair of Virginia"
+    source_url: "https://www.statefairva.org/"
+    venue: "The Meadow Event Park"
+    address: "13191 Dawn Boulevard, Doswell, VA 23047"
+    city: "Doswell"
+    county: "Hanover"
+    summary: >-
+      Virginia's state fair returns to The Meadow Event Park for ten days of
+      carnival rides, livestock and agricultural competitions, craft and home
+      arts exhibits, live entertainment, and fair food. Gates open daily at
+      10 a.m.; closing time runs later on Friday and Saturday nights.
+    price_text: "Ticketed"
+    tags: [fair, festival, carnival, rides, animals, all_ages, outdoor]
+    run:
+      start_date: 2026-09-25
+      end_date: 2026-10-04
+      start_time: "10:00"
+      end_time: "21:00"
+    verified_on: 2026-08-07
+
+  # ── Farm fall festivals ─────────────────────────────────────────────────
+  # Split into two entries because November hours differ from Sept/Oct hours.
+  - slug: cox-farms-fall-festival-2026-sep-oct
+    title: "Cox Farms Fall Festival"
+    organizer: "Cox Farms"
+    source_url: "https://coxfarmsva.com/fall-festival/"
+    registration_url: "https://coxfarmsva.com/fall-festival/fall-festival-tickets/"
+    venue: "Cox Farms"
+    address: "15621 Braddock Road, Centreville, VA 20120"
+    city: "Centreville"
+    county: "Fairfax"
+    summary: >-
+      Cox Farms' fall festival covers 90-plus acres with giant slides, hayrides,
+      rope swings, a cornfield adventure, the Forest Imaginature Trail, goat
+      village, play areas, apples and cider. Open Thursday through Monday;
+      the grounds are closed Tuesday and Wednesday. Timed entry tickets must be booked in advance and do sell out.
+    price_text: "Ticketed — timed entry"
+    tags: [farm, festival, animals, all_ages, outdoor]
+    run:
+      start_date: 2026-09-19
+      end_date: 2026-10-31
+      days_of_week: [thu, fri, sat, sun, mon]
+      start_time: "10:00"
+      end_time: "18:00"
+    verified_on: 2026-08-07
+
+  - slug: cox-farms-fall-festival-2026-nov
+    title: "Cox Farms Fall Festival"
+    organizer: "Cox Farms"
+    source_url: "https://coxfarmsva.com/fall-festival/"
+    registration_url: "https://coxfarmsva.com/fall-festival/fall-festival-tickets/"
+    venue: "Cox Farms"
+    address: "15621 Braddock Road, Centreville, VA 20120"
+    city: "Centreville"
+    county: "Fairfax"
+    summary: >-
+      Closing weeks of Cox Farms' fall festival — giant slides, hayrides, rope
+      swings, the Forest Imaginature Trail, goat village and play areas across
+      90-plus acres. November hours are shorter, with last entry at 4 p.m.
+      Open Thursday through Monday; closed Tuesday and Wednesday. Timed entry tickets must be booked in advance.
+    price_text: "Ticketed — timed entry"
+    tags: [farm, festival, animals, all_ages, outdoor]
+    run:
+      start_date: 2026-11-01
+      end_date: 2026-11-08
+      days_of_week: [thu, fri, sat, sun, mon]
+      start_time: "10:00"
+      end_time: "17:00"
+    verified_on: 2026-08-07

@@ -459,8 +459,10 @@ def _find_street_address_pos(text: str) -> int | None:
       4. Single space + 3-5 digit number + capital word
                                   "…Venue 501 E. Pratt…"
     """
-    # Pattern 1: comma before street number
-    m = re.search(r",\s*\d{1,5}\s+[A-Z]", text)
+    # Pattern 1: comma before street number. The street name itself may be an
+    # ordinal ("3501 2nd Street South"), so accept a digit-led token too —
+    # requiring [A-Z] here left such addresses glued onto the venue name.
+    m = re.search(r",\s*\d{1,5}\s+(?:[A-Z]|\d{1,3}(?:st|nd|rd|th)\b)", text)
     if m:
         return m.start()
 
@@ -712,8 +714,14 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
 
     end = parse_datetime(end_text, default_year=current_year)
 
-    # Location
+    # Location. A scraper that already knows the venue precisely (the curated
+    # marquee-events source, for example) may supply city/county directly;
+    # those win over keyword inference, which only sees the location string.
     loc = normalize_location(raw.get("location_text"))
+    if raw.get("city"):
+        loc["city"] = raw["city"]
+    if raw.get("county"):
+        loc["county"] = raw["county"]
 
     # Summary — clean junk before cost/note generation
     summary_text = clean_summary(raw.get("summary_text"))
@@ -760,6 +768,8 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
         "location_address": loc["location_address"],
         "city": loc["city"],
         "county": loc["county"],
+        "age_min": raw.get("age_min"),
+        "age_max": raw.get("age_max"),
         "cost_type": cost_type,
         "price_text": price_text,
         "is_free": pricing.is_free,
@@ -780,6 +790,8 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
         "extracted_from": raw.get("extracted_from", "direct_scraper"),
         "extraction_confidence": float(raw.get("extraction_confidence", 1.0)),
         "short_note": None,  # filled in after enrichment
+        # Consumed by enrich.derive_tags(), then dropped by Pydantic.
+        "extra_tags": raw.get("extra_tags") or [],
     }
 
     # Apply enrichment (tags, score, rainy_day, venue overrides)

@@ -17,9 +17,61 @@ following categories:
 | Museums & Nature Centers | National Zoo, Udvar-Hazy Center, Potomac Overlook Regional Park |
 | Government Cultural Programs | Fairfax County Arts, Arlington Cultural Affairs |
 | Public Event Platforms | Eventbrite (family-friendly query, Northern Virginia) |
+| Annual & Seasonal Attractions | County and state fairs, touring circuses, farm fall festivals, holiday light trails — via the curated source below |
 
 All sources must be listed in `config/sources.yaml` with `enabled: true`
 before the pipeline will use them.
+
+---
+
+## Curated Marquee Events
+
+Some of the events families most want to see are structurally unscrapeable.
+A county fair, a circus that pitches a tent for three weeks, a farm's
+eight-week fall festival — these live on a single-purpose promotional site
+that changes once a year, often JavaScript-rendered, usually with no
+per-occurrence markup at all. Writing and maintaining a scraper per circus is
+not viable; a human-verified entry refreshed annually is.
+
+`config/curated_events.yaml` holds those entries, and
+`scrapers/curated_events.py` expands each one into a raw record per open day.
+The source performs **no HTTP**.
+
+### Rules for curated entries
+
+1. **`source_url` must be the event's own official page.** Never an
+   aggregator, ticket reseller, news article, or listing site. Those may be
+   used to *find* an event; they may not be cited as its source. This is the
+   same rule that governs seed discovery — the aggregator is a pointer, not a
+   source of record.
+2. **Every field is transcribed from that official page.** Do not infer hours,
+   pricing, or age ranges from a secondary write-up. Omit a field rather than
+   guess. If the per-day schedule cannot be verified, leave the times off and
+   say so in the summary rather than inventing a plausible-looking one.
+3. **`verified_on` records when a human last read the official page.** Entries
+   not re-verified within 180 days log a staleness warning on every run.
+4. **Entries expire on their own.** Past occurrences, and anything beyond a
+   120-day horizon, are dropped at scrape time. A file nobody has touched in a
+   year publishes nothing rather than publishing last year's dates.
+5. **Delete entries once their run is over** and will not repeat.
+6. **Changes go through a PR**, like any other source change.
+
+### What this source is not
+
+It is not a general-purpose way to hand-enter events that a scraper could
+cover. If an organization publishes a real calendar, write a scraper for it.
+The curated file is for events whose publisher offers nothing to scrape.
+Keeping it small is what keeps it accurate.
+
+### Out-of-region entries
+
+An entry may deliberately sit outside the service-area bounding box when it is
+a genuine day-trip destination (the State Fair of Virginia in Doswell, for
+example). Such entries publish with `is_mappable: false` and
+`geo_within_service_region: false`, and appear in
+`data/manual_review/suspicious_geocodes.json` under `--strict-region`. Note the
+reason in a YAML comment on the entry so the geocode report is not mistaken
+for a bug.
 
 ---
 

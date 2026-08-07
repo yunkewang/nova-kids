@@ -68,11 +68,39 @@ this fixed set for the MVP:
 - `workshop`, `camp`, `festival`, `holiday`
 - `animals`, `train`, `museum`
 
+### Outings & Attractions
+
+Destination-style activities — the things a family plans a weekend around,
+as opposed to recurring class and program content.
+
+| Tag | Covers |
+|---|---|
+| `circus` | Touring circuses, big-top stands |
+| `fair` | County, state, and agricultural fairs |
+| `carnival` | Carnivals and midways (usually alongside `fair`) |
+| `parade` | Parades |
+| `farm` | Farm visits, pick-your-own, farm fall festivals |
+| `rides` | Amusement rides, midway attractions, wristband events |
+| `live_show` | Touring shows, ice shows, kids' concerts |
+| `movie` | Family film screenings, outdoor movie nights |
+| `lights` | Seasonal light displays, walk- and drive-through |
+| `water_play` | Splash pads, spraygrounds, water parks |
+
+`festival` remains the umbrella tag over fairs, carnivals, and parades, so an
+event can legitimately carry both `festival` and `fair`. Existing clients that
+filter on `festival` keep working unchanged.
+
 ### Weather
 - `rainy_day`
 
 To add new tags, edit `ALLOWED_TAGS` in `config/schema.py` and add
 corresponding keyword rules in `enrichment/enrich.py`.
+
+A scraper that knows an event's type from something other than its text can
+also declare tags directly, by putting them in the raw record's `extra_tags`
+list. They are merged in `derive_tags()` before scoring, and an explicitly
+declared `indoor`/`outdoor` beats keyword inference when the two disagree.
+Anything outside `ALLOWED_TAGS` is discarded.
 
 ---
 

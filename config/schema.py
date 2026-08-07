@@ -85,6 +85,21 @@ ALLOWED_TAGS: frozenset[str] = frozenset(
         "animals",
         "train",
         "museum",
+        # Outings & attractions — destination-style activities that are not
+        # recurring class/program content. Added so the feed can carry the
+        # things families actually plan a weekend around (fairs, circuses,
+        # farm visits, touring shows) alongside library and rec-center
+        # programming.
+        "circus",
+        "fair",          # county / state / agricultural fairs
+        "carnival",      # midways and carnivals (often paired with "fair")
+        "parade",
+        "farm",          # farm visits, pick-your-own, fall festivals at farms
+        "rides",         # amusement rides / midway attractions
+        "live_show",     # touring shows, ice shows, kids' concerts
+        "movie",         # family film screenings, outdoor movie nights
+        "lights",        # seasonal light displays (walk- or drive-through)
+        "water_play",    # splash pads, spraygrounds, water parks
         # Weather
         "rainy_day",
     }
