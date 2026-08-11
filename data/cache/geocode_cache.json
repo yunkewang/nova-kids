@@ -2224,5 +2224,33 @@
     "longitude": -77.19806,
     "confidence": 0.9,
     "resolved_at": "2026-08-07T14:25:48.008343+00:00"
+  },
+  "Burke Centre Library, Burke Centre Group Study Room, Burke, VA": {
+    "query": "Burke Centre Library, Burke Centre Group Study Room, Burke, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-11T10:48:42.388503+00:00"
+  },
+  "Burke Centre Library, Burke Centre Group Study Room, Burke, Fairfax County, VA": {
+    "query": "Burke Centre Library, Burke Centre Group Study Room, Burke, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-11T10:48:43.904106+00:00"
+  },
+  "Burke Centre Library, Burke Centre Group Study Room, Fairfax County, VA": {
+    "query": "Burke Centre Library, Burke Centre Group Study Room, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-11T10:48:45.504856+00:00"
+  },
+  "Burke Centre Library, Burke Centre Group Study Room": {
+    "query": "Burke Centre Library, Burke Centre Group Study Room",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-11T10:48:46.932366+00:00"
   }
 }
