@@ -35,8 +35,23 @@ from config.settings import (
     USER_AGENT,
 )
 from models.candidate import CandidateEvent, CandidateStatus
+from seed_discovery.urls import is_candidate_original_url, is_seed_url
 
 logger = logging.getLogger(__name__)
+
+# DullesMoms calendar pages that list many events rather than describing one.
+# A candidate whose seed_url is one of these has no detail page to scrape.
+_LISTING_PATH_RE = re.compile(
+    r"^/dmcalendar/(?:list|month|day|week|today|upcoming)?/?$",
+    re.IGNORECASE,
+)
+
+
+def _is_detail_page_url(url: str) -> bool:
+    """Return True if `url` is a per-event DullesMoms detail page."""
+    if not url or not is_seed_url(url):
+        return False
+    return not _LISTING_PATH_RE.match(urlparse(url).path or "/")
 
 # Minimum confidence for extracted facts to be publishable automatically
 _MIN_PUBLISH_CONFIDENCE = SEED_CONFIDENCE_THRESHOLD
@@ -424,31 +439,17 @@ def _find_original_url_from_detail_page(
     per-event detail page usually has a "Website", "Register", or "Tickets"
     button pointing to the original host.  This function must NOT extract or
     store any descriptive content from the DullesMoms page.
+
+    Returns None when `seed_url` is not a per-event detail page.  Scraping the
+    calendar list page here would return whichever outbound link appears first
+    in the site's own chrome, which describes DullesMoms rather than the event.
     """
-    _SEED_DOMAIN = "dullesmoms.com"
-
-    # Domains that are NOT usable original event sources
-    _UTILITY_DOMAINS = frozenset([
-        "google.com", "calendar.google.com",
-        "apple.com", "outlook.live.com", "outlook.office.com",
-        "facebook.com", "instagram.com", "twitter.com", "x.com",
-        "linkedin.com", "youtube.com",
-        "maps.google.com", "goo.gl",
-    ])
-
-    def _is_dm_url(url: str) -> bool:
-        try:
-            return _SEED_DOMAIN in urlparse(url).netloc.lower()
-        except Exception:
-            return True
-
-    def _is_utility_url(url: str) -> bool:
-        """Return True if the URL is a utility/social link, not an original event host."""
-        try:
-            netloc = urlparse(url).netloc.lower().lstrip("www.")
-            return any(netloc == d or netloc.endswith("." + d) for d in _UTILITY_DOMAINS)
-        except Exception:
-            return False
+    if not _is_detail_page_url(seed_url):
+        logger.debug(
+            "Seed URL %s is not a per-event detail page — skipping detail scrape.",
+            seed_url,
+        )
+        return None
 
     try:
         time.sleep(REQUEST_DELAY)
@@ -469,9 +470,7 @@ def _find_original_url_from_detail_page(
     #             that are neither DullesMoms nor utility/social/calendar links
     for anchor in soup.find_all("a", href=True):
         href = str(anchor.get("href", "")).strip()
-        if not href.startswith("http"):
-            continue
-        if _is_dm_url(href) or _is_utility_url(href):
+        if not is_candidate_original_url(href):
             continue
         link_text = anchor.get_text(strip=True)
         if priority_re.search(link_text) or priority_re.search(href):
@@ -480,11 +479,7 @@ def _find_original_url_from_detail_page(
     # Priority 2: first outbound https link that is not a utility/social URL
     for anchor in soup.find_all("a", href=True):
         href = str(anchor.get("href", "")).strip()
-        if (
-            href.startswith("https://")
-            and not _is_dm_url(href)
-            and not _is_utility_url(href)
-        ):
+        if href.startswith("https://") and is_candidate_original_url(href):
             return href
 
     return None
@@ -610,6 +605,19 @@ def resolve_candidate(
     original_url = candidate.candidate_original_url
     _session = session or _build_session()
 
+    # Candidates queued before the utility-domain filter existed can carry a
+    # social or calendar-widget URL (e.g. facebook.com/DullesMoms).  Resolving
+    # one publishes the aggregator's own page as if it were the event, so drop
+    # it here and fall through to detail-page resolution.
+    if original_url and not is_candidate_original_url(original_url):
+        logger.info(
+            "Discarding non-host original URL for '%s': %s",
+            candidate.discovered_title,
+            original_url,
+        )
+        candidate.candidate_original_url = None
+        original_url = None
+
     # If no original URL was found on the list page, visit the DullesMoms
     # event detail page to look for an outbound link there.
     if not original_url and candidate.seed_url and "dullesmoms.com" in candidate.seed_url:
@@ -633,9 +641,16 @@ def resolve_candidate(
             candidate.requires_manual_review = True
             candidate.status = CandidateStatus.MANUAL_REVIEW
             candidate.review_reason = "no_original_url_found"
-            candidate.last_resolution_error = (
-                "No outbound original URL found on DullesMoms list page or detail page."
-            )
+            if _is_detail_page_url(candidate.seed_url):
+                candidate.last_resolution_error = (
+                    "No outbound original URL found on DullesMoms list page "
+                    "or detail page."
+                )
+            else:
+                candidate.last_resolution_error = (
+                    "Candidate has no DullesMoms detail page to follow "
+                    f"(seed_url is the calendar listing: {candidate.seed_url})."
+                )
             candidate.suggested_next_action = (
                 "Search for this event manually and set candidate_original_url."
             )
