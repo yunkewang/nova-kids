@@ -85,6 +85,30 @@ DullesMoms (`dullesmoms.com`) occupies a **special, limited role** in the pipeli
   may visit the DullesMoms calendar list page to identify candidate events and,
   where present, outbound links to original event host pages.
 
+This discovery layer runs on every scheduled pipeline run via the
+`--use-dullesmoms-seeds` flag in `.github/workflows/nova-kids-pipeline.yml`.
+Enabling it does **not** relax any rule below: every event it contributes is
+published with its original host's URL and content, and
+`_check_no_dullesmoms_source_url` in `enrichment/validate.py` fails the run if a
+`dullesmoms.com` URL ever reaches a published event.
+
+### Choosing an outbound link
+
+`seed_discovery/urls.py` holds the single predicate — `is_candidate_original_url`
+— that both the seed finder and the resolver use to decide whether an outbound
+link is a plausible original host. It rejects the seed domain itself along with
+social, share, and calendar-widget domains.
+
+Both stages must use it. When they disagreed, the finder accepted the first
+outbound link on an article and candidates resolved to `facebook.com/DullesMoms`,
+publishing the aggregator's own page bio as an event description. Add new
+deny-list domains to `UTILITY_DOMAINS` so both stages pick them up at once.
+
+Relatedly, a candidate's `seed_url` must be a **per-event detail page**, never
+the calendar listing. The resolver refuses to detail-scrape a listing URL,
+because the first outbound link on that page belongs to the site's own chrome
+rather than to any event.
+
 ### What DullesMoms is NOT allowed for
 
 - **Published content source**: DullesMoms descriptions, summaries, images,

@@ -84,13 +84,17 @@ jobs:
           echo "Dry run       : ${{ inputs.dry_run || 'false' }}"
           echo "Commit SHA    : ${{ github.sha }}"
           echo ""
-          echo "Pipeline cmd  : python scripts/run_pipeline.py --enrich-geo --filter-non-family"
+          echo "Pipeline cmd  : python scripts/run_pipeline.py --enrich-geo --filter-non-family --use-dullesmoms-seeds"
           echo "Family filter : ENABLED  (--filter-non-family)"
           echo "  → Adult-service events excluded from published feed"
           echo "  → Excluded: tax prep, legal clinics, resume workshops, board meetings, etc."
           echo "  → Excluded events written to data/manual_review/excluded_non_family_events.json"
           echo "Geo enrichment: ENABLED  (--enrich-geo)"
           echo "  → Missing coordinates resolved via Photon (OpenStreetMap)"
+          echo "Seed discovery: ENABLED  (--use-dullesmoms-seeds)"
+          echo "  → DullesMoms is a DISCOVERY layer only, never a published source"
+          echo "  → Each candidate is resolved to its original host page before publishing"
+          echo "  → Unresolved candidates → data/manual_review/pending_candidates.json"
           echo ""
           python --version
           pip show requests pydantic beautifulsoup4 PyYAML lxml python-dateutil \
@@ -102,6 +106,12 @@ jobs:
       # --enrich-geo geocodes missing coordinates.
       # --filter-non-family excludes adult-oriented / public-service events that
       #   do not belong in the family activities feed.
+      # --use-dullesmoms-seeds widens coverage using DullesMoms as a DISCOVERY
+      #   layer only: each listing is resolved to the original event host page
+      #   and published with that host's URL and content.  DullesMoms text is
+      #   never published, and enrichment/validate.py fails the run if a
+      #   dullesmoms.com URL reaches a published event.  See
+      #   docs/source_rules.md § "DullesMoms — Discovery Layer Only".
       #
       # When inputs.dry_run == 'true' the pipeline still runs and writes output
       # files locally so the validation step can inspect them — but the commit
@@ -110,8 +120,8 @@ jobs:
       # -----------------------------------------------------------------------
       - name: Run pipeline
         run: |
-          echo "Running: python scripts/run_pipeline.py --enrich-geo --filter-non-family"
-          python scripts/run_pipeline.py --enrich-geo --filter-non-family
+          echo "Running: python scripts/run_pipeline.py --enrich-geo --filter-non-family --use-dullesmoms-seeds"
+          python scripts/run_pipeline.py --enrich-geo --filter-non-family --use-dullesmoms-seeds
 
       # -----------------------------------------------------------------------
       # 5. Validate published output

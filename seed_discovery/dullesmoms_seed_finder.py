@@ -48,19 +48,15 @@ from dateutil import parser as dateutil_parser
 
 from models.candidate import CandidateEvent, CandidateStatus
 from seed_discovery.base import BaseSeedFinder
+from seed_discovery.urls import (
+    SEED_DOMAIN,
+    is_candidate_original_url,
+    is_seed_url as _is_dullesmoms_url,
+)
 
 logger = logging.getLogger(__name__)
 
 SEED_URL = "https://dullesmoms.com/dmcalendar/list/"
-SEED_DOMAIN = "dullesmoms.com"
-
-
-def _is_dullesmoms_url(url: str) -> bool:
-    """Return True if the URL belongs to dullesmoms.com."""
-    try:
-        return SEED_DOMAIN in urlparse(url).netloc.lower()
-    except Exception:
-        return True  # treat unparseable URLs as seed-domain URLs
 
 
 def _stable_candidate_id(seed_url: str, title: str) -> str:
@@ -163,13 +159,13 @@ class DullesMomsSeedFinder(BaseSeedFinder):
         if not discovered_title:
             return None
 
-        # The DullesMoms page URL for this event (seed URL only — not published)
-        dullesmoms_href = title_el.get("href", "") or ""
-        seed_event_url = (
-            dullesmoms_href
-            if dullesmoms_href.startswith("http")
-            else urljoin(SEED_URL, dullesmoms_href)
-        )
+        # The DullesMoms page URL for this event (seed URL only — not published).
+        # When the title anchor carries no usable href we must NOT fall back to
+        # the calendar list URL: the resolver would then "detail-scrape" the
+        # list page and return the first outbound link on it — typically the
+        # site's own footer/social links, which describe DullesMoms rather than
+        # the event.  Record None instead so the candidate is routed to review.
+        seed_event_url = self._detail_url(title_el.get("href", "") or "")
 
         # Date text — used for matching only, not stored as content
         date_el = article.select_one(
@@ -206,12 +202,23 @@ class DullesMomsSeedFinder(BaseSeedFinder):
 
         notes: str | None = None
         if candidate_original_url is None:
-            notes = "No outbound original URL found on seed page. Manual review required."
+            if seed_event_url is None:
+                notes = (
+                    "No outbound original URL on the list entry, and no "
+                    "DullesMoms detail page link to follow. Manual review required."
+                )
+            else:
+                notes = (
+                    "No outbound original URL found on seed page. "
+                    "Resolver will try the detail page."
+                )
 
         return CandidateEvent(
-            candidate_id=_stable_candidate_id(seed_event_url, discovered_title),
+            candidate_id=_stable_candidate_id(
+                seed_event_url or SEED_URL, discovered_title
+            ),
             seed_source_name=self.seed_source_name,
-            seed_url=seed_event_url,
+            seed_url=seed_event_url or SEED_URL,
             discovered_title=discovered_title,
             discovered_date_text=discovered_date_text,
             discovered_location_text=discovered_location_text,
@@ -222,17 +229,40 @@ class DullesMomsSeedFinder(BaseSeedFinder):
             discovered_at=datetime.now(tz=timezone.utc),
         )
 
+    @staticmethod
+    def _detail_url(href: str) -> str | None:
+        """
+        Resolve a title anchor's href to a per-event DullesMoms detail URL.
+
+        Returns None when the href is empty or points back at the calendar
+        list page itself — neither is a detail page, and treating them as one
+        makes the resolver scrape the listing's own chrome.
+        """
+        href = (href or "").strip()
+        if not href or href.startswith("#"):
+            return None
+        absolute = href if href.startswith("http") else urljoin(SEED_URL, href)
+        if absolute.rstrip("/") == SEED_URL.rstrip("/"):
+            return None
+        if not _is_dullesmoms_url(absolute):
+            return None
+        return absolute
+
     def _find_original_url(
         self,
         article: BeautifulSoup,
-        seed_event_url: str,
+        seed_event_url: str | None,
     ) -> str | None:
         """
-        Search an event article for an outbound (non-DullesMoms) URL.
+        Search an event article for an outbound original-host URL.
 
         Strategy:
           1. Look for explicit "original event" or "register here" links.
-          2. Scan all anchors for the first non-DullesMoms https URL.
+          2. Scan all anchors for the first plausible original-host URL.
+
+        Social, share, and calendar-widget links are excluded at both steps —
+        `is_candidate_original_url` is the same predicate the resolver applies,
+        so a link rejected here is not silently accepted downstream.
 
         Returns the URL string, or None if nothing suitable is found.
         """
@@ -243,18 +273,16 @@ class DullesMomsSeedFinder(BaseSeedFinder):
         )
         for anchor in article.find_all("a", href=True):
             href = anchor.get("href", "")
-            if not href.startswith("http"):
-                continue
-            if _is_dullesmoms_url(href):
+            if not is_candidate_original_url(href):
                 continue
             link_text = anchor.get_text(strip=True)
             if priority_patterns.search(link_text) or priority_patterns.search(href):
                 return href
 
-        # Priority 2: first non-DullesMoms outbound https link
+        # Priority 2: first plausible outbound original-host link
         for anchor in article.find_all("a", href=True):
             href = anchor.get("href", "")
-            if href.startswith("https://") and not _is_dullesmoms_url(href):
+            if href.startswith("https://") and is_candidate_original_url(href):
                 return href
 
         return None
