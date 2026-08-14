@@ -3,7 +3,8 @@ name: NoVA Kids Pipeline
 # ============================================================
 # PIPELINE ENTRYPOINT
 #
-#   python scripts/run_pipeline.py --enrich-geo --filter-non-family
+#   python scripts/run_pipeline.py --enrich-geo --filter-non-family \
+#       --use-dullesmoms-seeds
 #
 # Both scheduled (cron) and manual (workflow_dispatch) runs use
 # the identical command — there are no separate code paths.
@@ -15,6 +16,14 @@ name: NoVA Kids Pipeline
 #                         from the published weekly JSON.
 #                         Excluded events are written to
 #                         data/manual_review/excluded_non_family_events.json.
+#   --use-dullesmoms-seeds
+#                         Widen coverage by discovering candidates on the
+#                         DullesMoms calendar and resolving each to its
+#                         ORIGINAL host page before publishing. DullesMoms
+#                         is a discovery layer only — its text is never
+#                         published and validation fails the run if a
+#                         dullesmoms.com URL reaches a published event.
+#                         See docs/source_rules.md.
 #
 # Safety guards:
 #   - Minimum 100 events required before committing output
