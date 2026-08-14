@@ -2259,5 +2259,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-08-12T10:59:45.176249+00:00"
+  },
+  "Thomas Jefferson Community Center, 3501 S 2nd St, Arlington VA 22204, Arlington": {
+    "query": "Thomas Jefferson Community Center, 3501 S 2nd St, Arlington VA 22204, Arlington",
+    "latitude": 38.870019,
+    "longitude": -77.096009,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-14T10:56:21.120224+00:00"
   }
 }
