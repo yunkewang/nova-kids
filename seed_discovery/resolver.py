@@ -18,8 +18,10 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import re
 import time
+from collections import Counter
 from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import urlparse
@@ -579,7 +581,87 @@ def _compute_extraction_confidence(
 
 
 # ---------------------------------------------------------------------------
-# Public entry point
+# Original URL selection
+# ---------------------------------------------------------------------------
+
+def _determine_original_url(
+    candidate: CandidateEvent,
+    session: requests.Session,
+) -> str | None:
+    """
+    Settle on the original host URL for `candidate` without fetching it.
+
+    Discards a stored URL that is not a plausible host, then falls back to
+    scraping the DullesMoms detail page.  Returns None and mutates `candidate`
+    with the manual-review reason when no URL can be found.
+    """
+    original_url = candidate.candidate_original_url
+
+    # Candidates queued before the utility-domain filter existed can carry a
+    # social or calendar-widget URL (e.g. facebook.com/DullesMoms).  Resolving
+    # one publishes the aggregator's own page as if it were the event, so drop
+    # it here and fall through to detail-page resolution.
+    if original_url and not is_candidate_original_url(original_url):
+        logger.info(
+            "Discarding non-host original URL for '%s': %s",
+            candidate.discovered_title,
+            original_url,
+        )
+        candidate.candidate_original_url = None
+        original_url = None
+
+    if original_url:
+        return original_url
+
+    # If no original URL was found on the list page, visit the DullesMoms
+    # event detail page to look for an outbound link there.
+    if candidate.seed_url and "dullesmoms.com" in candidate.seed_url:
+        logger.debug(
+            "No original URL for '%s' — visiting DullesMoms detail page: %s",
+            candidate.discovered_title,
+            candidate.seed_url,
+        )
+        original_url = _find_original_url_from_detail_page(candidate.seed_url, session)
+        if original_url:
+            candidate.candidate_original_url = original_url
+            # Recalculate confidence now that we have an original URL
+            candidate.confidence = min(candidate.confidence + 0.50, 1.0)
+            candidate.requires_manual_review = False
+            logger.info(
+                "Detail-page resolution: found original URL for '%s': %s",
+                candidate.discovered_title,
+                original_url,
+            )
+            return original_url
+
+        candidate.requires_manual_review = True
+        candidate.status = CandidateStatus.MANUAL_REVIEW
+        candidate.review_reason = "no_original_url_found"
+        if _is_detail_page_url(candidate.seed_url):
+            candidate.last_resolution_error = (
+                "No outbound original URL found on DullesMoms list page "
+                "or detail page."
+            )
+        else:
+            candidate.last_resolution_error = (
+                "Candidate has no DullesMoms detail page to follow "
+                f"(seed_url is the calendar listing: {candidate.seed_url})."
+            )
+        candidate.suggested_next_action = (
+            "Search for this event manually and set candidate_original_url."
+        )
+        candidate.notes = candidate.last_resolution_error
+        return None
+
+    candidate.requires_manual_review = True
+    candidate.status = CandidateStatus.MANUAL_REVIEW
+    candidate.review_reason = "no_original_url_found"
+    candidate.notes = (candidate.notes or "") + " No original URL to resolve."
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Public entry points
 # ---------------------------------------------------------------------------
 
 def resolve_candidate(
@@ -602,66 +684,10 @@ def resolve_candidate(
       - source_name = original host name
       - source_url = original host URL
     """
-    original_url = candidate.candidate_original_url
     _session = session or _build_session()
 
-    # Candidates queued before the utility-domain filter existed can carry a
-    # social or calendar-widget URL (e.g. facebook.com/DullesMoms).  Resolving
-    # one publishes the aggregator's own page as if it were the event, so drop
-    # it here and fall through to detail-page resolution.
-    if original_url and not is_candidate_original_url(original_url):
-        logger.info(
-            "Discarding non-host original URL for '%s': %s",
-            candidate.discovered_title,
-            original_url,
-        )
-        candidate.candidate_original_url = None
-        original_url = None
-
-    # If no original URL was found on the list page, visit the DullesMoms
-    # event detail page to look for an outbound link there.
-    if not original_url and candidate.seed_url and "dullesmoms.com" in candidate.seed_url:
-        logger.debug(
-            "No original URL for '%s' — visiting DullesMoms detail page: %s",
-            candidate.discovered_title,
-            candidate.seed_url,
-        )
-        original_url = _find_original_url_from_detail_page(candidate.seed_url, _session)
-        if original_url:
-            candidate.candidate_original_url = original_url
-            # Recalculate confidence now that we have an original URL
-            candidate.confidence = min(candidate.confidence + 0.50, 1.0)
-            candidate.requires_manual_review = False
-            logger.info(
-                "Detail-page resolution: found original URL for '%s': %s",
-                candidate.discovered_title,
-                original_url,
-            )
-        else:
-            candidate.requires_manual_review = True
-            candidate.status = CandidateStatus.MANUAL_REVIEW
-            candidate.review_reason = "no_original_url_found"
-            if _is_detail_page_url(candidate.seed_url):
-                candidate.last_resolution_error = (
-                    "No outbound original URL found on DullesMoms list page "
-                    "or detail page."
-                )
-            else:
-                candidate.last_resolution_error = (
-                    "Candidate has no DullesMoms detail page to follow "
-                    f"(seed_url is the calendar listing: {candidate.seed_url})."
-                )
-            candidate.suggested_next_action = (
-                "Search for this event manually and set candidate_original_url."
-            )
-            candidate.notes = candidate.last_resolution_error
-            return None
-
+    original_url = _determine_original_url(candidate, _session)
     if not original_url:
-        candidate.requires_manual_review = True
-        candidate.status = CandidateStatus.MANUAL_REVIEW
-        candidate.review_reason = "no_original_url_found"
-        candidate.notes = (candidate.notes or "") + " No original URL to resolve."
         return None
 
     # Fetch the original page
@@ -814,6 +840,32 @@ def resolve_candidate(
     return raw
 
 
+# ---------------------------------------------------------------------------
+# Site-chrome detection
+# ---------------------------------------------------------------------------
+# A link that appears on a large share of the calendar's detail pages is part
+# of the site's furniture — a sponsor tile, a partner banner, a "browse local
+# businesses" promo — not the host of any one event.  The 2026-08-15 run shows
+# what that costs: 747 of 1600 resolutions (47%) landed on the *same* URL,
+# https://www.bluemontlocal.com/, and published 770 copies of that page's
+# title, "Indoor Play Destinations — Find the Fun Here!", one per candidate
+# date.  Deduplication cannot collapse them because each carries a different
+# DullesMoms date.
+#
+# Frequency is the signal that separates chrome from a genuinely busy venue: a
+# real venue link (Leesburg Animal Park, 27 hits) is a rounding error next to
+# a banner that rides along on every page.  The absolute floor keeps small
+# batches from tripping the share test on a handful of events.
+_SITE_CHROME_MIN_HITS = 20
+_SITE_CHROME_SHARE = 0.15
+
+
+def _site_chrome_urls(url_counts: Counter[str], batch_size: int) -> set[str]:
+    """Return URLs claimed by so many candidates that they must be site chrome."""
+    threshold = max(_SITE_CHROME_MIN_HITS, math.ceil(batch_size * _SITE_CHROME_SHARE))
+    return {url for url, hits in url_counts.items() if hits >= threshold}
+
+
 def resolve_candidates(
     candidates: list[CandidateEvent],
 ) -> tuple[list[dict[str, Any]], list[CandidateEvent]]:
@@ -822,6 +874,11 @@ def resolve_candidates(
 
     For candidates without a candidate_original_url, this will attempt to visit
     the DullesMoms event detail page to find one before giving up.
+
+    Resolution runs in two passes.  The first settles on an original URL for
+    every candidate; URLs shared by too much of the batch are then rejected as
+    site chrome (see above).  Only the survivors are fetched and extracted, so
+    a sponsor banner costs one page load rather than hundreds.
 
     Returns:
       (resolved_raws, manual_review_candidates)
@@ -833,12 +890,47 @@ def resolve_candidates(
     resolved_raws: list[dict[str, Any]] = []
     manual_review: list[CandidateEvent] = []
 
+    # ---- Pass 1: settle on an original URL for each candidate ---------------
+    pending: list[CandidateEvent] = []
+    url_counts: Counter[str] = Counter()
     for candidate in candidates:
         # Skip explicitly rejected or already published candidates
         if candidate.status.value in ("rejected", "published"):
             continue
 
         candidate.resolution_attempts += 1
+        original_url = _determine_original_url(candidate, session)
+        if not original_url:
+            manual_review.append(candidate)
+            continue
+        url_counts[original_url] += 1
+        pending.append(candidate)
+
+    chrome = _site_chrome_urls(url_counts, len(pending))
+    for url in sorted(chrome):
+        logger.warning(
+            "Rejecting %s as site chrome — claimed by %d of %d candidates.",
+            url, url_counts[url], len(pending),
+        )
+
+    # ---- Pass 2: fetch and extract the survivors ----------------------------
+    for candidate in pending:
+        if candidate.candidate_original_url in chrome:
+            candidate.candidate_original_url = None
+            candidate.requires_manual_review = True
+            candidate.status = CandidateStatus.MANUAL_REVIEW
+            candidate.review_reason = "shared_site_link"
+            candidate.last_resolution_error = (
+                "Outbound link is shared by many listings on the seed calendar "
+                "— a sponsor or partner banner, not this event's host page."
+            )
+            candidate.suggested_next_action = (
+                "Search for this event manually and set candidate_original_url."
+            )
+            candidate.notes = candidate.last_resolution_error
+            manual_review.append(candidate)
+            continue
+
         raw = resolve_candidate(candidate, session=session)
         if raw is not None:
             resolved_raws.append(raw)

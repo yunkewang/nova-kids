@@ -238,3 +238,83 @@ class TestStaleCandidateSanitisation:
         assert candidate.requires_manual_review is True
         assert candidate.review_reason == "no_original_url_found"
         assert "calendar listing" in (candidate.last_resolution_error or "")
+
+
+# ---------------------------------------------------------------------------
+# Site chrome — a link shared by most of the calendar is not an event host
+# ---------------------------------------------------------------------------
+
+class TestSiteChromeRejection:
+    def _candidate(self, n: int, url: str) -> CandidateEvent:
+        return CandidateEvent(
+            candidate_id=f"{n:016x}",
+            seed_source_name="DullesMoms",
+            seed_url=f"https://dullesmoms.com/event/e{n}/",
+            discovered_title=f"Event {n}",
+            candidate_original_url=url,
+            confidence=0.9,
+        )
+
+    def test_threshold_flags_a_banner_but_spares_a_busy_venue(self):
+        from seed_discovery.resolver import _site_chrome_urls
+        from collections import Counter
+
+        # Shape of the 2026-08-15 run: one banner on nearly half the pages,
+        # one genuinely busy venue, and a long tail of one-off hosts.
+        counts = Counter({
+            "https://www.bluemontlocal.com/": 747,
+            "https://tinyurl.com/LeesburgAnimalPark": 27,
+            "http://bit.ly/GreatCountryFarms": 23,
+        })
+        assert _site_chrome_urls(counts, 1600) == {"https://www.bluemontlocal.com/"}
+
+    def test_small_batches_need_the_absolute_floor(self):
+        from seed_discovery.resolver import _site_chrome_urls
+        from collections import Counter
+
+        # 15% of 30 is 5 hits — too few to conclude anything, so the floor of
+        # 20 applies and nothing is rejected.
+        assert _site_chrome_urls(Counter({"https://venue.example/": 6}), 30) == set()
+
+    def test_shared_banner_candidates_go_to_review_unfetched(self, monkeypatch):
+        import seed_discovery.resolver as resolver
+
+        banner = "https://www.bluemontlocal.com/"
+        candidates = [self._candidate(n, banner) for n in range(25)]
+        candidates.append(self._candidate(99, "https://realvenue.example/fall-fest"))
+
+        fetched: list[str] = []
+
+        def _fake_resolve(candidate, session=None):
+            fetched.append(candidate.candidate_original_url)
+            return {"title": candidate.discovered_title}
+
+        monkeypatch.setattr(resolver, "resolve_candidate", _fake_resolve)
+        monkeypatch.setattr(resolver, "_build_session", lambda: object())
+
+        resolved, review = resolver.resolve_candidates(candidates)
+
+        # Only the one-off host is fetched; the banner costs zero page loads.
+        assert fetched == ["https://realvenue.example/fall-fest"]
+        assert len(resolved) == 1
+        assert len(review) == 25
+        assert {c.review_reason for c in review} == {"shared_site_link"}
+        assert all(c.candidate_original_url is None for c in review)
+
+    def test_ordinary_batch_is_untouched(self, monkeypatch):
+        import seed_discovery.resolver as resolver
+
+        candidates = [
+            self._candidate(n, f"https://venue{n}.example/event")
+            for n in range(25)
+        ]
+
+        monkeypatch.setattr(
+            resolver, "resolve_candidate",
+            lambda candidate, session=None: {"title": candidate.discovered_title},
+        )
+        monkeypatch.setattr(resolver, "_build_session", lambda: object())
+
+        resolved, review = resolver.resolve_candidates(candidates)
+        assert len(resolved) == 25
+        assert review == []

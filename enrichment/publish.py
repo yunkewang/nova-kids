@@ -5,9 +5,10 @@ Produces:
   data/published/events/week-YYYY-MM-DD.json   (one per ISO week)
   data/published/events/index.json             (manifest of all weeks)
 
-The week date in the filename is the Monday (ISO week start) of the week
-that contains the earliest event in the batch — or the current week if
-no events exist.
+The week date in the filename is the Monday (ISO week start) the caller passes
+in. When no week is given it is inferred from the earliest event in the batch —
+or the current week if no events exist — which is only safe when every event is
+upcoming. The pipeline passes the current week explicitly; see publish_events.
 
 Public entry point: publish_events(events: list[Event]) -> PublishResult
 """
@@ -88,10 +89,21 @@ def _prune_old_weeks(
     available_weeks: list[str],
     *,
     max_weeks: int,
+    protect: str | None = None,
 ) -> tuple[list[str], list[str]]:
     """
     Trim `available_weeks` to the newest `max_weeks` entries and delete the
     corresponding on-disk week files.
+
+    `protect` names a week that must survive pruning regardless of its age —
+    callers pass the week they have just written.  Retention used to assume the
+    newly written week was always the newest one on disk, which held only while
+    the week was derived from the current date.  Once a single stale-dated event
+    could pull the filename months into the past, that assumption silently
+    deleted the run's entire output: a run publishing `week-2026-05-25.json`
+    alongside five newer weeks wrote 1993 events and then unlinked the file.
+    When the protected week would otherwise be pruned it displaces the oldest
+    week that would have been kept, so the cap still holds.
 
     Returns (kept_weeks, removed_weeks). Both are ISO date strings sorted
     ascending.
@@ -102,11 +114,22 @@ def _prune_old_weeks(
         return sorted(set(available_weeks)), []
 
     sorted_weeks = sorted(set(available_weeks))
+    if protect is not None and protect not in sorted_weeks:
+        sorted_weeks = sorted({*sorted_weeks, protect})
     if len(sorted_weeks) <= max_weeks:
         return sorted_weeks, []
 
     kept = sorted_weeks[-max_weeks:]
-    removed = sorted_weeks[:-max_weeks]
+    if protect is not None and protect not in kept:
+        # Keep the just-written week; drop the oldest week that survived the
+        # newest-N cut so the retention cap is still respected.
+        logger.warning(
+            "Retention: %s is older than the %d newest weeks but was just "
+            "written — retaining it and pruning %s instead.",
+            protect, max_weeks, kept[0],
+        )
+        kept = sorted([protect, *kept[1:]])
+    removed = [w for w in sorted_weeks if w not in kept]
 
     for week_key in removed:
         path = PUBLISHED_DIR / _week_filename(date.fromisoformat(week_key))
@@ -151,8 +174,14 @@ def publish_events(
     If `week_start` is provided it is used as-is (snapped to Monday).
     Otherwise the week is inferred from the earliest event start time,
     or falls back to the current week when there are no events.
+
+    Inference is only safe when every event is upcoming: one stale-dated record
+    moves the whole batch into a past week's file, where the iOS app — which
+    reads `latest_week` from index.json — will never look for it.  Callers that
+    publish a live feed should pass `week_start` explicitly; the pipeline does.
     """
     now_utc = datetime.now(tz=timezone.utc)
+    current_week = _week_monday(now_utc.date())
 
     # Determine which week we're publishing
     if week_start is not None:
@@ -162,8 +191,15 @@ def publish_events(
         week_start = _week_monday(
             earliest_start.date() if isinstance(earliest_start, datetime) else earliest_start
         )
+        if week_start < current_week:
+            logger.warning(
+                "Inferred publish week %s is in the past (current week is %s) — "
+                "the earliest event in the batch is stale. Pass week_start "
+                "explicitly to publish into the live feed.",
+                week_start, current_week,
+            )
     else:
-        week_start = _week_monday(now_utc.date())
+        week_start = current_week
 
     # Sort events by start time before publishing
     def _sort_key(e: Event):
@@ -222,9 +258,10 @@ def publish_events(
 
     # Prune: keep only the most recent MAX_PUBLISHED_WEEKS weeks. Older files
     # are deleted from disk so the published feed never grows unbounded.
-    # The week we just wrote is always among the newest, so it is safe.
+    # `protect` keeps the week we just wrote out of the removal set even when
+    # it is not among the newest — see _prune_old_weeks.
     available_weeks, removed_weeks = _prune_old_weeks(
-        available_weeks, max_weeks=MAX_PUBLISHED_WEEKS,
+        available_weeks, max_weeks=MAX_PUBLISHED_WEEKS, protect=week_key,
     )
     if removed_weeks:
         logger.info(

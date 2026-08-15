@@ -109,6 +109,20 @@ the calendar listing. The resolver refuses to detail-scrape a listing URL,
 because the first outbound link on that page belongs to the site's own chrome
 rather than to any event.
 
+A domain deny-list only catches chrome we can name in advance. Detail pages also
+carry sponsor tiles and partner banners on ordinary-looking domains, and those
+pass every predicate above. The resolver catches them by frequency instead: an
+outbound link claimed by 15% or more of a batch (minimum 20 candidates) is
+rejected as `shared_site_link` and the affected candidates go to manual review.
+
+This is not hypothetical. The 2026-08-15 run resolved 747 of 1600 candidates —
+47% — to `https://www.bluemontlocal.com/`, a sponsor link present on every
+detail page, and published 770 copies of that page's title, "Indoor Play
+Destinations — Find the Fun Here!", one per candidate date. Deduplication could
+not collapse them because each carried a different date. A genuinely busy venue
+looks nothing like this: Leesburg Animal Park, the second-most-linked host in
+the same run, accounted for 27 candidates (1.7%).
+
 ### What DullesMoms is NOT allowed for
 
 - **Published content source**: DullesMoms descriptions, summaries, images,

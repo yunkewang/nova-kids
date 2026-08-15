@@ -230,10 +230,16 @@ python scripts/validate_events.py data/published/events/week-2026-03-16.json
 2. Runs each scraper → saves raw JSON to `data/raw/<source_id>.json`
 3. Normalizes raw records → saves to `data/normalized/events.json`
 4. Enriches events (tags, scores, rainy_day_friendly)
-5. Deduplicates (exact-ID and cross-source fingerprint)
-6. Validates — **halts with exit code 1 on any errors**
-7. Publishes weekly JSON file + updates `index.json`
-8. Prints summary report
+5. Drops events that already finished (multi-day events survive to their last day)
+6. Deduplicates (exact-ID and cross-source fingerprint)
+7. Validates — **halts with exit code 1 on any errors**
+8. Publishes to the **current** week's JSON file + updates `index.json`
+9. Prints summary report
+
+Step 8 anchors the filename to the current week rather than to the earliest
+event in the batch. Inferring it from the data means one stale listing renames
+the output: on 2026-08-15 a single May-dated seed event sent all 1993 published
+events to `week-2026-05-25.json`, which the retention policy then deleted.
 
 ---
 

@@ -26,6 +26,9 @@ name: NoVA Kids Pipeline
 #                         See docs/source_rules.md.
 #
 # Safety guards:
+#   - Published week file must carry this run's timestamp, so a run that
+#     publishes somewhere the feed never reads fails instead of re-validating
+#     yesterday's file
 #   - Minimum 100 events required before committing output
 #   - Family-relevance fields verified present (confirms new code ran)
 #   - Keyword leak check confirms adult-service events did not appear
@@ -137,16 +140,19 @@ jobs:
       #
       # Checks (all required to pass before committing):
       #   a) index.json and week file exist
-      #   b) event_count >= 100  (catches total scraper failure)
-      #   c) family_relevance_score field present  (proves new enrichment ran)
-      #   d) family_relevance_label field present  (proves new enrichment ran)
-      #   e) No adult-service events leaked into published feed
-      #   f) Writes pipeline_stats.json for downstream steps
+      #   b) the week file was written by THIS run (catches a publish that
+      #      landed somewhere the feed never reads — see the freshness check)
+      #   c) event_count >= 100  (catches total scraper failure)
+      #   d) family_relevance_score field present  (proves new enrichment ran)
+      #   e) family_relevance_label field present  (proves new enrichment ran)
+      #   f) No adult-service events leaked into published feed
+      #   g) Writes pipeline_stats.json for downstream steps
       # -----------------------------------------------------------------------
       - name: Validate published output
         run: |
           python3 - <<'PYEOF'
           import json, sys, os
+          from datetime import datetime, timedelta, timezone
           from pathlib import Path
           from collections import Counter
 
@@ -174,14 +180,48 @@ jobs:
           print(f"Latest week      : {latest}")
           print(f"Event count      : {count}")
 
-          # ── b) Minimum count guard ────────────────────────────────────────
+          # ── b) Freshness guard ────────────────────────────────────────────
+          # Every check below reads whatever index.json points at, which is not
+          # necessarily what this run produced.  On 2026-08-15 the pipeline
+          # published 1993 events into week-2026-05-25.json, retention deleted
+          # that file, and this step happily re-validated the untouched
+          # 2026-08-10 file from the day before — 433 events, all green, zero
+          # events actually updated.  Require the file to carry this run's
+          # timestamp so a feed that has silently stopped moving fails loudly.
+          MAX_AGE = timedelta(hours=6)
+          raw_generated = data.get("generated_at", "")
+          try:
+              generated = datetime.fromisoformat(raw_generated)
+              if generated.tzinfo is None:
+                  generated = generated.replace(tzinfo=timezone.utc)
+          except ValueError:
+              generated = None
+
+          if generated is None:
+              errors.append(
+                  f"{week_path.name} has no parseable generated_at "
+                  f"({raw_generated!r}) — cannot confirm this run wrote it."
+              )
+          else:
+              age = datetime.now(tz=timezone.utc) - generated
+              if age > MAX_AGE:
+                  errors.append(
+                      f"{week_path.name} was generated {age} ago "
+                      f"({generated.isoformat()}) — this run did not write it. "
+                      "The pipeline published to a week the feed does not read."
+                  )
+              else:
+                  print(f"{PASS}  {week_path.name} written by this run "
+                        f"({generated.isoformat()})")
+
+          # ── c) Minimum count guard ────────────────────────────────────────
           MIN_EVENTS = 100
           if count < MIN_EVENTS:
               errors.append(f"Only {count} events published (minimum {MIN_EVENTS}) — scraper failure?")
           else:
               print(f"{PASS}  Event count {count} ≥ {MIN_EVENTS}")
 
-          # ── c/d) Family relevance fields present ──────────────────────────
+          # ── d/e) Family relevance fields present ──────────────────────────
           # These are written by enrichment/family_relevance.py (new code).
           # If absent, the --filter-non-family flag had no effect.
           sample = events[0] if events else {}
@@ -215,7 +255,7 @@ jobs:
                   f"still in published feed — filter may not have run correctly."
               )
 
-          # ── e) Adult-service keyword leak check ───────────────────────────
+          # ── f) Adult-service keyword leak check ───────────────────────────
           # These phrases should never appear in the published family feed.
           # The list is intentionally conservative (specific phrases only) to
           # avoid false positives from e.g. "family tax benefit" events.

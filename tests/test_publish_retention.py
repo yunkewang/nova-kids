@@ -115,6 +115,51 @@ class TestPruneOldWeeks:
         assert kept == ["2026-03-02", "2026-03-09"]
         assert removed == []
 
+    def test_protected_week_survives_even_when_oldest(self, tmp_published_dir: Path):
+        """The week just written is never pruned, however old it looks.
+
+        Regression: the 2026-08-15 run published to week-2026-05-25.json
+        alongside five newer weeks; retention deleted the file it had just
+        written, discarding 1993 events.
+        """
+        from enrichment.publish import _prune_old_weeks
+
+        weeks = [
+            "2026-05-25", "2026-06-22", "2026-06-29",
+            "2026-07-27", "2026-08-03", "2026-08-10",
+        ]
+        for w in weeks:
+            _touch_week(tmp_published_dir, w)
+
+        kept, removed = _prune_old_weeks(weeks, max_weeks=5, protect="2026-05-25")
+
+        assert "2026-05-25" in kept
+        assert len(kept) == 5
+        # The protected week displaces the oldest week that would have survived
+        assert removed == ["2026-06-22"]
+        remaining = sorted(p.name for p in tmp_published_dir.glob("week-*.json"))
+        assert "week-2026-05-25.json" in remaining
+        assert "week-2026-06-22.json" not in remaining
+
+    def test_protect_is_added_when_absent_from_index(self, tmp_published_dir: Path):
+        from enrichment.publish import _prune_old_weeks
+
+        weeks = ["2026-06-22", "2026-06-29", "2026-07-27"]
+        kept, removed = _prune_old_weeks(weeks, max_weeks=5, protect="2026-08-10")
+        assert kept == ["2026-06-22", "2026-06-29", "2026-07-27", "2026-08-10"]
+        assert removed == []
+
+    def test_protect_noop_when_already_newest(self, tmp_published_dir: Path):
+        from enrichment.publish import _prune_old_weeks
+
+        weeks = ["2026-02-02", "2026-02-09", "2026-02-16"]
+        for w in weeks:
+            _touch_week(tmp_published_dir, w)
+
+        kept, removed = _prune_old_weeks(weeks, max_weeks=2, protect="2026-02-16")
+        assert kept == ["2026-02-09", "2026-02-16"]
+        assert removed == ["2026-02-02"]
+
     def test_tolerates_missing_files(self, tmp_published_dir: Path):
         """Pruning a week whose file is already gone shouldn't raise."""
         from enrichment.publish import _prune_old_weeks

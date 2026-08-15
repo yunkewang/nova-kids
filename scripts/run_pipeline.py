@@ -197,17 +197,51 @@ def save_normalized(events: list[Event]) -> None:
 # ---------------------------------------------------------------------------
 
 def _sync_public() -> None:
-    """Copy all published JSON files into public/events/ for Vercel hosting."""
-    import shutil
-    src_dir = Path(__file__).parent.parent / "data" / "published" / "events"
-    dst_dir = Path(__file__).parent.parent / "public" / "events"
-    dst_dir.mkdir(parents=True, exist_ok=True)
-    count = 0
-    for src_file in sorted(src_dir.glob("*.json")):
-        shutil.copy2(src_file, dst_dir / src_file.name)
-        count += 1
-    if count:
-        print(f"[sync] {count} file(s) → public/events/")
+    """
+    Mirror data/published/events/ into public/events/ for Vercel hosting.
+
+    Delegates to scripts/sync_public.py rather than re-implementing the copy:
+    that module also mirrors *deletions*, so weeks dropped by the retention
+    policy stop being served.  The copy-only version this replaced is why
+    public/events/ accumulated week files going back to March that
+    data/published/events/ had long since pruned.
+    """
+    from scripts.sync_public import sync
+    sync()
+
+
+# ---------------------------------------------------------------------------
+# Stale event filter
+# ---------------------------------------------------------------------------
+
+def _drop_past_events(
+    events: list[Event],
+    today: date,
+) -> tuple[list[Event], list[Event]]:
+    """
+    Split *events* into (upcoming, already_finished).
+
+    Direct scrapers only list what is still on their calendars, so this used to
+    be a no-op.  Seed-resolved events are different: DullesMoms lists recurring
+    and lapsed entries, and a host page's JSON-LD can carry last season's dates,
+    so a run can pick up events that finished months ago.  Those are dead
+    listings for the reader, and — because the published week is derived from
+    the earliest event — a single one of them used to relocate the entire feed
+    into a past week's file.
+
+    An event counts as upcoming while its last day has not passed, so multi-day
+    festivals stay in the feed until they actually end.  Event's schema already
+    guarantees ``end >= start``, so ``end or start`` is the last day.
+    """
+    upcoming: list[Event] = []
+    finished: list[Event] = []
+    for ev in events:
+        last = ev.end or ev.start
+        if last.date() < today:
+            finished.append(ev)
+        else:
+            upcoming.append(ev)
+    return upcoming, finished
 
 
 # ---------------------------------------------------------------------------
@@ -866,6 +900,14 @@ def main(argv: list[str] | None = None) -> int:
     save_normalized(events)
     print(f"      Events normalized:   {len(events)}")
 
+    # 3a. Drop events that already finished
+    today = datetime.now(tz=timezone.utc).date()
+    events, finished = _drop_past_events(events, today)
+    if finished:
+        oldest = min(e.start for e in finished).date()
+        print(f"      Past events dropped: {len(finished)} "
+              f"(oldest {oldest.isoformat()})")
+
     # 3b. Filter to target week when specified
     if target_week is not None:
         from datetime import timedelta
@@ -922,7 +964,13 @@ def main(argv: list[str] | None = None) -> int:
         print("\n[5/5] Dry run — skipping publish.")
     else:
         print("\n[5/5] Publishing...")
-        result = publish_events(events, week_start=target_week)
+        # Anchor the file to the current week unless the caller named one.
+        # Letting publish_events infer it from the earliest event makes the
+        # filename a function of the scraped data: the 2026-08-15 run picked up
+        # a stale seed event and wrote every one of its 1993 events to
+        # week-2026-05-25.json, which retention then deleted.
+        # publish_events snaps whatever it is given back to that week's Monday.
+        result = publish_events(events, week_start=target_week or today)
         print(f"      Written: {result.output_path.name}")
         print(f"      Index updated: {result.index_path.name}")
         _sync_public()
