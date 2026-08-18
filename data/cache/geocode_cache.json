@@ -3162,5 +3162,68 @@
     "longitude": -77.055759,
     "confidence": 0.9,
     "resolved_at": "2026-08-17T11:49:59.215835+00:00"
+  },
+  "Central Station Drive": {
+    "query": "Central Station Drive",
+    "latitude": 39.006854,
+    "longitude": -77.487074,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-18T11:37:20.946642+00:00"
+  },
+  "Hidden Oaks Nature Center, Annandale, VA": {
+    "query": "Hidden Oaks Nature Center, Annandale, VA",
+    "latitude": 38.839453,
+    "longitude": -77.212113,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-18T11:37:22.288074+00:00"
+  },
+  "11900 Market StreetReston, VA 20190, Reston": {
+    "query": "11900 Market StreetReston, VA 20190, Reston",
+    "latitude": 38.959155,
+    "longitude": -77.357591,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-18T11:37:25.513268+00:00"
+  },
+  "231 Dominion Rd, Vienna, Virginia, 22180, Vienna": {
+    "query": "231 Dominion Rd, Vienna, Virginia, 22180, Vienna",
+    "latitude": 38.904136,
+    "longitude": -77.266965,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-18T11:37:28.975945+00:00"
+  },
+  "42420 Unicorn Drive, South Riding": {
+    "query": "42420 Unicorn Drive, South Riding",
+    "latitude": 38.918997,
+    "longitude": -77.535765,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-18T11:37:30.946838+00:00"
+  },
+  "Lake Accotink Park, Springfield, VA": {
+    "query": "Lake Accotink Park, Springfield, VA",
+    "latitude": 38.801697,
+    "longitude": -77.228921,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-18T11:37:32.542852+00:00"
+  },
+  "Clarendon District": {
+    "query": "Clarendon District",
+    "latitude": 38.888926,
+    "longitude": -77.092137,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-18T11:37:34.032145+00:00"
+  },
+  "Meadowlark Botanical Gardens, Vienna, VA": {
+    "query": "Meadowlark Botanical Gardens, Vienna, VA",
+    "latitude": 38.937539,
+    "longitude": -77.282561,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-18T11:37:35.592138+00:00"
+  },
+  "Carlyle House Historic Park": {
+    "query": "Carlyle House Historic Park",
+    "latitude": 38.805244,
+    "longitude": -77.041839,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-18T11:37:36.992221+00:00"
   }
 }
