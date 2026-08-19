@@ -3225,5 +3225,19 @@
     "longitude": -77.041839,
     "confidence": 0.9,
     "resolved_at": "2026-08-18T11:37:36.992221+00:00"
+  },
+  "Potomac Music": {
+    "query": "Potomac Music",
+    "latitude": 39.097818,
+    "longitude": -77.527823,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-19T12:17:04.085372+00:00"
+  },
+  "Workhouse Arts Center, Lorton, VA": {
+    "query": "Workhouse Arts Center, Lorton, VA",
+    "latitude": 38.698071,
+    "longitude": -77.255393,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-19T12:17:05.221737+00:00"
   }
 }
