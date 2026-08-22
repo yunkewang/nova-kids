@@ -3239,5 +3239,12 @@
     "longitude": -77.255393,
     "confidence": 0.9,
     "resolved_at": "2026-08-19T12:17:05.221737+00:00"
+  },
+  "Manassas Mall, Manassas, Prince William County, VA": {
+    "query": "Manassas Mall, Manassas, Prince William County, VA",
+    "latitude": 38.773073,
+    "longitude": -77.504859,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-22T11:37:39.516332+00:00"
   }
 }
