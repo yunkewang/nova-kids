@@ -3246,5 +3246,12 @@
     "longitude": -77.504859,
     "confidence": 0.9,
     "resolved_at": "2026-08-22T11:37:39.516332+00:00"
+  },
+  "National Museum of Railroad History & Innovation": {
+    "query": "National Museum of Railroad History & Innovation",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-24T11:49:53.892859+00:00"
   }
 }
