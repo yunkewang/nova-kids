@@ -3253,5 +3253,54 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-08-24T11:49:53.892859+00:00"
+  },
+  "Sully Historic Site, Chantilly, VA": {
+    "query": "Sully Historic Site, Chantilly, VA",
+    "latitude": 38.908094,
+    "longitude": -77.429375,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-25T13:37:12.773011+00:00"
+  },
+  "6317 Georgetown PikeMcLean, Virginia 22101, Mclean": {
+    "query": "6317 Georgetown PikeMcLean, Virginia 22101, Mclean",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-25T13:37:13.957829+00:00"
+  },
+  "6317 Georgetown PikeMcLean, Virginia 22101": {
+    "query": "6317 Georgetown PikeMcLean, Virginia 22101",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-25T13:37:15.512975+00:00"
+  },
+  "Clemyjontri Park, Mclean, Fairfax County, VA": {
+    "query": "Clemyjontri Park, Mclean, Fairfax County, VA",
+    "latitude": 38.94491,
+    "longitude": -77.156293,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-25T13:37:16.801307+00:00"
+  },
+  "Participating Outback Steakhouse Locations": {
+    "query": "Participating Outback Steakhouse Locations",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-25T13:37:17.935235+00:00"
+  },
+  "Dave & Buster's, Fairfax, Fairfax County, VA": {
+    "query": "Dave & Buster's, Fairfax, Fairfax County, VA",
+    "latitude": 38.863519,
+    "longitude": -77.361521,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-25T13:37:19.157592+00:00"
+  },
+  "Tysons Central Park, Tysons, VA, 22182, Tyson, Fairfax County, VA": {
+    "query": "Tysons Central Park, Tysons, VA, 22182, Tyson, Fairfax County, VA",
+    "latitude": 38.89728,
+    "longitude": -77.238224,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-25T13:37:20.660594+00:00"
   }
 }
