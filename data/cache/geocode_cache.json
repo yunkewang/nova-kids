@@ -3302,5 +3302,61 @@
     "longitude": -77.238224,
     "confidence": 0.9,
     "resolved_at": "2026-08-25T13:37:20.660594+00:00"
+  },
+  "Courthouse Plaza / 2100 Clarendon Blvd, Arlington, VA 22201, Arlington": {
+    "query": "Courthouse Plaza / 2100 Clarendon Blvd, Arlington, VA 22201, Arlington",
+    "latitude": 38.891553,
+    "longitude": -77.082641,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-26T13:43:03.054165+00:00"
+  },
+  "Children's Lighthouse": {
+    "query": "Children's Lighthouse",
+    "latitude": 39.289037,
+    "longitude": -76.606284,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-26T13:43:04.705757+00:00"
+  },
+  "Franconia Rec Center, Alexandria, VA": {
+    "query": "Franconia Rec Center, Alexandria, VA",
+    "latitude": 38.774003,
+    "longitude": -77.106854,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-26T13:43:05.996994+00:00"
+  },
+  "The Field Parking Lot 14335-14361 Newbrook Dr., Chantilly, 20151, Chantilly, Fairfax County, VA": {
+    "query": "The Field Parking Lot 14335-14361 Newbrook Dr., Chantilly, 20151, Chantilly, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-26T13:43:07.295609+00:00"
+  },
+  "The Field Parking Lot 14335-14361 Newbrook Dr., Chantilly, 20151, Chantilly, VA": {
+    "query": "The Field Parking Lot 14335-14361 Newbrook Dr., Chantilly, 20151, Chantilly, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-26T13:43:08.570393+00:00"
+  },
+  "The Field Parking Lot 14335-14361 Newbrook Dr., Chantilly, 20151, Fairfax County, VA": {
+    "query": "The Field Parking Lot 14335-14361 Newbrook Dr., Chantilly, 20151, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-26T13:43:09.931495+00:00"
+  },
+  "The Field Parking Lot 14335-14361 Newbrook Dr., Chantilly, 20151": {
+    "query": "The Field Parking Lot 14335-14361 Newbrook Dr., Chantilly, 20151",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-08-26T13:43:11.378196+00:00"
+  },
+  "The Alden Theatre, McLean, VA": {
+    "query": "The Alden Theatre, McLean, VA",
+    "latitude": 38.940847,
+    "longitude": -77.183973,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-26T13:43:12.551578+00:00"
   }
 }
