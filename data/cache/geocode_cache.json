@@ -3358,5 +3358,61 @@
     "longitude": -77.183973,
     "confidence": 0.9,
     "resolved_at": "2026-08-26T13:43:12.551578+00:00"
+  },
+  "Shenandoah Valley Discovery Museum": {
+    "query": "Shenandoah Valley Discovery Museum",
+    "latitude": 39.182086,
+    "longitude": -78.16738,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-27T23:24:24.240755+00:00"
+  },
+  "Historic Fairfax City, Fairfax, Fairfax County, VA": {
+    "query": "Historic Fairfax City, Fairfax, Fairfax County, VA",
+    "latitude": 38.845649,
+    "longitude": -77.307385,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-27T23:24:25.473714+00:00"
+  },
+  "Cherrydale United Methodist Church": {
+    "query": "Cherrydale United Methodist Church",
+    "latitude": 38.901171,
+    "longitude": -77.10283,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-27T23:24:26.621815+00:00"
+  },
+  "Bluemont Fairgrounds, Bluemont, Loudoun County, VA": {
+    "query": "Bluemont Fairgrounds, Bluemont, Loudoun County, VA",
+    "latitude": 39.095707,
+    "longitude": -77.820693,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-27T23:24:27.880260+00:00"
+  },
+  "The Village at Shirlington": {
+    "query": "The Village at Shirlington",
+    "latitude": 38.839416,
+    "longitude": -77.089076,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-27T23:24:29.124676+00:00"
+  },
+  "National Historic Landmark": {
+    "query": "National Historic Landmark",
+    "latitude": 38.987411,
+    "longitude": -77.236189,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-27T23:24:30.382728+00:00"
+  },
+  "2700 South Quincy StreetArlington, VA 22206, Arlington": {
+    "query": "2700 South Quincy StreetArlington, VA 22206, Arlington",
+    "latitude": 38.841404,
+    "longitude": -77.087045,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-27T23:24:32.063064+00:00"
+  },
+  "Our Lady of Hope Catholic School": {
+    "query": "Our Lady of Hope Catholic School",
+    "latitude": 39.049182,
+    "longitude": -77.381683,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-27T23:24:33.179028+00:00"
   }
 }
