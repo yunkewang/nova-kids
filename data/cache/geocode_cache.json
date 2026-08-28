@@ -3414,5 +3414,12 @@
     "longitude": -77.381683,
     "confidence": 0.9,
     "resolved_at": "2026-08-27T23:24:33.179028+00:00"
+  },
+  "1321 Pennsylvania Avenue Northwest, Washington, DC 20004, Washington, DC": {
+    "query": "1321 Pennsylvania Avenue Northwest, Washington, DC 20004, Washington, DC",
+    "latitude": 38.894318,
+    "longitude": -77.027638,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-28T21:48:35.859551+00:00"
   }
 }
