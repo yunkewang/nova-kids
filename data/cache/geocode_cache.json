@@ -3421,5 +3421,12 @@
     "longitude": -77.027638,
     "confidence": 0.9,
     "resolved_at": "2026-08-28T21:48:35.859551+00:00"
+  },
+  "12055 Government Center Parkway, Suite 927Fairfax, VA 22035, Fairfax": {
+    "query": "12055 Government Center Parkway, Suite 927Fairfax, VA 22035, Fairfax",
+    "latitude": 38.856597,
+    "longitude": -77.363123,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-29T17:51:00.623259+00:00"
   }
 }
