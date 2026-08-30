@@ -3428,5 +3428,19 @@
     "longitude": -77.363123,
     "confidence": 0.9,
     "resolved_at": "2026-08-29T17:51:00.623259+00:00"
+  },
+  "Great Meadow": {
+    "query": "Great Meadow",
+    "latitude": 38.929282,
+    "longitude": -77.047884,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-30T16:05:27.340212+00:00"
+  },
+  "McLean Community Center, McLean, VA": {
+    "query": "McLean Community Center, McLean, VA",
+    "latitude": 38.940549,
+    "longitude": -77.18368,
+    "confidence": 0.9,
+    "resolved_at": "2026-08-30T16:05:28.544292+00:00"
   }
 }
