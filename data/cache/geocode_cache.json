@@ -3442,5 +3442,82 @@
     "longitude": -77.18368,
     "confidence": 0.9,
     "resolved_at": "2026-08-30T16:05:28.544292+00:00"
+  },
+  "Skate 'N Fun Zone": {
+    "query": "Skate 'N Fun Zone",
+    "latitude": 38.785692,
+    "longitude": -77.514749,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-01T15:35:08.817985+00:00"
+  },
+  "Crystal City, 510 14th Street South Arlington, VA 22202, Arlington": {
+    "query": "Crystal City, 510 14th Street South Arlington, VA 22202, Arlington",
+    "latitude": 38.860447,
+    "longitude": -77.054495,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-01T15:35:10.118911+00:00"
+  },
+  "Kidcreate Studio, Alexandria, Alexandria County, VA": {
+    "query": "Kidcreate Studio, Alexandria, Alexandria County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-01T15:35:11.460155+00:00"
+  },
+  "Kidcreate Studio, Alexandria, VA": {
+    "query": "Kidcreate Studio, Alexandria, VA",
+    "latitude": 38.806083,
+    "longitude": -77.055967,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-01T15:35:12.682453+00:00"
+  },
+  "7130 Silver Lake BoulevardKingstowne, VA, 22315": {
+    "query": "7130 Silver Lake BoulevardKingstowne, VA, 22315",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-01T15:35:13.788781+00:00"
+  },
+  "Kidcreate Studio, Ashburn, Loudoun County, VA": {
+    "query": "Kidcreate Studio, Ashburn, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-01T15:35:14.896404+00:00"
+  },
+  "Kidcreate Studio, Ashburn, VA": {
+    "query": "Kidcreate Studio, Ashburn, VA",
+    "latitude": 39.071039,
+    "longitude": -77.462434,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-01T15:35:15.967559+00:00"
+  },
+  "7525 Marc DriveFalls Church, Virginia, Falls Church": {
+    "query": "7525 Marc DriveFalls Church, Virginia, Falls Church",
+    "latitude": 38.861366,
+    "longitude": -77.210824,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-01T15:35:17.082251+00:00"
+  },
+  "Barnes & Noble, Ashburn, Loudoun County, VA": {
+    "query": "Barnes & Noble, Ashburn, Loudoun County, VA",
+    "latitude": 39.050903,
+    "longitude": -77.453937,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-01T15:35:18.207935+00:00"
+  },
+  "4603 Green Spring RoadAlexandria, Virginia, Alexandria": {
+    "query": "4603 Green Spring RoadAlexandria, Virginia, Alexandria",
+    "latitude": 38.82456,
+    "longitude": -77.157423,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-01T15:35:19.366505+00:00"
+  },
+  "Temple Hall Farm": {
+    "query": "Temple Hall Farm",
+    "latitude": 39.180642,
+    "longitude": -77.525792,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-01T15:35:20.399726+00:00"
   }
 }
