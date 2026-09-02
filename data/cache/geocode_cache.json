@@ -3519,5 +3519,12 @@
     "longitude": -77.525792,
     "confidence": 0.9,
     "resolved_at": "2026-09-01T15:35:20.399726+00:00"
+  },
+  "Arlington Cinema & Drafthouse, Arlington, Arlington County, VA": {
+    "query": "Arlington Cinema & Drafthouse, Arlington, Arlington County, VA",
+    "latitude": 38.862735,
+    "longitude": -77.087328,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-02T15:17:17.465219+00:00"
   }
 }
