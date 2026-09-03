@@ -3526,5 +3526,40 @@
     "longitude": -77.087328,
     "confidence": 0.9,
     "resolved_at": "2026-09-02T15:17:17.465219+00:00"
+  },
+  "Van Metre Homes": {
+    "query": "Van Metre Homes",
+    "latitude": 39.028182,
+    "longitude": -77.512403,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-03T15:29:22.225490+00:00"
+  },
+  "Tackett's Mill Shopping Center, Prince William County, VA": {
+    "query": "Tackett's Mill Shopping Center, Prince William County, VA",
+    "latitude": 38.676836,
+    "longitude": -77.280599,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-03T15:29:24.187666+00:00"
+  },
+  "District Wharf": {
+    "query": "District Wharf",
+    "latitude": 38.878688,
+    "longitude": -77.023759,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-03T15:29:25.670129+00:00"
+  },
+  "Watch Me Bloom": {
+    "query": "Watch Me Bloom",
+    "latitude": 39.128647,
+    "longitude": -76.707746,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-03T15:29:27.588952+00:00"
+  },
+  "Sassy Woof": {
+    "query": "Sassy Woof",
+    "latitude": 38.79056,
+    "longitude": -77.294073,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-03T15:29:29.465485+00:00"
   }
 }
