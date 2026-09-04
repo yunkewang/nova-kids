@@ -3561,5 +3561,19 @@
     "longitude": -77.294073,
     "confidence": 0.9,
     "resolved_at": "2026-09-03T15:29:29.465485+00:00"
+  },
+  "Gym America": {
+    "query": "Gym America",
+    "latitude": 38.952364,
+    "longitude": -77.349293,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-04T15:06:59.978212+00:00"
+  },
+  "8511 Greeley Blvd., Springfield, Virginia, Springfield": {
+    "query": "8511 Greeley Blvd., Springfield, Virginia, Springfield",
+    "latitude": 38.772286,
+    "longitude": -77.23874,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-04T15:07:01.163336+00:00"
   }
 }
