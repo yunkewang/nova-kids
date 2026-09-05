@@ -3575,5 +3575,12 @@
     "longitude": -77.23874,
     "confidence": 0.9,
     "resolved_at": "2026-09-04T15:07:01.163336+00:00"
+  },
+  "Shirlington Library, Outside: Shirlington Library Plaza": {
+    "query": "Shirlington Library, Outside: Shirlington Library Plaza",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-05T15:11:08.643163+00:00"
   }
 }
