@@ -3582,5 +3582,12 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-09-05T15:11:08.643163+00:00"
+  },
+  "ALL": {
+    "query": "ALL",
+    "latitude": 38.926006,
+    "longitude": -77.036001,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-07T16:55:57.099474+00:00"
   }
 }
