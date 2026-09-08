@@ -3589,5 +3589,47 @@
     "longitude": -77.036001,
     "confidence": 0.9,
     "resolved_at": "2026-09-07T16:55:57.099474+00:00"
+  },
+  "All in One 20356 Commonwealth Center Dr., Ashburn,\u00c2VA\u00c220147, Ashburn": {
+    "query": "All in One 20356 Commonwealth Center Dr., Ashburn,\u00c2VA\u00c220147, Ashburn",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-08T16:07:23.583413+00:00"
+  },
+  "All in One 20356 Commonwealth Center Dr., Ashburn,\u00c2VA\u00c220147": {
+    "query": "All in One 20356 Commonwealth Center Dr., Ashburn,\u00c2VA\u00c220147",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-08T16:07:25.842229+00:00"
+  },
+  "Food and Fun, Ashburn, Loudoun County, VA": {
+    "query": "Food and Fun, Ashburn, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-08T16:07:28.267718+00:00"
+  },
+  "Food and Fun, Ashburn, VA": {
+    "query": "Food and Fun, Ashburn, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-08T16:07:30.454959+00:00"
+  },
+  "Food and Fun, Loudoun County, VA": {
+    "query": "Food and Fun, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-08T16:07:32.611753+00:00"
+  },
+  "Food and Fun": {
+    "query": "Food and Fun",
+    "latitude": 39.17725,
+    "longitude": -77.17309,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-08T16:07:34.642811+00:00"
   }
 }
