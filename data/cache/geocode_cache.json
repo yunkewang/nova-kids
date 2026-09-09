@@ -3631,5 +3631,26 @@
     "longitude": -77.17309,
     "confidence": 0.9,
     "resolved_at": "2026-09-08T16:07:34.642811+00:00"
+  },
+  "SensePlay Studio": {
+    "query": "SensePlay Studio",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-09T16:16:48.509057+00:00"
+  },
+  "The Church of Jesus Christ of Latter-day Saints": {
+    "query": "The Church of Jesus Christ of Latter-day Saints",
+    "latitude": 38.882093,
+    "longitude": -76.995872,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-09T16:16:50.946363+00:00"
+  },
+  "W&OD Trail": {
+    "query": "W&OD Trail",
+    "latitude": 39.145457,
+    "longitude": -77.691491,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-09T16:16:53.616966+00:00"
   }
 }
