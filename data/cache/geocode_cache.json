@@ -3652,5 +3652,110 @@
     "longitude": -77.691491,
     "confidence": 0.9,
     "resolved_at": "2026-09-09T16:16:53.616966+00:00"
+  },
+  "LIVE M\u00c3\u0081S 20356 Commonwealth Center Dr., Ashburn,\u00c2VA\u00c220147, Ashburn": {
+    "query": "LIVE M\u00c3\u0081S 20356 Commonwealth Center Dr., Ashburn,\u00c2VA\u00c220147, Ashburn",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-10T18:04:54.596705+00:00"
+  },
+  "LIVE M\u00c3\u0081S 20356 Commonwealth Center Dr., Ashburn,\u00c2VA\u00c220147": {
+    "query": "LIVE M\u00c3\u0081S 20356 Commonwealth Center Dr., Ashburn,\u00c2VA\u00c220147",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-10T18:04:57.219472+00:00"
+  },
+  "WIN BIG, Ashburn, Loudoun County, VA": {
+    "query": "WIN BIG, Ashburn, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-10T18:04:59.978711+00:00"
+  },
+  "WIN BIG, Ashburn, VA": {
+    "query": "WIN BIG, Ashburn, VA",
+    "latitude": 39.059352,
+    "longitude": -77.469152,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:02.699531+00:00"
+  },
+  "847 South Pickett Street, Alexandria, VA 22304, Alexandria, VA, Alexandria": {
+    "query": "847 South Pickett Street, Alexandria, VA 22304, Alexandria, VA, Alexandria",
+    "latitude": 38.804142,
+    "longitude": -77.138241,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:04.528515+00:00"
+  },
+  "Warner Theatre 513 13th St NW, Washington, DC, 20004": {
+    "query": "Warner Theatre 513 13th St NW, Washington, DC, 20004",
+    "latitude": 38.896511,
+    "longitude": -77.029353,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:07.695976+00:00"
+  },
+  "1401 Wilson BoulevardArlington, VA 22209, Arlington": {
+    "query": "1401 Wilson BoulevardArlington, VA 22209, Arlington",
+    "latitude": 38.895466,
+    "longitude": -77.07358,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:10.424706+00:00"
+  },
+  "7581 Colshire DriveTysons, VA 22102, Tyson": {
+    "query": "7581 Colshire DriveTysons, VA 22102, Tyson",
+    "latitude": 38.922723,
+    "longitude": -77.207575,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:13.448081+00:00"
+  },
+  "Walnut Creek Farm": {
+    "query": "Walnut Creek Farm",
+    "latitude": 39.23787,
+    "longitude": -76.947292,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:15.521192+00:00"
+  },
+  "Loudoun Heritage Farm Museum, Loudoun, Loudoun County, VA": {
+    "query": "Loudoun Heritage Farm Museum, Loudoun, Loudoun County, VA",
+    "latitude": 39.016704,
+    "longitude": -77.403967,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:18.975302+00:00"
+  },
+  "Historic Downtown Leesburg, Leesburg, Loudoun County, VA": {
+    "query": "Historic Downtown Leesburg, Leesburg, Loudoun County, VA",
+    "latitude": 39.115435,
+    "longitude": -77.56463,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:22.571670+00:00"
+  },
+  "Historic Vienna, Vienna, Fairfax County, VA": {
+    "query": "Historic Vienna, Vienna, Fairfax County, VA",
+    "latitude": 38.931845,
+    "longitude": -77.249905,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:26.179337+00:00"
+  },
+  "National Museum of American History, Washington, VA": {
+    "query": "National Museum of American History, Washington, VA",
+    "latitude": 38.89124,
+    "longitude": -77.030021,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:29.146275+00:00"
+  },
+  "Little Goat Farm at the Lake": {
+    "query": "Little Goat Farm at the Lake",
+    "latitude": 38.761881,
+    "longitude": -77.652396,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:30.950651+00:00"
+  },
+  "Capital One Arena": {
+    "query": "Capital One Arena",
+    "latitude": 38.898188,
+    "longitude": -77.020938,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-10T18:05:32.625751+00:00"
   }
 }
