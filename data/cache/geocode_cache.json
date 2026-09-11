@@ -3757,5 +3757,54 @@
     "longitude": -77.020938,
     "confidence": 0.9,
     "resolved_at": "2026-09-10T18:05:32.625751+00:00"
+  },
+  "300 John Carlyle StreetAlexandria, VA 22314, Alexandria": {
+    "query": "300 John Carlyle StreetAlexandria, VA 22314, Alexandria",
+    "latitude": 38.801789,
+    "longitude": -77.061849,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-11T15:14:20.427210+00:00"
+  },
+  "Kids World Montessori, Centreville, Fairfax County, VA": {
+    "query": "Kids World Montessori, Centreville, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-11T15:14:21.618760+00:00"
+  },
+  "Kids World Montessori, Centreville, VA": {
+    "query": "Kids World Montessori, Centreville, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-11T15:14:22.964308+00:00"
+  },
+  "Kids World Montessori, Fairfax County, VA": {
+    "query": "Kids World Montessori, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-11T15:14:24.084177+00:00"
+  },
+  "Kids World Montessori": {
+    "query": "Kids World Montessori",
+    "latitude": 39.059362,
+    "longitude": -77.476347,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-11T15:14:25.535316+00:00"
+  },
+  "Ronald Reagan Building and International Trade Center1300 Pennsylvania Ave NW, Washington, DC 20004 1300 Pennsylvania Ave NW, Washington, DC 20004": {
+    "query": "Ronald Reagan Building and International Trade Center1300 Pennsylvania Ave NW, Washington, DC 20004 1300 Pennsylvania Ave NW, Washington, DC 20004",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-11T15:14:26.593646+00:00"
+  },
+  "Amphitheater": {
+    "query": "Amphitheater",
+    "latitude": 38.590166,
+    "longitude": -78.38405,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-11T15:14:27.560936+00:00"
   }
 }
