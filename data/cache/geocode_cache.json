@@ -3806,5 +3806,19 @@
     "longitude": -78.38405,
     "confidence": 0.9,
     "resolved_at": "2026-09-11T15:14:27.560936+00:00"
+  },
+  "Lobby": {
+    "query": "Lobby",
+    "latitude": 39.162836,
+    "longitude": -76.899483,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-12T14:27:46.573943+00:00"
+  },
+  "Play N' Learn": {
+    "query": "Play N' Learn",
+    "latitude": 38.491368,
+    "longitude": -76.764827,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-12T14:27:47.595605+00:00"
   }
 }
