@@ -3820,5 +3820,33 @@
     "longitude": -76.764827,
     "confidence": 0.9,
     "resolved_at": "2026-09-12T14:27:47.595605+00:00"
+  },
+  "Historic Downtown Clifton, Clifton, Fairfax County, VA": {
+    "query": "Historic Downtown Clifton, Clifton, Fairfax County, VA",
+    "latitude": 38.780327,
+    "longitude": -77.386641,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-13T15:28:15.970155+00:00"
+  },
+  "Hampshire Park": {
+    "query": "Hampshire Park",
+    "latitude": 39.027457,
+    "longitude": -77.462208,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-13T15:28:16.980150+00:00"
+  },
+  "Dulles South Rec Center, Dulles, Loudoun County, VA": {
+    "query": "Dulles South Rec Center, Dulles, Loudoun County, VA",
+    "latitude": 38.919528,
+    "longitude": -77.517283,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-13T15:28:18.108233+00:00"
+  },
+  "Potomac Overlook Regional Park, Arlington, VA": {
+    "query": "Potomac Overlook Regional Park, Arlington, VA",
+    "latitude": 38.913292,
+    "longitude": -77.107868,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-13T15:28:19.068079+00:00"
   }
 }
