@@ -3848,5 +3848,12 @@
     "longitude": -77.107868,
     "confidence": 0.9,
     "resolved_at": "2026-09-13T15:28:19.068079+00:00"
+  },
+  "Long Bridge Aquatics Center": {
+    "query": "Long Bridge Aquatics Center",
+    "latitude": 38.870139,
+    "longitude": -77.043287,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-14T17:29:39.665650+00:00"
   }
 }
