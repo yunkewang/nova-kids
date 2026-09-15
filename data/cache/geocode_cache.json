@@ -3855,5 +3855,12 @@
     "longitude": -77.043287,
     "confidence": 0.9,
     "resolved_at": "2026-09-14T17:29:39.665650+00:00"
+  },
+  "43045 Van Metre Drive, Ashburn, VA, 20148, Ashburn": {
+    "query": "43045 Van Metre Drive, Ashburn, VA, 20148, Ashburn",
+    "latitude": 39.028182,
+    "longitude": -77.512403,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-15T17:34:49.007214+00:00"
   }
 }
