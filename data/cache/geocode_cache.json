@@ -3862,5 +3862,61 @@
     "longitude": -77.512403,
     "confidence": 0.9,
     "resolved_at": "2026-09-15T17:34:49.007214+00:00"
+  },
+  "OUTR - THE COMMONS POP-UP PARK AT BALLSTON | 4075 WILSON BLVD ARLINGTON VA 22201, Arlington": {
+    "query": "OUTR - THE COMMONS POP-UP PARK AT BALLSTON | 4075 WILSON BLVD ARLINGTON VA 22201, Arlington",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-16T17:44:27.121615+00:00"
+  },
+  "OUTR - THE COMMONS POP-UP PARK AT BALLSTON | 4075 WILSON BLVD ARLINGTON VA 22201": {
+    "query": "OUTR - THE COMMONS POP-UP PARK AT BALLSTON | 4075 WILSON BLVD ARLINGTON VA 22201",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-16T17:44:30.245937+00:00"
+  },
+  "Cherrydale Library, Arlington, Arlington County, VA": {
+    "query": "Cherrydale Library, Arlington, Arlington County, VA",
+    "latitude": 38.898717,
+    "longitude": -77.109269,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-16T17:44:33.480707+00:00"
+  },
+  "Capital One Center": {
+    "query": "Capital One Center",
+    "latitude": 38.92574,
+    "longitude": -77.21088,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-16T17:44:35.683336+00:00"
+  },
+  "Be Hive Wellness": {
+    "query": "Be Hive Wellness",
+    "latitude": 39.49825,
+    "longitude": -76.325855,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-16T17:44:39.353400+00:00"
+  },
+  "The Historic Douglass High School Education & Development Campus, Loudoun County, VA": {
+    "query": "The Historic Douglass High School Education & Development Campus, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-16T17:44:42.861461+00:00"
+  },
+  "The Historic Douglass High School Education & Development Campus": {
+    "query": "The Historic Douglass High School Education & Development Campus",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-16T17:44:45.885243+00:00"
+  },
+  "Lindsay Volkswagen of Dulles, Dulles, Loudoun County, VA": {
+    "query": "Lindsay Volkswagen of Dulles, Dulles, Loudoun County, VA",
+    "latitude": 38.997814,
+    "longitude": -77.433124,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-16T17:44:48.881893+00:00"
   }
 }
