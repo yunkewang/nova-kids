@@ -3918,5 +3918,26 @@
     "longitude": -77.433124,
     "confidence": 0.9,
     "resolved_at": "2026-09-16T17:44:48.881893+00:00"
+  },
+  "Atrium Hall": {
+    "query": "Atrium Hall",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-17T15:35:53.349510+00:00"
+  },
+  "Frying Pan Farm Park Farm and Equestrian, Herndon, VA": {
+    "query": "Frying Pan Farm Park Farm and Equestrian, Herndon, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-17T15:35:56.027219+00:00"
+  },
+  "Lubber Run Community Center": {
+    "query": "Lubber Run Community Center",
+    "latitude": 38.873379,
+    "longitude": -77.11435,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-17T15:35:57.709549+00:00"
   }
 }
