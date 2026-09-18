@@ -3939,5 +3939,75 @@
     "longitude": -77.11435,
     "confidence": 0.9,
     "resolved_at": "2026-09-17T15:35:57.709549+00:00"
+  },
+  "21100 Dulles Town CircleDulles,VA 20166, Dulles": {
+    "query": "21100 Dulles Town CircleDulles,VA 20166, Dulles",
+    "latitude": 39.032226,
+    "longitude": -77.423631,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-18T18:07:15.124915+00:00"
+  },
+  "Abernethy & Spencer Greenhouse & Garden Center": {
+    "query": "Abernethy & Spencer Greenhouse & Garden Center",
+    "latitude": 39.117968,
+    "longitude": -77.697851,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-18T18:07:16.858356+00:00"
+  },
+  "3210 King StreetAlexandria, VA 22302, Alexandria": {
+    "query": "3210 King StreetAlexandria, VA 22302, Alexandria",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-18T18:07:19.182417+00:00"
+  },
+  "3210 King StreetAlexandria, VA 22302": {
+    "query": "3210 King StreetAlexandria, VA 22302",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-18T18:07:21.680785+00:00"
+  },
+  "Chinquapin Park Rec Center Chinquapin Park & Forest Park, Alexandria, Alexandria County, VA": {
+    "query": "Chinquapin Park Rec Center Chinquapin Park & Forest Park, Alexandria, Alexandria County, VA",
+    "latitude": 38.823159,
+    "longitude": -77.083324,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-18T18:07:24.237491+00:00"
+  },
+  "7315 Ox RoadFairfax Station, VA 22039, Fairfax": {
+    "query": "7315 Ox RoadFairfax Station, VA 22039, Fairfax",
+    "latitude": 38.762479,
+    "longitude": -77.291917,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-18T18:07:26.358407+00:00"
+  },
+  "Center Court by JC Penny 21100 Dulles Town CircleDulles,VA 20166, Dulles": {
+    "query": "Center Court by JC Penny 21100 Dulles Town CircleDulles,VA 20166, Dulles",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-18T18:07:28.369942+00:00"
+  },
+  "Center Court by JC Penny 21100 Dulles Town CircleDulles,VA 20166": {
+    "query": "Center Court by JC Penny 21100 Dulles Town CircleDulles,VA 20166",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-18T18:07:31.245987+00:00"
+  },
+  "Level 1, Dulles, Loudoun County, VA": {
+    "query": "Level 1, Dulles, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-18T18:07:33.967718+00:00"
+  },
+  "Level 1, Dulles, VA": {
+    "query": "Level 1, Dulles, VA",
+    "latitude": 38.952266,
+    "longitude": -77.453485,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-18T18:07:36.806448+00:00"
   }
 }
