@@ -4009,5 +4009,19 @@
     "longitude": -77.453485,
     "confidence": 0.9,
     "resolved_at": "2026-09-18T18:07:36.806448+00:00"
+  },
+  "Events at Other Locations, Government Center": {
+    "query": "Events at Other Locations, Government Center",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-19T15:10:55.844336+00:00"
+  },
+  "Meeting Room (E103)": {
+    "query": "Meeting Room (E103)",
+    "latitude": 39.196848,
+    "longitude": -76.922987,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-19T15:10:57.079453+00:00"
   }
 }
