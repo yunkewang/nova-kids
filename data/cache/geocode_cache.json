@@ -4023,5 +4023,12 @@
     "longitude": -76.922987,
     "confidence": 0.9,
     "resolved_at": "2026-09-19T15:10:57.079453+00:00"
+  },
+  "Central Library, Arlington, Arlington County, VA": {
+    "query": "Central Library, Arlington, Arlington County, VA",
+    "latitude": 38.883787,
+    "longitude": -77.107184,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-20T15:03:08.789129+00:00"
   }
 }
