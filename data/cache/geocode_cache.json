@@ -4030,5 +4030,12 @@
     "longitude": -77.107184,
     "confidence": 0.9,
     "resolved_at": "2026-09-20T15:03:08.789129+00:00"
+  },
+  "nZone": {
+    "query": "nZone",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-21T17:16:49.513910+00:00"
   }
 }
