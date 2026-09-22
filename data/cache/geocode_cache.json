@@ -4037,5 +4037,19 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-09-21T17:16:49.513910+00:00"
+  },
+  "Ellanor C. Lawrence Park Walney Visitor Center, Chantilly, VA": {
+    "query": "Ellanor C. Lawrence Park Walney Visitor Center, Chantilly, VA",
+    "latitude": 38.858536,
+    "longitude": -77.424687,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-22T15:33:51.886879+00:00"
+  },
+  "Hal & Berni Hanson Regional Park": {
+    "query": "Hal & Berni Hanson Regional Park",
+    "latitude": 38.972902,
+    "longitude": -77.550261,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-22T15:33:53.670974+00:00"
   }
 }
