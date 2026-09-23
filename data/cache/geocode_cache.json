@@ -4051,5 +4051,68 @@
     "longitude": -77.550261,
     "confidence": 0.9,
     "resolved_at": "2026-09-22T15:33:53.670974+00:00"
+  },
+  "Dillon's Woods": {
+    "query": "Dillon's Woods",
+    "latitude": 39.282441,
+    "longitude": -78.45705,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-23T18:21:53.037601+00:00"
+  },
+  "Ashburn Rec & Community Center, Ashburn, Loudoun County, VA": {
+    "query": "Ashburn Rec & Community Center, Ashburn, Loudoun County, VA",
+    "latitude": 39.056826,
+    "longitude": -77.477712,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-23T18:21:55.960058+00:00"
+  },
+  "Banshee Reeks Nature Preserve": {
+    "query": "Banshee Reeks Nature Preserve",
+    "latitude": 39.028938,
+    "longitude": -77.597255,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-23T18:21:57.825435+00:00"
+  },
+  "Lovettsville Community Center & Park, Lovettsville, Loudoun County, VA": {
+    "query": "Lovettsville Community Center & Park, Lovettsville, Loudoun County, VA",
+    "latitude": 39.270367,
+    "longitude": -77.632978,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-23T18:22:00.731925+00:00"
+  },
+  "Philomont Community Center": {
+    "query": "Philomont Community Center",
+    "latitude": 39.056939,
+    "longitude": -77.739223,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-23T18:22:02.319917+00:00"
+  },
+  "Bluemont Community Center, Bluemont, Loudoun County, VA": {
+    "query": "Bluemont Community Center, Bluemont, Loudoun County, VA",
+    "latitude": 39.095707,
+    "longitude": -77.820693,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-23T18:22:05.116416+00:00"
+  },
+  "Ada's on the River 3 Pioneer Mill Way, Alexandria, VA 22314, Alexandria, VA, Alexandria, Alexandria County, VA": {
+    "query": "Ada's on the River 3 Pioneer Mill Way, Alexandria, VA 22314, Alexandria, VA, Alexandria, Alexandria County, VA",
+    "latitude": 38.801614,
+    "longitude": -77.039639,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-23T18:22:08.276296+00:00"
+  },
+  "1800 Diagonal Road, Alexandria, VA 22314, Alexandria, VA, Alexandria": {
+    "query": "1800 Diagonal Road, Alexandria, VA 22314, Alexandria, VA, Alexandria",
+    "latitude": 38.805685,
+    "longitude": -77.06044,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-23T18:22:10.337047+00:00"
+  },
+  "100 King Street, Alexandria, VA 22314, Alexandria, VA, Alexandria": {
+    "query": "100 King Street, Alexandria, VA 22314, Alexandria, VA, Alexandria",
+    "latitude": 38.804119,
+    "longitude": -77.040507,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-23T18:22:12.438028+00:00"
   }
 }
