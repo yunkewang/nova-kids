@@ -4114,5 +4114,33 @@
     "longitude": -77.040507,
     "confidence": 0.9,
     "resolved_at": "2026-09-23T18:22:12.438028+00:00"
+  },
+  "Walter Reed Community Center & Park": {
+    "query": "Walter Reed Community Center & Park",
+    "latitude": 38.857678,
+    "longitude": -77.086682,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-24T15:32:43.152799+00:00"
+  },
+  "Charles Drew Community Center": {
+    "query": "Charles Drew Community Center",
+    "latitude": 38.460446,
+    "longitude": -77.216271,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-24T15:32:46.934533+00:00"
+  },
+  "Fort C.F. Smith Park": {
+    "query": "Fort C.F. Smith Park",
+    "latitude": 38.90191,
+    "longitude": -77.089813,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-24T15:32:49.243103+00:00"
+  },
+  "Play Street Museum": {
+    "query": "Play Street Museum",
+    "latitude": 39.190834,
+    "longitude": -76.818505,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-24T15:32:51.196037+00:00"
   }
 }
