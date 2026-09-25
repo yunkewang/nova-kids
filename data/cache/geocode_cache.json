@@ -4142,5 +4142,19 @@
     "longitude": -76.818505,
     "confidence": 0.9,
     "resolved_at": "2026-09-24T15:32:51.196037+00:00"
+  },
+  "Meadows Farms Nursery, Chantilly, Fairfax County, VA": {
+    "query": "Meadows Farms Nursery, Chantilly, Fairfax County, VA",
+    "latitude": 38.870356,
+    "longitude": -77.165839,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-25T16:06:05.674781+00:00"
+  },
+  "Meadows Farms Nurseries & Landscape": {
+    "query": "Meadows Farms Nurseries & Landscape",
+    "latitude": 38.928487,
+    "longitude": -77.513125,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-25T16:06:08.740993+00:00"
   }
 }
