@@ -4198,5 +4198,12 @@
     "longitude": -77.069082,
     "confidence": 0.9,
     "resolved_at": "2026-09-26T17:52:04.131156+00:00"
+  },
+  "1468 Dolley Madison Blvd, McLean, Va., 22101, Mclean": {
+    "query": "1468 Dolley Madison Blvd, McLean, Va., 22101, Mclean",
+    "latitude": 38.9437,
+    "longitude": -77.151114,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-27T17:00:01.541008+00:00"
   }
 }
