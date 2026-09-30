@@ -4205,5 +4205,61 @@
     "longitude": -77.151114,
     "confidence": 0.9,
     "resolved_at": "2026-09-27T17:00:01.541008+00:00"
+  },
+  "Paint Your Heart Out": {
+    "query": "Paint Your Heart Out",
+    "latitude": 38.841242,
+    "longitude": -77.087807,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-30T17:31:24.595804+00:00"
+  },
+  "Ashburn Volunteer Fire & Rescue Station 6, Ashburn, Loudoun County, VA": {
+    "query": "Ashburn Volunteer Fire & Rescue Station 6, Ashburn, Loudoun County, VA",
+    "latitude": 39.04496,
+    "longitude": -77.486534,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-30T17:31:29.682361+00:00"
+  },
+  "Video, Photos, and Generic Diagrams": {
+    "query": "Video, Photos, and Generic Diagrams",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-09-30T17:31:34.740399+00:00"
+  },
+  "Downtown Fairfax, Fairfax, Fairfax County, VA": {
+    "query": "Downtown Fairfax, Fairfax, Fairfax County, VA",
+    "latitude": 38.85412,
+    "longitude": -77.356822,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-30T17:31:39.397538+00:00"
+  },
+  "Frying Pan Farm Park, Herndon, VA": {
+    "query": "Frying Pan Farm Park, Herndon, VA",
+    "latitude": 38.937541,
+    "longitude": -77.407358,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-30T17:31:44.922484+00:00"
+  },
+  "Library of Congress": {
+    "query": "Library of Congress",
+    "latitude": 38.888674,
+    "longitude": -77.004636,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-30T17:31:49.025363+00:00"
+  },
+  "Good Shepherd Lutheran School": {
+    "query": "Good Shepherd Lutheran School",
+    "latitude": 38.817127,
+    "longitude": -77.063999,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-30T17:31:54.967686+00:00"
+  },
+  "Pennsylvania Avenue NW": {
+    "query": "Pennsylvania Avenue NW",
+    "latitude": 38.893596,
+    "longitude": -77.023531,
+    "confidence": 0.9,
+    "resolved_at": "2026-09-30T17:31:58.876776+00:00"
   }
 }
