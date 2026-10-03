@@ -4261,5 +4261,47 @@
     "longitude": -77.023531,
     "confidence": 0.9,
     "resolved_at": "2026-09-30T17:31:58.876776+00:00"
+  },
+  "*Off-Site, Intersection: W&OD Trail & Columbia Pike": {
+    "query": "*Off-Site, Intersection: W&OD Trail & Columbia Pike",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-03T15:35:44.376176+00:00"
+  },
+  "We Rock the Spectrum - Loudoun, Loudoun, Loudoun County, VA": {
+    "query": "We Rock the Spectrum - Loudoun, Loudoun, Loudoun County, VA",
+    "latitude": 39.016791,
+    "longitude": -77.476324,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-03T15:35:45.936425+00:00"
+  },
+  "9024 Prince William St, Manassas, VA, 20110, Prince William": {
+    "query": "9024 Prince William St, Manassas, VA, 20110, Prince William",
+    "latitude": 38.752621,
+    "longitude": -77.483607,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-03T15:35:47.972642+00:00"
+  },
+  "This show is at Union Stage": {
+    "query": "This show is at Union Stage",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-03T15:35:49.997934+00:00"
+  },
+  "3001 Vaden DriveFairfax, VA 22031, Fairfax": {
+    "query": "3001 Vaden DriveFairfax, VA 22031, Fairfax",
+    "latitude": 38.873218,
+    "longitude": -77.27306,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-03T15:35:52.221589+00:00"
+  },
+  "6500 Springfield MallSpringfield,VA 22150, Springfield": {
+    "query": "6500 Springfield MallSpringfield,VA 22150, Springfield",
+    "latitude": 38.774557,
+    "longitude": -77.174461,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-03T15:35:55.126776+00:00"
   }
 }
