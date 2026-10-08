@@ -4303,5 +4303,68 @@
     "longitude": -77.174461,
     "confidence": 0.9,
     "resolved_at": "2026-10-03T15:35:55.126776+00:00"
+  },
+  "1st Stage": {
+    "query": "1st Stage",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-08T18:45:28.646060+00:00"
+  },
+  "Willowsford Farm": {
+    "query": "Willowsford Farm",
+    "latitude": 38.92596,
+    "longitude": -77.605712,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-08T18:45:30.528648+00:00"
+  },
+  "Torpedo Factory Art Center": {
+    "query": "Torpedo Factory Art Center",
+    "latitude": 38.804856,
+    "longitude": -77.039795,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-08T18:45:32.516936+00:00"
+  },
+  "Pender Village Center": {
+    "query": "Pender Village Center",
+    "latitude": 38.873254,
+    "longitude": -77.359634,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-08T18:45:35.716890+00:00"
+  },
+  "DTC Expo & Event Center, Dulles, Loudoun County, VA": {
+    "query": "DTC Expo & Event Center, Dulles, Loudoun County, VA",
+    "latitude": 39.03056,
+    "longitude": -77.423152,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-08T18:45:39.127631+00:00"
+  },
+  "Del Ray Neighborhood": {
+    "query": "Del Ray Neighborhood",
+    "latitude": 38.825638,
+    "longitude": -77.061652,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-08T18:45:41.246029+00:00"
+  },
+  "12196 Sunset Hills RoadReston, VA 20190, Fairfax": {
+    "query": "12196 Sunset Hills RoadReston, VA 20190, Fairfax",
+    "latitude": 38.955992,
+    "longitude": -77.368134,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-08T18:45:44.356949+00:00"
+  },
+  "Fairfax Funky Flea, Fairfax, Fairfax County, VA": {
+    "query": "Fairfax Funky Flea, Fairfax, Fairfax County, VA",
+    "latitude": 38.85412,
+    "longitude": -77.356822,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-08T18:45:47.723068+00:00"
+  },
+  "DTC Expo & Event Center": {
+    "query": "DTC Expo & Event Center",
+    "latitude": 39.03056,
+    "longitude": -77.423152,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-08T18:45:50.076633+00:00"
   }
 }
