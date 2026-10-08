@@ -26,6 +26,7 @@ from pydantic import ValidationError
 
 from config.schema import CostType, Event, PriceType
 from config.source_names import normalize_source_name
+from enrichment.ages import extract_age_range
 from enrichment.annotate import generate_short_note
 from enrichment.enrich import enrich_event
 from enrichment.pricing import PricingClassification, classify_pricing
@@ -756,6 +757,13 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
     # Generate ID
     event_id = generate_event_id(title, start, loc["location_name"], source_url)
 
+    # Age range — scrapers rarely provide structured ages; recover them from
+    # title/summary text ("Ages 3-5", "Grades K-2", "toddlers", ...).
+    # Explicit scraper-provided values always win.
+    _extracted_ages = (None, None)
+    if raw.get("age_min") is None and raw.get("age_max") is None:
+        _extracted_ages = extract_age_range(title, summary_text)
+
     # Assemble base event dict
     event_data: dict[str, Any] = {
         "id": event_id,
@@ -768,8 +776,8 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
         "location_address": loc["location_address"],
         "city": loc["city"],
         "county": loc["county"],
-        "age_min": raw.get("age_min"),
-        "age_max": raw.get("age_max"),
+        "age_min": raw.get("age_min") if raw.get("age_min") is not None else _extracted_ages[0],
+        "age_max": raw.get("age_max") if raw.get("age_max") is not None else _extracted_ages[1],
         "cost_type": cost_type,
         "price_text": price_text,
         "is_free": pricing.is_free,
@@ -781,7 +789,7 @@ def normalize_record(raw: dict[str, Any]) -> Event | None:
         "source_name": source_name,
         "source_url": source_url,
         "registration_url": normalize_url(raw.get("registration_url")),
-        "image_url": normalize_url(raw.get("image_url")),
+        "image_url": normalize_url(raw.get("image_url") or raw.get("featured_image")),
         "last_verified_at": datetime.now(tz=timezone.utc),
         "tags": [],
         "family_friendly_score": 0.0,
