@@ -466,6 +466,48 @@ def _write_cost_inference_report(
 
 
 # ---------------------------------------------------------------------------
+# Validation quarantine
+# ---------------------------------------------------------------------------
+
+def _write_quarantine_report(
+    quarantined: list[Event],
+    report,  # enrichment.validate.ValidationReport
+) -> Path:
+    """Write validation-quarantined events for manual review.
+
+    Quarantine mode (2026-10-07): instead of halting the whole pipeline when
+    any event fails validation, events with error-severity issues are isolated
+    here and the clean events publish normally.  Each entry carries the event
+    payload plus the list of issues that quarantined it.
+
+    Returns the path written.
+    """
+    issues_by_id: dict[str, list[dict]] = {}
+    for issue in report.errors:
+        issues_by_id.setdefault(issue.event_id, []).append(
+            {"rule": issue.rule, "message": issue.message}
+        )
+    payload = {
+        "generated_at": datetime.now(tz=timezone.utc).isoformat(),
+        "quarantined_count": len(quarantined),
+        "events": [
+            {
+                **event.model_dump(),
+                "_quarantine_reasons": issues_by_id.get(event.id, []),
+            }
+            for event in quarantined
+        ],
+    }
+    MANUAL_REVIEW_DIR.mkdir(parents=True, exist_ok=True)
+    path = MANUAL_REVIEW_DIR / "quarantined_events.json"
+    path.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False, default=str),
+        encoding="utf-8",
+    )
+    return path
+
+
+# ---------------------------------------------------------------------------
 # Repair mode
 # ---------------------------------------------------------------------------
 
@@ -944,16 +986,30 @@ def main(argv: list[str] | None = None) -> int:
         n_excluded_non_family = len(excluded_nf)
         _print_filter_summary(before_filter, excluded_nf)
 
-    # 5. Validate
+    # 5. Validate (quarantine mode — 2026-10-07)
+    #
+    # Previously any validation error halted the whole pipeline (return 1),
+    # so a single dirty scraper record blocked the entire week's publish
+    # (runs #204/#205/#207/#208/#210).  Now events with error-severity issues
+    # are quarantined to data/manual_review/quarantined_events.json and the
+    # clean events publish normally.  Hard safety guards (freshness, minimum
+    # event count, adult-service leak check) still live in the workflow's
+    # post-publish validation step and still fail the run when triggered.
     print("\n[4/5] Validating...")
     report = validate_events(events)
     print(f"      {report.summary()}")
+    n_quarantined = 0
     if not report.is_clean():
-        print("\n  ERRORS (publishing blocked):")
+        print("\n  ERRORS (quarantining affected events, publishing the rest):")
         for issue in report.errors:
             print(f"    [{issue.rule}] {issue.event_title}: {issue.message}")
-        print("\nPipeline halted due to validation errors.")
-        return 1
+        bad_ids = {issue.event_id for issue in report.errors}
+        quarantined = [e for e in events if e.id in bad_ids]
+        events = [e for e in events if e.id not in bad_ids]
+        n_quarantined = len(quarantined)
+        qpath = _write_quarantine_report(quarantined, report)
+        print(f"\n      Quarantined {n_quarantined} event(s) → {qpath}")
+        print(f"      Continuing with {len(events)} clean event(s).")
     if report.warnings:
         print("  Warnings:")
         for issue in report.warnings:
@@ -982,6 +1038,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"    Discovered:         {n_discovered}")
         print(f"    Resolved:           {n_resolved}")
     print(f"    Published:          {len(events)}")
+    if n_quarantined:
+        print(f"    Quarantined:        {n_quarantined} (see data/manual_review/quarantined_events.json)")
     if n_excluded_non_family:
         print(f"    Excluded (non-family): {n_excluded_non_family}")
     if args.use_dullesmoms or args.reprocess:
