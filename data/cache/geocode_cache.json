@@ -4366,5 +4366,47 @@
     "longitude": -77.423152,
     "confidence": 0.9,
     "resolved_at": "2026-10-08T18:45:50.076633+00:00"
+  },
+  "Loudoun, VA 4844 N 300 W STE 202, Provo, UT 84604, Loudoun, Loudoun County, VA": {
+    "query": "Loudoun, VA 4844 N 300 W STE 202, Provo, UT 84604, Loudoun, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-10T19:39:49.713365+00:00"
+  },
+  "Loudoun, VA 4844 N 300 W STE 202, Provo, UT 84604, Loudoun, VA": {
+    "query": "Loudoun, VA 4844 N 300 W STE 202, Provo, UT 84604, Loudoun, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-10T19:39:50.887115+00:00"
+  },
+  "Loudoun, VA 4844 N 300 W STE 202, Provo, UT 84604, Loudoun County, VA": {
+    "query": "Loudoun, VA 4844 N 300 W STE 202, Provo, UT 84604, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-10T19:39:52.183532+00:00"
+  },
+  "Loudoun, VA 4844 N 300 W STE 202, Provo, UT 84604": {
+    "query": "Loudoun, VA 4844 N 300 W STE 202, Provo, UT 84604",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-10T19:39:53.419246+00:00"
+  },
+  "Heartland Design & Remodeling": {
+    "query": "Heartland Design & Remodeling",
+    "latitude": 38.986867,
+    "longitude": -76.694176,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-10T19:39:54.579226+00:00"
+  },
+  "St. Matthew's Episcopal Church": {
+    "query": "St. Matthew's Episcopal Church",
+    "latitude": 38.901823,
+    "longitude": -76.908564,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-10T19:39:55.681483+00:00"
   }
 }
