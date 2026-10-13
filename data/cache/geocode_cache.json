@@ -4408,5 +4408,19 @@
     "longitude": -76.908564,
     "confidence": 0.9,
     "resolved_at": "2026-10-10T19:39:55.681483+00:00"
+  },
+  "42885 Orchard Oriole DriveAshburn, VA 20147, Ashburn": {
+    "query": "42885 Orchard Oriole DriveAshburn, VA 20147, Ashburn",
+    "latitude": 39.053926,
+    "longitude": -77.517501,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-13T18:45:21.765396+00:00"
+  },
+  "Mosaic District & Strawberry Park": {
+    "query": "Mosaic District & Strawberry Park",
+    "latitude": 38.872653,
+    "longitude": -77.230639,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-13T18:45:29.969139+00:00"
   }
 }
