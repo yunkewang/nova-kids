@@ -4422,5 +4422,19 @@
     "longitude": -77.230639,
     "confidence": 0.9,
     "resolved_at": "2026-10-13T18:45:29.969139+00:00"
+  },
+  "Riverside High School, Loudoun County, VA": {
+    "query": "Riverside High School, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-14T15:33:12.901271+00:00"
+  },
+  "Riverside High School": {
+    "query": "Riverside High School",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-14T15:33:23.729306+00:00"
   }
 }
