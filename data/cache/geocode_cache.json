@@ -4436,5 +4436,68 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-10-14T15:33:23.729306+00:00"
+  },
+  "Pitango Gelato & Coffee, South Riding, Loudoun County, VA": {
+    "query": "Pitango Gelato & Coffee, South Riding, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-15T15:39:22.736483+00:00"
+  },
+  "Pitango Gelato & Coffee, South Riding, VA": {
+    "query": "Pitango Gelato & Coffee, South Riding, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-15T15:39:33.741217+00:00"
+  },
+  "Pitango Gelato & Coffee, Loudoun County, VA": {
+    "query": "Pitango Gelato & Coffee, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-15T15:39:44.738690+00:00"
+  },
+  "Pitango Gelato & Coffee": {
+    "query": "Pitango Gelato & Coffee",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-15T15:39:55.695102+00:00"
+  },
+  "Grace Covenant Church, Chantilly, Fairfax County, VA": {
+    "query": "Grace Covenant Church, Chantilly, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-15T15:40:06.643244+00:00"
+  },
+  "Grace Covenant Church, Chantilly, VA": {
+    "query": "Grace Covenant Church, Chantilly, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-15T15:40:17.624437+00:00"
+  },
+  "Grace Covenant Church, Fairfax County, VA": {
+    "query": "Grace Covenant Church, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-15T15:40:28.607681+00:00"
+  },
+  "Grace Covenant Church": {
+    "query": "Grace Covenant Church",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-15T15:40:39.634994+00:00"
+  },
+  "George Washington Middle School": {
+    "query": "George Washington Middle School",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-15T15:40:50.632059+00:00"
   }
 }
