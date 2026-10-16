@@ -4499,5 +4499,26 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-10-15T15:40:50.632059+00:00"
+  },
+  "7525 Shreve Road, Falls Church, VA 22043, Falls Church": {
+    "query": "7525 Shreve Road, Falls Church, VA 22043, Falls Church",
+    "latitude": 38.888377,
+    "longitude": -77.205616,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-16T15:25:55.669013+00:00"
+  },
+  "13893 Willard Rd, Chantilly, VA 20151, Chantilly, VA, Chantilly": {
+    "query": "13893 Willard Rd, Chantilly, VA 20151, Chantilly, VA, Chantilly",
+    "latitude": 38.885626,
+    "longitude": -77.440642,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-16T15:25:59.140562+00:00"
+  },
+  "The Leaf": {
+    "query": "The Leaf",
+    "latitude": 39.496869,
+    "longitude": -76.655018,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-16T15:26:01.651983+00:00"
   }
 }
