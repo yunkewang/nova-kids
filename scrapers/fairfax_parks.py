@@ -24,9 +24,10 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
 from scrapers.base import BaseScraper
+from scrapers.detail_image import extract_image_from_detail_html
 from scrapers.detail_price import (
     extract_price_from_detail_html,
-    fetch_detail_price,
+    fetch_detail_html_text,
 )
 
 logger = logging.getLogger(__name__)
@@ -198,13 +199,21 @@ class FairfaxParksAuthorityScraper(BaseScraper):
         #    Pokémon-Go hike) passed the keyword gate and silently defaulted
         #    to Free. The calendar list simply is not a reliable source of
         #    pricing signals, so we always consult the detail page when the
-        #    card doesn't already answer the question.
+        #    card doesn't already answer the question. The detail-page HTML is
+        #    fetched once and shared between the pricing and image
+        #    extractors — no second round-trip.
+        detail_html: str | None = None
         if not price_text:
-            price_text = fetch_detail_price(
+            detail_html = fetch_detail_html_text(
                 self, event_url,
                 fetch_count_attr="_detail_fetches",
                 limit=DETAIL_FETCH_LIMIT,
             )
+            price_text = extract_price_from_detail_html(detail_html)
+
+        # The detail page usually declares an og:image; extract_image_…
+        # returns None for pages without usable image meta tags.
+        image_url = extract_image_from_detail_html(detail_html, event_url)
 
         return {
             "source_id":     self.source_id,
@@ -215,4 +224,5 @@ class FairfaxParksAuthorityScraper(BaseScraper):
             "location_text": location_text,
             "summary_text":  summary_text,
             "price_text":    price_text,
+            "image_url":     image_url,
         }

@@ -22,7 +22,11 @@ from typing import Any
 from bs4 import BeautifulSoup
 
 from scrapers.base import BaseScraper
-from scrapers.detail_price import fetch_detail_price
+from scrapers.detail_image import extract_image_from_detail_html
+from scrapers.detail_price import (
+    extract_price_from_detail_html,
+    fetch_detail_html_text,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -109,12 +113,16 @@ class ArlingtonParksRecScraper(BaseScraper):
 
         # The Arlington list card has no pricing field; the per-event page
         # carries "$X" or "Free" in a body block. Always fetch the detail
-        # page so paid programs don't silently default to free.
-        price_text = fetch_detail_price(
+        # page so paid programs don't silently default to free. The same
+        # fetched page also feeds the og:image extractor — one request,
+        # two extractors.
+        detail_html = fetch_detail_html_text(
             self, event_url,
             fetch_count_attr="_detail_fetches",
             limit=DETAIL_FETCH_LIMIT,
         )
+        price_text = extract_price_from_detail_html(detail_html)
+        image_url = extract_image_from_detail_html(detail_html, event_url)
 
         return {
             "source_id": self.source_id,
@@ -125,4 +133,5 @@ class ArlingtonParksRecScraper(BaseScraper):
             "location_text": None,
             "summary_text": summary_text,
             "price_text": price_text,
+            "image_url": image_url,
         }

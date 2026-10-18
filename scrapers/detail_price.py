@@ -15,6 +15,8 @@ scraper can use it consistently.
 
 Public API:
     extract_price_from_detail_html(html) -> str | None
+    fetch_detail_html_text(scraper, url, fetch_count_attr="_detail_fetches",
+                           limit=500) -> str | None
     fetch_detail_price(scraper, url, fetch_count_attr="_detail_fetches",
                        limit=500) -> str | None
 """
@@ -180,6 +182,41 @@ def extract_price_from_detail_html(html: str | None) -> str | None:
     return None
 
 
+def fetch_detail_html_text(
+    scraper: Any,
+    url: str,
+    *,
+    fetch_count_attr: str = "_detail_fetches",
+    limit: int = DEFAULT_DETAIL_FETCH_LIMIT,
+) -> str | None:
+    """
+    Fetch an event detail page and return its raw HTML text.
+
+    Shared low-level fetch behind :func:`fetch_detail_price` (and any other
+    detail-page extractor, e.g. the og:image helper in
+    ``scrapers/detail_image.py``) so a scraper can download a detail page
+    ONCE and run several extractors over the same HTML instead of issuing
+    one request per extractor.
+
+    Politeness semantics mirror :func:`fetch_detail_price`: the integer
+    counter named ``fetch_count_attr`` is incremented on every attempted
+    fetch and capped at ``limit``; failures never raise and return None.
+    """
+    count = int(getattr(scraper, fetch_count_attr, 0) or 0)
+    if count >= limit:
+        logger.debug("Skipping detail fetch for %s — limit %d reached", url, limit)
+        return None
+    setattr(scraper, fetch_count_attr, count + 1)
+
+    try:
+        response = scraper.get(url)
+    except Exception as exc:
+        logger.debug("Detail fetch failed for %s: %s", url, exc)
+        return None
+
+    return response.text
+
+
 def fetch_detail_price(
     scraper: Any,
     url: str,
@@ -201,16 +238,7 @@ def fetch_detail_price(
     Returns the extracted pricing snippet, or None when the fetch fails,
     the page is empty, or no pricing-shaped text is present.
     """
-    count = int(getattr(scraper, fetch_count_attr, 0) or 0)
-    if count >= limit:
-        logger.debug("Skipping detail fetch for %s — limit %d reached", url, limit)
-        return None
-    setattr(scraper, fetch_count_attr, count + 1)
-
-    try:
-        response = scraper.get(url)
-    except Exception as exc:
-        logger.debug("Detail fetch failed for %s: %s", url, exc)
-        return None
-
-    return extract_price_from_detail_html(response.text)
+    html = fetch_detail_html_text(
+        scraper, url, fetch_count_attr=fetch_count_attr, limit=limit
+    )
+    return extract_price_from_detail_html(html)
