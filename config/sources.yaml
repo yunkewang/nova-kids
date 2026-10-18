@@ -84,15 +84,19 @@ sources:
   - id: nova_parks
     name: NOVA Parks
     source_type: html
-    base_url: https://www.novaparks.com/events
-    enabled: false
+    base_url: https://www.novaparks.com/ajax-event-calendar
+    enabled: true
     notes: >
       Northern Virginia Regional Park Authority (NVRPA) public events listing.
-      DISABLED: The events calendar at novaparks.com is fully JavaScript-rendered
-      via Drupal Views AJAX. The SSR page contains only navigation links and
-      promoted festivals — no event rows are accessible without executing JS.
-      Re-enable only if a Playwright/headless-browser scraper is added, or if
-      a public JSON/RSS API becomes available.
+      Re-enabled 2026-10-18: the calendar is served by a custom AJAX endpoint
+      (GET /ajax-event-calendar?from=…&to=…&category=All&response_type=ajax)
+      returning server-rendered div.views-row teasers — no headless browser
+      needed.  The scraper iterates 30-day windows across a 120-day horizon;
+      category=All is fetched and family relevance is decided by the
+      pipeline's family_relevance classifier (explicitly adult-only listings
+      are skipped in the scraper).  List rows carry no year — it is resolved
+      from the request window — and no pricing, so detail pages are fetched
+      for price/image enrichment like fairfax_parks.
       Covers parks in Fairfax, Arlington, Loudoun, and Prince William counties:
       Bull Run Regional Park, Lake Fairfax Park, Meadowlark Botanical Gardens,
       Algonkian Regional Park, Occoquan Regional Park, Fountainhead Regional Park.

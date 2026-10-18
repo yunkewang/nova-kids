@@ -92,10 +92,14 @@ class BaseScraper(ABC):
     # HTTP helpers
     # ------------------------------------------------------------------
 
-    def get(self, url: str, **kwargs: Any) -> requests.Response:
-        """Polite GET with delay and timeout."""
+    def get(self, url: str, timeout: int | None = None, **kwargs: Any) -> requests.Response:
+        """Polite GET with delay and timeout.
+
+        ``timeout`` overrides the default REQUEST_TIMEOUT for sources whose
+        first response is known to be slow (e.g. server-rendered AJAX).
+        """
         time.sleep(REQUEST_DELAY)
-        response = self.session.get(url, timeout=REQUEST_TIMEOUT, **kwargs)
+        response = self.session.get(url, timeout=timeout or REQUEST_TIMEOUT, **kwargs)
         response.raise_for_status()
         return response
 

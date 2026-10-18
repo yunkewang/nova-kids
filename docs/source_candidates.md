@@ -75,7 +75,7 @@ approves.
 
 | Source | Status |
 |---|---|
-| **NOVA Parks** (`nova_parks`) | In `sources.yaml`, `enabled: false`. Events calendar is fully JS-rendered via Drupal Views AJAX. **Worth revisiting**: NOVA Parks runs Bull Run Festival of Lights, Meadowlark's Winter Walk of Lights, and the regional water parks — exactly the destination content the feed lacks. Needs either a Playwright scraper or a discovered JSON endpoint. Until then, its marquee events are curated-file candidates |
+| **NOVA Parks** (`nova_parks`) | Enabled (2026-10-18). The calendar page is JS-rendered, but its custom endpoint `/ajax-event-calendar?from=…&to=…&category=…&response_type=ajax` returns full server-rendered event rows — the scraper iterates 30-day windows over a 120-day horizon, no headless browser needed. NOVA Parks runs Bull Run Festival of Lights, Meadowlark's Winter Walk of Lights, and the regional water parks |
 | **Eventbrite** (`eventbrite_nova_family`) | In `sources.yaml`, `enabled: false`, needs `EVENTBRITE_API_KEY`. Would surface commercial family events, but quality control is the hard part — see the family relevance filter |
 
 ## Tier 5 — Farms and seasonal attractions
