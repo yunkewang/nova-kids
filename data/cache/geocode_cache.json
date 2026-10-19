@@ -4520,5 +4520,124 @@
     "longitude": -76.655018,
     "confidence": 0.9,
     "resolved_at": "2026-10-16T15:26:01.651983+00:00"
+  },
+  "Unitarian Universalist Congregation of Sterling, Sterling, Loudoun County, VA": {
+    "query": "Unitarian Universalist Congregation of Sterling, Sterling, Loudoun County, VA",
+    "latitude": 39.003498,
+    "longitude": -77.429348,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:46:43.275839+00:00"
+  },
+  "Meadowlark Botanical Gardens , Vienna, VA, Vienna, VA": {
+    "query": "Meadowlark Botanical Gardens , Vienna, VA, Vienna, VA",
+    "latitude": 38.937539,
+    "longitude": -77.282561,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:46:44.441685+00:00"
+  },
+  "Carlyle House Historic Park, Alexandria, VA, Alexandria, Alexandria County, VA": {
+    "query": "Carlyle House Historic Park, Alexandria, VA, Alexandria, Alexandria County, VA",
+    "latitude": 38.805244,
+    "longitude": -77.041839,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:46:46.376864+00:00"
+  },
+  "Upton Hill Regional Park, Arlington, VA, Arlington, VA": {
+    "query": "Upton Hill Regional Park, Arlington, VA, Arlington, VA",
+    "latitude": 38.871728,
+    "longitude": -77.142231,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:46:47.572322+00:00"
+  },
+  "Bull Run Regional Park, Centreville, VA, Centreville, VA": {
+    "query": "Bull Run Regional Park, Centreville, VA, Centreville, VA",
+    "latitude": 38.827464,
+    "longitude": -77.507923,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:46:48.996514+00:00"
+  },
+  "Temple Hall Farm Pumpkin Patch & Flower Fields, Leesburg, VA, Leesburg, Loudoun County, VA": {
+    "query": "Temple Hall Farm Pumpkin Patch & Flower Fields, Leesburg, VA, Leesburg, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-19T17:46:50.524803+00:00"
+  },
+  "Temple Hall Farm Pumpkin Patch & Flower Fields, Leesburg, VA, Leesburg, VA": {
+    "query": "Temple Hall Farm Pumpkin Patch & Flower Fields, Leesburg, VA, Leesburg, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-19T17:46:52.351862+00:00"
+  },
+  "Temple Hall Farm Pumpkin Patch & Flower Fields, Leesburg, VA, Loudoun County, VA": {
+    "query": "Temple Hall Farm Pumpkin Patch & Flower Fields, Leesburg, VA, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-19T17:46:54.036787+00:00"
+  },
+  "Temple Hall Farm Pumpkin Patch & Flower Fields, Leesburg, VA": {
+    "query": "Temple Hall Farm Pumpkin Patch & Flower Fields, Leesburg, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-19T17:46:55.517336+00:00"
+  },
+  "Pohick Bay Regional Park, Lorton, VA, Lorton, Fairfax County, VA": {
+    "query": "Pohick Bay Regional Park, Lorton, VA, Lorton, Fairfax County, VA",
+    "latitude": 38.678859,
+    "longitude": -77.190496,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:46:56.721003+00:00"
+  },
+  "Winkler Botanical Preserve, Alexandria, VA, Alexandria, Alexandria County, VA": {
+    "query": "Winkler Botanical Preserve, Alexandria, VA, Alexandria, Alexandria County, VA",
+    "latitude": 38.828164,
+    "longitude": -77.121215,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:46:58.167869+00:00"
+  },
+  "Potomac Overlook Regional Park, Arlington, VA, Arlington, VA": {
+    "query": "Potomac Overlook Regional Park, Arlington, VA, Arlington, VA",
+    "latitude": 38.913292,
+    "longitude": -77.107868,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:46:59.307862+00:00"
+  },
+  "Algonkian Regional Park, Sterling, VA, Sterling, VA": {
+    "query": "Algonkian Regional Park, Sterling, VA, Sterling, VA",
+    "latitude": 39.056737,
+    "longitude": -77.410222,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:47:01.073890+00:00"
+  },
+  "Dulles Subaru, Dulles, Loudoun County, VA": {
+    "query": "Dulles Subaru, Dulles, Loudoun County, VA",
+    "latitude": 39.106551,
+    "longitude": -77.56129,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:47:03.005564+00:00"
+  },
+  "3900 Spring of Freedom Street, NW, Washington, DC 20008": {
+    "query": "3900 Spring of Freedom Street, NW, Washington, DC 20008",
+    "latitude": 38.939311,
+    "longitude": -77.054092,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:47:04.653205+00:00"
+  },
+  "Nalls Produce": {
+    "query": "Nalls Produce",
+    "latitude": 38.759557,
+    "longitude": -77.161435,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:47:06.054178+00:00"
+  },
+  "Aldie Mill Historic Park, Aldie, VA, Aldie, Loudoun County, VA": {
+    "query": "Aldie Mill Historic Park, Aldie, VA, Aldie, Loudoun County, VA",
+    "latitude": 38.975223,
+    "longitude": -77.640964,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-19T17:47:07.365819+00:00"
   }
 }
