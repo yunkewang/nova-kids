@@ -4639,5 +4639,54 @@
     "longitude": -77.640964,
     "confidence": 0.9,
     "resolved_at": "2026-10-19T17:47:07.365819+00:00"
+  },
+  "Capital Jewish Museum 575 3rd Street, NW, Washington, DC": {
+    "query": "Capital Jewish Museum 575 3rd Street, NW, Washington, DC",
+    "latitude": 38.896997,
+    "longitude": -77.014826,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-20T18:47:14.235373+00:00"
+  },
+  "Ridgetop Coffee": {
+    "query": "Ridgetop Coffee",
+    "latitude": 39.026479,
+    "longitude": -77.407052,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-20T18:47:19.396834+00:00"
+  },
+  "The Fantastic Store": {
+    "query": "The Fantastic Store",
+    "latitude": 38.900035,
+    "longitude": -77.44737,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-20T18:47:24.147421+00:00"
+  },
+  "Bull Run Regional Park, Centreville, VA": {
+    "query": "Bull Run Regional Park, Centreville, VA",
+    "latitude": 38.807547,
+    "longitude": -77.476938,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-20T18:47:30.700366+00:00"
+  },
+  "3501 Lion Run Fairfax, VA 22030, Fairfax": {
+    "query": "3501 Lion Run Fairfax, VA 22030, Fairfax",
+    "latitude": 38.860685,
+    "longitude": -77.286967,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-20T18:47:36.480114+00:00"
+  },
+  "Solace Brewing Company": {
+    "query": "Solace Brewing Company",
+    "latitude": 38.950877,
+    "longitude": -77.528266,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-20T18:47:40.718889+00:00"
+  },
+  "Old Town Alexandria, Alexandria, Alexandria County, VA": {
+    "query": "Old Town Alexandria, Alexandria, Alexandria County, VA",
+    "latitude": 38.80437,
+    "longitude": -77.044572,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-20T18:47:46.873541+00:00"
   }
 }
