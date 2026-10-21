@@ -4688,5 +4688,26 @@
     "longitude": -77.044572,
     "confidence": 0.9,
     "resolved_at": "2026-10-20T18:47:46.873541+00:00"
+  },
+  "Woodmont Center, 2422 N Fillmore St, Arlington, VA 22207, Arlington": {
+    "query": "Woodmont Center, 2422 N Fillmore St, Arlington, VA 22207, Arlington",
+    "latitude": 38.902341,
+    "longitude": -77.097717,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-21T15:54:01.595795+00:00"
+  },
+  "Fairfax Museum & Visitor Center, Fairfax, Fairfax County, VA": {
+    "query": "Fairfax Museum & Visitor Center, Fairfax, Fairfax County, VA",
+    "latitude": 38.844545,
+    "longitude": -77.300497,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-21T15:54:02.847219+00:00"
+  },
+  "Crescent Islamic Center": {
+    "query": "Crescent Islamic Center",
+    "latitude": 38.912756,
+    "longitude": -77.464386,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-21T15:54:03.825583+00:00"
   }
 }
