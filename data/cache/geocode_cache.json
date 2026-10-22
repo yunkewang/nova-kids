@@ -4709,5 +4709,12 @@
     "longitude": -77.464386,
     "confidence": 0.9,
     "resolved_at": "2026-10-21T15:54:03.825583+00:00"
+  },
+  "Tysons Corner Carnival, Tysons, VA": {
+    "query": "Tysons Corner Carnival, Tysons, VA",
+    "latitude": 38.916979,
+    "longitude": -77.223114,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-22T15:19:17.355461+00:00"
   }
 }
