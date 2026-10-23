@@ -4716,5 +4716,47 @@
     "longitude": -77.223114,
     "confidence": 0.9,
     "resolved_at": "2026-10-22T15:19:17.355461+00:00"
+  },
+  "Tumbles Fairfax10621-E Braddock RdSuite E Fairfax, VA 22032, Fairfax, Fairfax County, VA": {
+    "query": "Tumbles Fairfax10621-E Braddock RdSuite E Fairfax, VA 22032, Fairfax, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-23T15:47:38.474048+00:00"
+  },
+  "Tumbles Fairfax10621-E Braddock RdSuite E Fairfax, VA 22032, Fairfax, VA": {
+    "query": "Tumbles Fairfax10621-E Braddock RdSuite E Fairfax, VA 22032, Fairfax, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-23T15:47:39.863698+00:00"
+  },
+  "Tumbles Fairfax10621-E Braddock RdSuite E Fairfax, VA 22032, Fairfax County, VA": {
+    "query": "Tumbles Fairfax10621-E Braddock RdSuite E Fairfax, VA 22032, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-23T15:47:41.526750+00:00"
+  },
+  "Tumbles Fairfax10621-E Braddock RdSuite E Fairfax, VA 22032": {
+    "query": "Tumbles Fairfax10621-E Braddock RdSuite E Fairfax, VA 22032",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-10-23T15:47:42.888371+00:00"
+  },
+  "Montessori Children's House of Loudoun, Loudoun, Loudoun County, VA": {
+    "query": "Montessori Children's House of Loudoun, Loudoun, Loudoun County, VA",
+    "latitude": 39.008024,
+    "longitude": -77.417522,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-23T15:47:44.424609+00:00"
+  },
+  "Constitution Avenue": {
+    "query": "Constitution Avenue",
+    "latitude": 38.892014,
+    "longitude": -76.97593,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-23T15:47:45.615270+00:00"
   }
 }
