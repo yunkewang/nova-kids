@@ -4758,5 +4758,12 @@
     "longitude": -76.97593,
     "confidence": 0.9,
     "resolved_at": "2026-10-23T15:47:45.615270+00:00"
+  },
+  "1602 Village Market Boulevard Southeast, #115, Leesburg, VA 20175, Leesburg, VA, Leesburg": {
+    "query": "1602 Village Market Boulevard Southeast, #115, Leesburg, VA 20175, Leesburg, VA, Leesburg",
+    "latitude": 39.090674,
+    "longitude": -77.526157,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-24T14:06:20.284047+00:00"
   }
 }
