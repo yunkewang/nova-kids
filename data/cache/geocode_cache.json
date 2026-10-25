@@ -4765,5 +4765,19 @@
     "longitude": -77.526157,
     "confidence": 0.9,
     "resolved_at": "2026-10-24T14:06:20.284047+00:00"
+  },
+  "Ratcliffe\u2013Allison-Pozer House": {
+    "query": "Ratcliffe\u2013Allison-Pozer House",
+    "latitude": 38.845993,
+    "longitude": -77.304684,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-25T17:57:37.464161+00:00"
+  },
+  "Herndon WinterMarkt, Herndon, Fairfax County, VA": {
+    "query": "Herndon WinterMarkt, Herndon, Fairfax County, VA",
+    "latitude": 38.969062,
+    "longitude": -77.385875,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-25T17:57:38.695666+00:00"
   }
 }
