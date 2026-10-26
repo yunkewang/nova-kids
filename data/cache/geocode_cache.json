@@ -4779,5 +4779,26 @@
     "longitude": -77.385875,
     "confidence": 0.9,
     "resolved_at": "2026-10-25T17:57:38.695666+00:00"
+  },
+  "Reservoir Park, Ashburn, VA, Ashburn, Loudoun County, VA": {
+    "query": "Reservoir Park, Ashburn, VA, Ashburn, Loudoun County, VA",
+    "latitude": 39.002427,
+    "longitude": -77.536149,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-26T16:46:40.296662+00:00"
+  },
+  "The Branch": {
+    "query": "The Branch",
+    "latitude": 38.838627,
+    "longitude": -76.948084,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-26T16:46:41.415067+00:00"
+  },
+  "Fountainhead Regional Park, Fairfax Station, VA, Fairfax, VA": {
+    "query": "Fountainhead Regional Park, Fairfax Station, VA, Fairfax, VA",
+    "latitude": 38.723588,
+    "longitude": -77.326156,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-26T16:46:42.673953+00:00"
   }
 }
