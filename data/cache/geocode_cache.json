@@ -4800,5 +4800,12 @@
     "longitude": -77.326156,
     "confidence": 0.9,
     "resolved_at": "2026-10-26T16:46:42.673953+00:00"
+  },
+  "8430 Center Drive, Annandale, Virginia, 22003, Annandale": {
+    "query": "8430 Center Drive, Annandale, Virginia, 22003, Annandale",
+    "latitude": 38.833238,
+    "longitude": -77.23681,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-27T19:36:42.433591+00:00"
   }
 }
