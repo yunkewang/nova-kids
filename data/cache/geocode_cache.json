@@ -4828,5 +4828,12 @@
     "longitude": -77.322594,
     "confidence": 0.9,
     "resolved_at": "2026-10-29T20:22:29.427150+00:00"
+  },
+  "Seneca Ridge Middle School": {
+    "query": "Seneca Ridge Middle School",
+    "latitude": 39.028147,
+    "longitude": -77.372986,
+    "confidence": 0.9,
+    "resolved_at": "2026-10-31T19:06:00.034740+00:00"
   }
 }
