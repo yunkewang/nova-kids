@@ -4835,5 +4835,12 @@
     "longitude": -77.372986,
     "confidence": 0.9,
     "resolved_at": "2026-10-31T19:06:00.034740+00:00"
+  },
+  "Vienna Volunteer Fire Department, Vienna, Fairfax County, VA": {
+    "query": "Vienna Volunteer Fire Department, Vienna, Fairfax County, VA",
+    "latitude": 38.792989,
+    "longitude": -77.272098,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-02T21:17:24.988528+00:00"
   }
 }
