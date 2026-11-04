@@ -4842,5 +4842,33 @@
     "longitude": -77.272098,
     "confidence": 0.9,
     "resolved_at": "2026-11-02T21:17:24.988528+00:00"
+  },
+  "Sandy Point State Park": {
+    "query": "Sandy Point State Park",
+    "latitude": 39.019362,
+    "longitude": -76.405486,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-04T21:30:46.122865+00:00"
+  },
+  "3001 Connecticut Ave., NW, Washington, DC, 20008": {
+    "query": "3001 Connecticut Ave., NW, Washington, DC, 20008",
+    "latitude": 38.928594,
+    "longitude": -77.048538,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-04T21:30:47.422523+00:00"
+  },
+  "Manassas Dr & Park Central Plz, Manassas, Prince William County, VA": {
+    "query": "Manassas Dr & Park Central Plz, Manassas, Prince William County, VA",
+    "latitude": 38.751505,
+    "longitude": -77.541871,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-04T21:30:48.852812+00:00"
+  },
+  "Dave & Buster's, Springfield, Fairfax County, VA": {
+    "query": "Dave & Buster's, Springfield, Fairfax County, VA",
+    "latitude": 38.77417,
+    "longitude": -77.175462,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-04T21:30:50.133080+00:00"
   }
 }
