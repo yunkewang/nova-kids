@@ -4870,5 +4870,12 @@
     "longitude": -77.175462,
     "confidence": 0.9,
     "resolved_at": "2026-11-04T21:30:50.133080+00:00"
+  },
+  "Access Services Library": {
+    "query": "Access Services Library",
+    "latitude": 38.854034,
+    "longitude": -77.357014,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-05T18:24:24.513087+00:00"
   }
 }
