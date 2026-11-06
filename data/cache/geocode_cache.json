@@ -4877,5 +4877,19 @@
     "longitude": -77.357014,
     "confidence": 0.9,
     "resolved_at": "2026-11-05T18:24:24.513087+00:00"
+  },
+  "Dulles Town Center (DTC) Expo & Event Center, Dulles, VA": {
+    "query": "Dulles Town Center (DTC) Expo & Event Center, Dulles, VA",
+    "latitude": 39.03056,
+    "longitude": -77.423152,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-06T17:41:38.695380+00:00"
+  },
+  "Veterans Day Closures: Wed., Nov. 11": {
+    "query": "Veterans Day Closures: Wed., Nov. 11",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-06T17:41:40.577078+00:00"
   }
 }
