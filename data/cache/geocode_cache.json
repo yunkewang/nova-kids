@@ -4891,5 +4891,61 @@
     "longitude": null,
     "confidence": null,
     "resolved_at": "2026-11-06T17:41:40.577078+00:00"
+  },
+  "Historic Vienna Train Station, Vienna, Fairfax County, VA": {
+    "query": "Historic Vienna Train Station, Vienna, Fairfax County, VA",
+    "latitude": 38.899218,
+    "longitude": -77.261299,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-07T19:56:51.652069+00:00"
+  },
+  "11400 South Lakes Dr. Reston, VA 20191, Reston": {
+    "query": "11400 South Lakes Dr. Reston, VA 20191, Reston",
+    "latitude": 38.932255,
+    "longitude": -77.339445,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-07T19:56:52.814696+00:00"
+  },
+  "Craftspace": {
+    "query": "Craftspace",
+    "latitude": 39.146076,
+    "longitude": -77.417287,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-07T19:56:54.011626+00:00"
+  },
+  "21100 Dulles Town CircleDulles,VA20166, Dulles, Loudoun County, VA": {
+    "query": "21100 Dulles Town CircleDulles,VA20166, Dulles, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-07T19:56:55.210644+00:00"
+  },
+  "21100 Dulles Town CircleDulles,VA20166, Dulles, VA": {
+    "query": "21100 Dulles Town CircleDulles,VA20166, Dulles, VA",
+    "latitude": 39.032226,
+    "longitude": -77.423631,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-07T19:56:56.767524+00:00"
+  },
+  "1820 Capital One Drive South, Tysons, VA 22102, Tysons, VA, Tyson": {
+    "query": "1820 Capital One Drive South, Tysons, VA 22102, Tysons, VA, Tyson",
+    "latitude": 38.92583,
+    "longitude": -77.21046,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-07T19:56:58.024495+00:00"
+  },
+  "Life Time": {
+    "query": "Life Time",
+    "latitude": 38.888831,
+    "longitude": -77.091926,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-07T19:56:59.186545+00:00"
+  },
+  "Newton-Lee Elementary School, Loudoun County, VA": {
+    "query": "Newton-Lee Elementary School, Loudoun County, VA",
+    "latitude": 39.057109,
+    "longitude": -77.503512,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-07T19:57:00.581936+00:00"
   }
 }
