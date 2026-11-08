@@ -4947,5 +4947,12 @@
     "longitude": -77.503512,
     "confidence": 0.9,
     "resolved_at": "2026-11-07T19:57:00.581936+00:00"
+  },
+  "Founders Row": {
+    "query": "Founders Row",
+    "latitude": 38.890159,
+    "longitude": -77.183183,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-08T18:03:14.491325+00:00"
   }
 }
