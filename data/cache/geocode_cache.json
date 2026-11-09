@@ -4954,5 +4954,173 @@
     "longitude": -77.183183,
     "confidence": 0.9,
     "resolved_at": "2026-11-08T18:03:14.491325+00:00"
+  },
+  "Muse Paintbar (Fairfax), Fairfax, Fairfax County, VA": {
+    "query": "Muse Paintbar (Fairfax), Fairfax, Fairfax County, VA",
+    "latitude": 38.85412,
+    "longitude": -77.356822,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:10.267374+00:00"
+  },
+  "Udvar-Hazy Center (Chantilly) National Air and Space Museum, Chantilly, VA": {
+    "query": "Udvar-Hazy Center (Chantilly) National Air and Space Museum, Chantilly, VA",
+    "latitude": 38.910837,
+    "longitude": -77.444461,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:11.746424+00:00"
+  },
+  "11816 Spectrum Center Suite K-27Reston,VA 20190, Reston": {
+    "query": "11816 Spectrum Center Suite K-27Reston,VA 20190, Reston",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:12.907587+00:00"
+  },
+  "Barnes & Noble (Reston) RestonFeaturesCaf\u00e9VinylThe Spectrum at Reston Town Center, Reston, Fairfax County, VA": {
+    "query": "Barnes & Noble (Reston) RestonFeaturesCaf\u00e9VinylThe Spectrum at Reston Town Center, Reston, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:14.440074+00:00"
+  },
+  "Barnes & Noble (Reston) RestonFeaturesCaf\u00e9VinylThe Spectrum at Reston Town Center, Reston, VA": {
+    "query": "Barnes & Noble (Reston) RestonFeaturesCaf\u00e9VinylThe Spectrum at Reston Town Center, Reston, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:15.864500+00:00"
+  },
+  "Barnes & Noble (Reston) RestonFeaturesCaf\u00e9VinylThe Spectrum at Reston Town Center, Fairfax County, VA": {
+    "query": "Barnes & Noble (Reston) RestonFeaturesCaf\u00e9VinylThe Spectrum at Reston Town Center, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:17.515557+00:00"
+  },
+  "Barnes & Noble (Reston) RestonFeaturesCaf\u00e9VinylThe Spectrum at Reston Town Center": {
+    "query": "Barnes & Noble (Reston) RestonFeaturesCaf\u00e9VinylThe Spectrum at Reston Town Center",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:18.824261+00:00"
+  },
+  "12193 Fair Lakes Promenade DriveFairfax,VA 22033, Fairfax": {
+    "query": "12193 Fair Lakes Promenade DriveFairfax,VA 22033, Fairfax",
+    "latitude": 38.859615,
+    "longitude": -77.366747,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:20.137511+00:00"
+  },
+  "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147, Ashburn, VA": {
+    "query": "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147, Ashburn, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:21.566090+00:00"
+  },
+  "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147, Loudoun, Loudoun County, VA": {
+    "query": "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147, Loudoun, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:23.053389+00:00"
+  },
+  "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147, Loudoun, VA": {
+    "query": "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147, Loudoun, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:24.354793+00:00"
+  },
+  "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147, Loudoun County, VA": {
+    "query": "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147, Loudoun County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:26.162635+00:00"
+  },
+  "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147": {
+    "query": "Barnes & Noble (Ashburn) One LoudounFeaturesCaf\u00e920427 Exchange StAshburn,VA20147",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:28.043069+00:00"
+  },
+  "William Ramsay Rec Center": {
+    "query": "William Ramsay Rec Center",
+    "latitude": 38.827847,
+    "longitude": -77.132077,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:29.840489+00:00"
+  },
+  "Library of Congress (Thomas Jefferson Building)": {
+    "query": "Library of Congress (Thomas Jefferson Building)",
+    "latitude": 38.888674,
+    "longitude": -77.004636,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:31.106198+00:00"
+  },
+  "Bull Run Park, Centreville, VA": {
+    "query": "Bull Run Park, Centreville, VA",
+    "latitude": 38.803666,
+    "longitude": -77.449783,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:32.183376+00:00"
+  },
+  "Church of the Epiphany 1317 G Street Northwest, Washington, DC 20005, Washington, DC": {
+    "query": "Church of the Epiphany 1317 G Street Northwest, Washington, DC 20005, Washington, DC",
+    "latitude": 38.898718,
+    "longitude": -77.030488,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:33.293676+00:00"
+  },
+  "MOD Pizza (Select Locations)": {
+    "query": "MOD Pizza (Select Locations)",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:34.662587+00:00"
+  },
+  "Center for the Arts @ George Mason University": {
+    "query": "Center for the Arts @ George Mason University",
+    "latitude": 38.83932,
+    "longitude": -77.311484,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:36.062959+00:00"
+  },
+  "5040 Walney Road; Woodlands Stewardship Education Center: 5301 Walney RoadChantilly, Virginia, Chantilly": {
+    "query": "5040 Walney Road; Woodlands Stewardship Education Center: 5301 Walney RoadChantilly, Virginia, Chantilly",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:37.263259+00:00"
+  },
+  "5040 Walney Road; Woodlands Stewardship Education Center: 5301 Walney RoadChantilly, Virginia": {
+    "query": "5040 Walney Road; Woodlands Stewardship Education Center: 5301 Walney RoadChantilly, Virginia",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-09T20:59:38.566764+00:00"
+  },
+  "Ellanor Lawrence Park Walney Visitor Center, Chantilly, Fairfax County, VA": {
+    "query": "Ellanor Lawrence Park Walney Visitor Center, Chantilly, Fairfax County, VA",
+    "latitude": 38.861015,
+    "longitude": -77.430768,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:39.977512+00:00"
+  },
+  "Kidcreate Studio (Alexandria), Alexandria, Alexandria County, VA": {
+    "query": "Kidcreate Studio (Alexandria), Alexandria, Alexandria County, VA",
+    "latitude": 38.806083,
+    "longitude": -77.055967,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:41.179585+00:00"
+  },
+  "Herndon Middle School, Herndon, Fairfax County, VA": {
+    "query": "Herndon Middle School, Herndon, Fairfax County, VA",
+    "latitude": 38.966285,
+    "longitude": -77.393773,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-09T20:59:42.586215+00:00"
   }
 }
