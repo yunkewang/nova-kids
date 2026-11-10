@@ -5122,5 +5122,47 @@
     "longitude": -77.393773,
     "confidence": 0.9,
     "resolved_at": "2026-11-09T20:59:42.586215+00:00"
+  },
+  "International Spy Museum": {
+    "query": "International Spy Museum",
+    "latitude": 38.883955,
+    "longitude": -77.025537,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-10T17:51:12.861115+00:00"
+  },
+  "Kidcreate Studio (Ashburn & Fairfax Station Locations), Fairfax, Fairfax County, VA": {
+    "query": "Kidcreate Studio (Ashburn & Fairfax Station Locations), Fairfax, Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-10T17:51:16.402102+00:00"
+  },
+  "Kidcreate Studio (Ashburn & Fairfax Station Locations), Fairfax, VA": {
+    "query": "Kidcreate Studio (Ashburn & Fairfax Station Locations), Fairfax, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-10T17:51:19.682091+00:00"
+  },
+  "Kidcreate Studio (Ashburn & Fairfax Station Locations), Fairfax County, VA": {
+    "query": "Kidcreate Studio (Ashburn & Fairfax Station Locations), Fairfax County, VA",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-10T17:51:22.608606+00:00"
+  },
+  "Kidcreate Studio (Ashburn & Fairfax Station Locations)": {
+    "query": "Kidcreate Studio (Ashburn & Fairfax Station Locations)",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-10T17:51:25.760874+00:00"
+  },
+  "Potomac Overlook Park, Arlington, VA": {
+    "query": "Potomac Overlook Park, Arlington, VA",
+    "latitude": 38.913292,
+    "longitude": -77.107868,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-10T17:51:27.513198+00:00"
   }
 }
