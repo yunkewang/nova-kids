@@ -5164,5 +5164,47 @@
     "longitude": -77.107868,
     "confidence": 0.9,
     "resolved_at": "2026-11-10T17:51:27.513198+00:00"
+  },
+  "Solace Brewing Co": {
+    "query": "Solace Brewing Co",
+    "latitude": 38.950877,
+    "longitude": -77.528266,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-11T21:22:59.261656+00:00"
+  },
+  "Dave & Buster's (Fairfax), Fairfax, Fairfax County, VA": {
+    "query": "Dave & Buster's (Fairfax), Fairfax, Fairfax County, VA",
+    "latitude": 38.863519,
+    "longitude": -77.361521,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-11T21:23:00.676446+00:00"
+  },
+  "Alamo Drafthouse Cinema (Ashburn), Ashburn, Loudoun County, VA": {
+    "query": "Alamo Drafthouse Cinema (Ashburn), Ashburn, Loudoun County, VA",
+    "latitude": 39.052044,
+    "longitude": -77.455051,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-11T21:23:01.977687+00:00"
+  },
+  "Animal Welfare League (Arlington), Arlington, Arlington County, VA": {
+    "query": "Animal Welfare League (Arlington), Arlington, Arlington County, VA",
+    "latitude": 38.843506,
+    "longitude": -77.093112,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-11T21:23:03.221259+00:00"
+  },
+  "Dave & Buster's (Springfield), Springfield, Fairfax County, VA": {
+    "query": "Dave & Buster's (Springfield), Springfield, Fairfax County, VA",
+    "latitude": 38.77417,
+    "longitude": -77.175462,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-11T21:23:04.612670+00:00"
+  },
+  "7584 Leesburg PikeFalls Church VA 22043-2003, Falls Church": {
+    "query": "7584 Leesburg PikeFalls Church VA 22043-2003, Falls Church",
+    "latitude": 38.906937,
+    "longitude": -77.206436,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-11T21:23:06.335460+00:00"
   }
 }
