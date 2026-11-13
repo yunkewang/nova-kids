@@ -5213,5 +5213,12 @@
     "longitude": -78.143691,
     "confidence": 0.9,
     "resolved_at": "2026-11-12T21:45:56.182486+00:00"
+  },
+  "Access Services Library, Government Center": {
+    "query": "Access Services Library, Government Center",
+    "latitude": 38.854034,
+    "longitude": -77.357014,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-13T18:14:08.467151+00:00"
   }
 }
