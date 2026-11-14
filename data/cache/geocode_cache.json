@@ -5220,5 +5220,26 @@
     "longitude": -77.357014,
     "confidence": 0.9,
     "resolved_at": "2026-11-13T18:14:08.467151+00:00"
+  },
+  "Galilee Church": {
+    "query": "Galilee Church",
+    "latitude": 39.263713,
+    "longitude": -78.134167,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-14T17:59:07.659185+00:00"
+  },
+  "The Simon": {
+    "query": "The Simon",
+    "latitude": 38.949448,
+    "longitude": -77.337483,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-14T17:59:08.625236+00:00"
+  },
+  "Ellanor Lawrence Park": {
+    "query": "Ellanor Lawrence Park",
+    "latitude": 38.858536,
+    "longitude": -77.424687,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-14T17:59:09.538555+00:00"
   }
 }
