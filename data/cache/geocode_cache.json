@@ -5248,5 +5248,12 @@
     "longitude": -77.142146,
     "confidence": 0.9,
     "resolved_at": "2026-11-15T17:27:54.341930+00:00"
+  },
+  "Tumbles": {
+    "query": "Tumbles",
+    "latitude": 39.425366,
+    "longitude": -76.367007,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-17T22:55:21.830499+00:00"
   }
 }
