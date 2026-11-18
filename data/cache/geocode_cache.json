@@ -5255,5 +5255,19 @@
     "longitude": -76.367007,
     "confidence": 0.9,
     "resolved_at": "2026-11-17T22:55:21.830499+00:00"
+  },
+  "Nationals Park": {
+    "query": "Nationals Park",
+    "latitude": 38.872733,
+    "longitude": -77.007481,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-18T22:24:21.093167+00:00"
+  },
+  "Barnes & Noble (Ashburn), Ashburn, Loudoun County, VA": {
+    "query": "Barnes & Noble (Ashburn), Ashburn, Loudoun County, VA",
+    "latitude": 39.050903,
+    "longitude": -77.453937,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-18T22:24:22.388205+00:00"
   }
 }
