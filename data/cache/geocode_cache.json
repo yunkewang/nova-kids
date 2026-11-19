@@ -5269,5 +5269,19 @@
     "longitude": -77.453937,
     "confidence": 0.9,
     "resolved_at": "2026-11-18T22:24:22.388205+00:00"
+  },
+  "Thanksgiving Hours, Nov. 25-27": {
+    "query": "Thanksgiving Hours, Nov. 25-27",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-19T22:52:20.168641+00:00"
+  },
+  "Our Savior's Way Lutheran Church": {
+    "query": "Our Savior's Way Lutheran Church",
+    "latitude": 39.016439,
+    "longitude": -77.512102,
+    "confidence": 0.9,
+    "resolved_at": "2026-11-19T22:52:21.343752+00:00"
   }
 }
