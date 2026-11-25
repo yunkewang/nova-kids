@@ -5283,5 +5283,12 @@
     "longitude": -77.512102,
     "confidence": 0.9,
     "resolved_at": "2026-11-19T22:52:21.343752+00:00"
+  },
+  "Thanksgiving Day Weather Advisory, Nov. 26": {
+    "query": "Thanksgiving Day Weather Advisory, Nov. 26",
+    "latitude": null,
+    "longitude": null,
+    "confidence": null,
+    "resolved_at": "2026-11-25T20:08:11.804857+00:00"
   }
 }
